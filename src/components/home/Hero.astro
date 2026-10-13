@@ -123,7 +123,9 @@ import BarName from "../solid/BarName";
     margin-top: clamp(1rem, 3vw, 2rem);
   }
 
+  /* The text gives up width before the buttons wrap under it. */
   .lede {
+    flex: 1 1 30rem;
     max-width: 30ch;
     font-family: var(--font-display);
     font-size: var(--step-2);
