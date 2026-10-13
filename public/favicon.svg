@@ -1,12 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <style>
-    rect { fill: #1d1a17; }
-    path { fill: #f0b85a; }
-    @media (prefers-color-scheme: dark) {
-      rect { fill: #f3efe8; }
-      path { fill: #c77d1a; }
-    }
-  </style>
-  <rect width="32" height="32" rx="7" />
-  <path d="M7 24h4v-7H7zm7 0h4V8h-4zm7 0h4V13h-4z" />
+  <rect width="32" height="32" rx="7" fill="#1d1a17"/>
+  <g fill="#f0b85a">
+    <rect x="7.35" y="7.67" width="2.90" height="20.05" rx="0.8"/>
+    <rect x="10.95" y="4.27" width="2.90" height="3.05" rx="0.8"/>
+    <rect x="10.95" y="14.47" width="2.90" height="3.05" rx="0.8"/>
+    <rect x="14.55" y="4.27" width="2.90" height="3.05" rx="0.8"/>
+    <rect x="14.55" y="14.47" width="2.90" height="3.05" rx="0.8"/>
+    <rect x="18.15" y="4.27" width="2.90" height="3.05" rx="0.8"/>
+    <rect x="18.15" y="14.47" width="2.90" height="3.05" rx="0.8"/>
+    <rect x="21.75" y="7.67" width="2.90" height="20.05" rx="0.8"/>
+  </g>
 </svg>
