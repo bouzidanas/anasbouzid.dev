@@ -83,6 +83,12 @@ I recorded the clips with Playwright and cut them with FFmpeg into 960×600 H.26
 The Streamlit clips come from the packages running on my machine in Streamlit's dark theme.
 Live Streamlit apps are too heavy to embed.
 
+## Icons
+
+The icon is the A from my name on the amber tile.
+`favicon.svg` and `favicon.ico` draw it on whole pixels, so it stays sharp at 16 and 32 pixels in a browser tab.
+The home-screen icons (`apple-touch-icon.png`, `icon-192.png`, `icon-512.png`) use a finer drawing of the same A that only looks right at large sizes.
+
 ## Copies to update by hand
 
 - `public/rhp/` holds three recipe pages and the beeswarm poster from rhp's documentation site.
