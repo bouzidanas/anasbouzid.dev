@@ -85,9 +85,9 @@ Live Streamlit apps are too heavy to embed.
 
 ## Icons
 
-The icon is the A from my name on the amber tile.
-`favicon.svg` and `favicon.ico` draw it on whole pixels, so it stays sharp at 16 and 32 pixels in a browser tab.
-The home-screen icons (`apple-touch-icon.png`, `icon-192.png`, `icon-512.png`) use a finer drawing of the same A that only looks right at large sizes.
+The icon is the A from my name on the amber tile, drawn on whole pixels so it stays sharp at 16 and 32 pixels in a browser tab.
+`favicon.svg` is the source.
+`favicon.ico` and the home-screen icons (`apple-touch-icon.png`, `icon-192.png`, `icon-512.png`) are rendered from it, the home-screen ones without the rounded corners because phones round them.
 
 ## Copies to update by hand
 
