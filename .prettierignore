@@ -1,0 +1,5 @@
+package-lock.json
+src/data/stats.json
+public/
+src/components/quizmark/demo.js
+src/components/quizmark/lecture.js

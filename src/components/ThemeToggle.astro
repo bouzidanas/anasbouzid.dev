@@ -1,0 +1,82 @@
+<button class="theme-toggle" type="button" aria-label="Dark theme" aria-pressed="false">
+  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+    <path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"></path>
+  </svg>
+</button>
+
+<script>
+  import { isDark, prefersDark } from "../lib/theme";
+
+  const root = document.documentElement;
+  const button = document.querySelector<HTMLButtonElement>(".theme-toggle")!;
+
+  const sync = () => button.setAttribute("aria-pressed", String(isDark()));
+
+  button.addEventListener("click", () => {
+    const theme = isDark() ? "light" : "dark";
+    const apply = () => {
+      root.dataset.theme = theme;
+      sync();
+      try {
+        localStorage.setItem("theme", theme);
+      } catch {}
+    };
+
+    if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      apply();
+      return;
+    }
+
+    // The new theme grows out of the button as a circle.
+    const { left, top, width, height } = button.getBoundingClientRect();
+    const x = left + width / 2;
+    const y = top + height / 2;
+    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+
+    root.classList.add("theme-switch");
+    const transition = document.startViewTransition(apply);
+    transition.ready.then(() => {
+      root.animate(
+        { clipPath: [`circle(0 at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+        {
+          duration: 550,
+          easing: "cubic-bezier(0.2, 0.7, 0.2, 1)",
+          pseudoElement: "::view-transition-new(root)",
+        },
+      );
+    });
+    transition.finished.finally(() => root.classList.remove("theme-switch"));
+  });
+
+  prefersDark.addEventListener("change", sync);
+  sync();
+</script>
+
+<style>
+  .theme-toggle {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .theme-toggle:hover {
+    background: color-mix(in oklch, var(--ink) 8%, transparent);
+  }
+
+  :global(.theme-switch)::view-transition-old(root),
+  :global(.theme-switch)::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  :global(.theme-switch) :global(.header) {
+    view-transition-name: none;
+  }
+</style>

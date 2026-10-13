@@ -1,0 +1,71 @@
+---
+title: Tools for coding agents
+summary: MCP servers that show coding agents what their changes look like. PR UI Compare records a UI before and after a change, and rhp-mcp renders a chart and reports its problems.
+order: 4
+years: "2026"
+role: Creator
+stack: [TypeScript, Playwright, FFmpeg, MCP, VS Code API]
+links:
+  - { label: PR UI Compare, href: "https://marketplace.visualstudio.com/items?itemName=bouzidanas.pr-ui-compare" }
+  - { label: pr-ui-compare on npm, href: "https://www.npmjs.com/package/pr-ui-compare" }
+  - { label: rhp-mcp on npm, href: "https://www.npmjs.com/package/@bezda/rhp-mcp" }
+---
+
+import stats from "../../data/stats.json";
+import { formatNumber } from "../../lib/format";
+
+A coding agent can change a UI or write a chart, but it can't see the result.
+Both tools open the agent's work in a real browser and return what they find as text and images the agent can read.
+
+## PR UI Compare
+
+Recording a UI change by hand means checking out the old code, starting the app, recording, switching back, recording again and stitching the clips together.
+Even then, the two clips don't line up.
+PR UI Compare does it from one request to a coding agent, such as "Make a comparison gif of this dropdown fix against main."
+The agent reads the project for the start command, the URL and the steps to replay, and passes them to the tool as a short scenario.
+The result is one labeled, side-by-side GIF or PNG to drop into the pull request.
+
+## Two versions on one timeline
+
+The Before side runs from a temporary Git worktree pinned to an exact commit.
+The After side is your working tree, including uncommitted edits.
+The tool never creates or changes files in the repository it records.
+Both versions replay the same Playwright scenario in a headless browser, and paired actions start and end together.
+
+Each recording starts at a slightly different moment, so timestamps alone can't line the videos up.
+Before the scenario starts, the tool covers the page with a magenta frame for 150 ms, and FFmpeg finds that frame in each video by its color.
+The renderer aligns the two recordings on it.
+
+## Zoom, resize and still images
+
+The recording can zoom in on part of the page, like a camera, without changing the page itself.
+It can also resize the window to show how a layout changes at different widths, and you choose which edge of the window moves.
+
+Before and After normally play side by side.
+If you focus on one part of the page and that part is very wide, like a menu bar, they play one on top of the other instead.
+
+For a change that doesn't move, the tool runs the same steps and then saves a single image instead of a GIF.
+
+## Where it runs
+
+In VS Code, PR UI Compare is a language model tool, an agent skill and a command-palette wizard.
+The same engine runs as an MCP server over stdio for Claude Code, Codex, Cursor and Zed.
+I added it to HOL Guard's extensions in [pull request #3118](https://github.com/hashgraph-online/hol-guard/pull/3118).
+npm counted {formatNumber(stats.npm["pr-ui-compare"].lastMonth)} downloads of the server in the last 30 days.
+
+Unit tests cover the renderer.
+End-to-end tests in VS Code record a working tree with uncommitted changes against a commit and render the GIF.
+They also capture and combine the PNG images.
+A smoke test drives the MCP server's tools.
+
+## rhp-mcp
+
+rhp 2 came out in September 2026, after the training data of today's models, so a coding agent knows nothing about it until it reads rhp's guide.
+`@bezda/rhp-mcp` includes that guide, with its references and tested recipes, and a checker.
+The checker renders a chart at 1280 and 390 pixels wide, tries its interactions, and lists each problem with what to change, along with screenshots.
+It checks HTML pages, Solid and React components, and modules that load rhp from a CDN, and it exits with code 1 when a chart has errors.
+The terminal above shows its real output for a chart whose scale runs backward.
+
+As an MCP server, it gives an agent the guide, the references, the recipes and the checker as four tools, and it returns the screenshots as images the agent can see.
+Its regression suite is a set of broken charts, each with the findings it should produce.
+npm counted {formatNumber(stats.npm["@bezda/rhp-mcp"].lastMonth)} downloads in the last 30 days.

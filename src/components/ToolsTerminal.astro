@@ -1,0 +1,127 @@
+---
+// Real output from `rhp-mcp check` on one of its broken test charts, trimmed where marked with "…".
+const lines = [
+  { kind: "command", text: "claude mcp add --scope user pr-ui-compare -- npx -y pr-ui-compare" },
+  { kind: "command", text: "npx -y @bezda/rhp-mcp check bad-scale.html" },
+  { kind: "muted", text: "rhp check of bad-scale.html (html, rhp 2.0.4, …): 1 error." },
+  { kind: "blank", text: "" },
+  { kind: "heading", text: "Errors" },
+  {
+    kind: "error",
+    text: "1. [bad-scale] Chart's scale is [20, 0]: the larger number comes first, so Bars have no length and no axis is drawn. (1280px)",
+  },
+  { kind: "fix", text: "   Fix: Put the smaller first: scale=${[0, 20]}." },
+  { kind: "blank", text: "" },
+  {
+    kind: "muted",
+    text: "Passed: no errors thrown, no rhp warnings, 1 chart drawn (3 slats), no NaN values, values inside the scale, …",
+  },
+];
+---
+
+<figure class="terminal" data-terminal>
+  <div class="bar" aria-hidden="true">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <pre><code>{lines.map((line, i) => <span class:list={["line", line.kind]} style={`--i: ${i}`}>{line.text}</span>)}</code></pre>
+</figure>
+
+<script>
+  // Lines type in once the terminal is on screen; without this script they're all there from the start.
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const { target, isIntersecting } of entries) {
+        if (!isIntersecting) continue;
+        (target as HTMLElement).dataset.play = "";
+        observer.unobserve(target);
+      }
+    },
+    { threshold: 0.3 },
+  );
+
+  document.querySelectorAll<HTMLElement>("[data-terminal]").forEach((terminal) => {
+    terminal.dataset.armed = "";
+    observer.observe(terminal);
+  });
+</script>
+
+<style>
+  .terminal {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+    margin: 0;
+    background: #0d1117;
+    color: #e6edf3;
+  }
+
+  .bar {
+    display: flex;
+    gap: 0.4rem;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid #21262d;
+  }
+
+  .bar span {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+    background: #30363d;
+  }
+
+  pre {
+    margin: 0;
+    padding: clamp(1rem, 3vw, 1.5rem);
+    overflow: hidden;
+    font-family: var(--font-mono);
+    font-size: clamp(0.72rem, 1.6cqi, 0.9rem);
+    line-height: 1.6;
+  }
+
+  .line {
+    display: block;
+    min-height: 1lh;
+    white-space: pre-wrap;
+  }
+
+  .command::before {
+    content: "$ ";
+    color: #f0b85a;
+  }
+
+  .muted {
+    color: #8b949e;
+  }
+
+  .heading {
+    font-weight: 600;
+  }
+
+  .error {
+    color: #ff7b72;
+  }
+
+  .fix {
+    color: #7ee787;
+  }
+
+  /* A clip, not a fade, so any text that shows is already at full contrast. */
+  @media (prefers-reduced-motion: no-preference) {
+    [data-armed]:not([data-play]) .line {
+      clip-path: inset(0 100% 0 0);
+    }
+
+    [data-play] .line {
+      animation: type 450ms steps(30, end) backwards;
+      animation-delay: calc(var(--i) * 380ms);
+    }
+  }
+
+  @keyframes type {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+  }
+</style>

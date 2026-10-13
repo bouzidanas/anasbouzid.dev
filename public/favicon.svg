@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    rect { fill: #1d1a17; }
+    path { fill: #f0b85a; }
+    @media (prefers-color-scheme: dark) {
+      rect { fill: #f3efe8; }
+      path { fill: #c77d1a; }
+    }
+  </style>
+  <rect width="32" height="32" rx="7" />
+  <path d="M7 24h4v-7H7zm7 0h4V8h-4zm7 0h4V13h-4z" />
+</svg>

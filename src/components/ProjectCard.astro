@@ -1,0 +1,146 @@
+---
+import type { CollectionEntry } from "astro:content";
+import ProjectMedia from "./ProjectMedia.astro";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+const { title, summary, years, role, stack } = project.data;
+---
+
+<article class="tile reveal">
+  <ProjectMedia project={project} />
+  <div class="body">
+    <p class="label">
+      {years} · {role}
+    </p>
+    <h3>
+      <a href={`/work/${project.id}/`}>{title}</a>
+      <span class="arrow" aria-hidden="true">
+        →
+      </span>
+    </h3>
+    <p class="summary">{summary}</p>
+    <p class="stack">{stack.join(" · ")}</p>
+  </div>
+</article>
+
+<style>
+  .tile {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    border-radius: 1.25rem;
+    background: var(--raised);
+    transition:
+      border-color 250ms var(--ease-out),
+      box-shadow 250ms var(--ease-out);
+  }
+
+  .tile::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      30rem circle at var(--x, 50%) var(--y, 50%),
+      color-mix(in oklch, var(--accent) 14%, transparent),
+      transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 300ms var(--ease-out);
+    pointer-events: none;
+  }
+
+  .tile:hover {
+    border-color: color-mix(in oklch, var(--accent) 60%, var(--rule));
+    box-shadow: 0 24px 50px -30px color-mix(in oklch, var(--ink) 50%, transparent);
+  }
+
+  .tile:hover::after {
+    opacity: 1;
+  }
+
+  .tile :global(.media) {
+    height: clamp(14rem, 26vw, 22rem);
+    aspect-ratio: auto;
+    border: 0;
+    border-bottom: 1px solid var(--rule);
+    border-radius: calc(1.25rem - 1px) calc(1.25rem - 1px) 0 0;
+  }
+
+  .tile :global(.loop-video) {
+    transition: scale 600ms var(--ease-out);
+  }
+
+  .tile:hover :global(.loop-video) {
+    scale: 1.04;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  h3 {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: var(--step-2);
+  }
+
+  h3 a {
+    text-decoration: none;
+  }
+
+  h3 a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  h3 a:focus-visible {
+    outline: none;
+  }
+
+  .tile:has(a:focus-visible) {
+    outline: 2px solid var(--accent-text);
+    outline-offset: 4px;
+  }
+
+  .arrow {
+    color: var(--accent-text);
+    font-family: var(--font-sans);
+    font-size: 0.7em;
+    translate: -0.4rem 0;
+    opacity: 0;
+    transition:
+      translate 250ms var(--ease-out),
+      opacity 250ms var(--ease-out);
+  }
+
+  .tile:hover .arrow,
+  .tile:has(a:focus-visible) .arrow {
+    translate: 0 0;
+    opacity: 1;
+  }
+
+  .summary {
+    max-width: 54ch;
+  }
+
+  .stack {
+    margin-top: auto;
+    padding-top: 0.75rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+  }
+</style>

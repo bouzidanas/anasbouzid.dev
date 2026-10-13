@@ -1,0 +1,28 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="wrap row">
+    <p>© {year} Anas Bouzid</p>
+    <p>
+      Built with Astro, SolidJS and <a href="/work/rhp/">rhp</a>.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--rule);
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    padding-block: 2rem;
+  }
+</style>

@@ -1,0 +1,44 @@
+---
+title: React components
+summary: React components I publish and maintain for playlists, synced lyrics and reveal.js slides.
+order: 5
+years: Since 2023
+role: Creator and maintainer
+stack: [React, TypeScript, CSS, Vite, npm]
+links:
+  - { label: react-list-player, href: "https://github.com/bouzidanas/react-list-player" }
+  - { label: lyr-ix, href: "https://github.com/bouzidanas/lyr-ix" }
+  - { label: react-reveal-slides, href: "https://github.com/bouzidanas/react-reveal-slides" }
+poster: ../../assets/projects/react.png
+video: /media/react.mp4
+embed: "https://react-list-player.vercel.app/"
+---
+
+import InlineDemo from "../../components/InlineDemo.astro";
+import stats from "../../data/stats.json";
+
+## react-list-player
+
+react-list-player is a React playlist component.
+It manages the list but doesn't play media itself, so it works with any audio or video player.
+It resizes with its container, switches between built-in sizes, and has a headless mode that leaves out its playback controls so you can use your own.
+The player at the top of this page is its live demo.
+It installs from npm as `react-list-player`, and the repository has {stats.github["bouzidanas/react-list-player"].stars} stars on GitHub.
+
+## lyr-ix
+
+lyr-ix shows a song's lyrics in time with the music and highlights the line being sung.
+Clicking a line pauses the song and moves playback to the start of that line, and clicking it again plays from there.
+The lyrics scroll to keep the current line in view, and you can control playback and move between lines with the keyboard.
+It has two themes, one modeled on Spotify's lyrics view, and it accepts your own CSS.
+Callbacks report play, pause and line changes.
+Its `play`, `pause` and `isPlaying` functions let another player control it.
+It installs from GitHub.
+
+<InlineDemo src="https://lyr-ix.vercel.app" title="The lyr-ix demo" />
+
+## react-reveal-slides
+
+react-reveal-slides builds [reveal.js](https://revealjs.com) presentations in React.
+You write slides in JSX, put React components inside them, and control the configuration and the current slide through props.
+It installs from GitHub, and the repository has {stats.github["bouzidanas/react-reveal-slides"].stars} stars.

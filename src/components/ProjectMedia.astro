@@ -1,0 +1,105 @@
+---
+import type { CollectionEntry } from "astro:content";
+import LiveEmbed from "./LiveEmbed.astro";
+import LoopVideo from "./LoopVideo.astro";
+import QuizmarkDemo from "./quizmark/QuizmarkDemo.astro";
+import ToolsTerminal from "./ToolsTerminal.astro";
+import BellCard from "./solid/BellCard";
+import RhpShowcase from "./solid/RhpShowcase";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+  page?: boolean;
+}
+
+const { project, page = false } = Astro.props;
+const { title, poster, video, embed, embedDark } = project.data;
+const rhp = project.id === "rhp";
+const quizmark = project.id === "quizmark";
+const tools = project.id === "tools";
+---
+
+<div
+  class:list={[
+    "media",
+    {
+      page,
+      bell: rhp && !page,
+      showcase: rhp && page,
+      demo: quizmark && page,
+      terminal: tools,
+      embed: page && embed,
+    },
+  ]}
+  data-media={project.id}
+>
+  {rhp && page ? (
+    <RhpShowcase client:load />
+  ) : rhp ? (
+    <BellCard client:visible />
+  ) : tools ? (
+    <ToolsTerminal />
+  ) : quizmark && page ? (
+    <QuizmarkDemo />
+  ) : page && embed ? (
+    <LiveEmbed src={embed} darkSrc={embedDark} title={title} video={video!} poster={poster!} />
+  ) : (
+    <LoopVideo src={video!} poster={poster!} label={`${title} in use`} />
+  )}
+</div>
+
+<style>
+  .media {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--raised);
+  }
+
+  .bell {
+    display: grid;
+    align-items: center;
+    background: #0e0c14;
+  }
+
+  .bell :global(.poster) {
+    border-radius: 0;
+  }
+
+  .showcase {
+    aspect-ratio: auto;
+    padding-top: 1rem;
+  }
+
+  /* The demo was designed for Quizmark's light page, so its band stays white in both themes. */
+  .demo {
+    display: grid;
+    justify-items: center;
+    aspect-ratio: auto;
+    padding: clamp(2rem, 6vw, 4.5rem) var(--gutter);
+    border-inline: 0;
+    border-radius: 0;
+    background: #fff;
+  }
+
+  .demo :global(.quizmark) {
+    width: min(100%, 1000px);
+  }
+
+  .terminal {
+    container-type: inline-size;
+    border-color: #21262d;
+    background: #0d1117;
+  }
+
+  .terminal.page {
+    aspect-ratio: auto;
+    min-height: 24rem;
+  }
+
+  .embed {
+    aspect-ratio: auto;
+    height: min(82svh, 58rem);
+  }
+</style>

@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Africa's typical country trails Europe's</title>
+<meta name="description" content="Life expectancy at birth in 2023 for the 193 UN member states, drawn as an atlas plate: each continent's countries gather into one island along a scale of years. Point at, tap or Tab to a dot to name its country.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Spectral:wght@600;700&display=swap">
+<script type="importmap">{ "imports": { "@bezda/rhp/standalone": "https://cdn.jsdelivr.net/npm/@bezda/rhp@2.0.4/dist/standalone.js" } }</script>
+<style>
+  /* An atlas plate: pale ocean paper, sand-coloured land, slate dots for the countries, a coral accent */
+  :root {
+    color-scheme: light;
+    --page: #bdd3db;
+    --paper: #dbe9ee;
+    --ink: #0f2a35;
+    --soft: #3b5864;
+    --rule: #bfd4dc;
+    --land: #f4eddc;
+    --coast: #a69270;
+    --dot: #4a5f6d;
+    --accent: #a92d1b;
+    --display: Spectral, Georgia, "Times New Roman", serif;
+    /* The world's land without Antarctica (Natural Earth 1:110m, public domain, via world-atlas), in Equal Earth centered
+       on 15°E, so Africa and Europe sit in the middle */
+    --world: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0.0 0.0 1000.0 468.9'%3E%3Cpath d='M992,333l1,0l1,1l-1,2l-2,0l-2,0l0-2l2-1zM999,327l1,0l-1,2l-2,1l-3,1l1-1l1-1l1,0l2-2zM583,282l-2,5l1,2l2,1l0,1l-1,3l0,1l0,2l1,3l1,4l1,0l0,2l0,4l0,4l0,6l1,2l-1,3l-2,3l-2,2l-2,2l-4,2l-3,4l-2,1l-2,2l-1,1l0,3l1,3l0,2l0,1l1,0l0,4l-1,2l1,1l-1,1l-1,2l-3,1l-3,2l-1,1l0,2l0,2l-1,3l0,3l-1,2l-2,2l-1,0l-1,2l-1,2l-2,3l-3,4l-2,2l-2,2l-3,1l-2,0l0,1l-2,0l-1,1l-3-1l-2,0l-1,0l-3,2l-2,0l-2,2l-1,0l-1-2l-1,0l-2-1l0-1l0-2l-1-3l1,0l0-3l-2-4l-1-3l-2-5l-2-3l-1-2l-1-4l-1-3l-1-6l0-4l0-3l-1-1l-2-3l-1-5l-1-3l-3-4l0-3l0-2l0-4l1-3l1-2l0-4l1-1l2-3l1-2l0-3l0-2l-1-1l-1-3l0-2l0-1l1-2l-1-4l-1-2l-1-3l0-1l-1-1l0-3l-3-4l-3-4l-2-4l-2-4l0-1l1-2l1-3l0-3l1-5l0-3l-1-3l-1,0l-1-2l-1-1l0-1l-3,2l-1-1l-1,1l-3,0l-1-2l-1-3l-2-3l-3,0l-2,0l-3,1l-2,0l-5,3l-2,1l-2,1l-3-1l-1,0l-2-1l-2,0l-4,1l-2,1l-3,2l-1,0l-4-2l-2-3l-3-2l-2-3l-1,0l-2-2l-1-2l-1-2l0-3l-1-2l-1-2l-1,0l-1-1l0-2l-1-1l-2-2l-1,0l-1-1l0-1l-1-1l0-1l0-3l0-2l-1-3l-1-1l1-1l2-3l1-2l-1-2l1-2l1-4l0-4l0-1l0-2l-1-2l-1-2l0-2l1-1l1-2l1-2l0-1l1-3l2-2l1-1l1-2l0-2l1-2l2-2l3-4l1-1l3-1l2-2l2-1l2-3l0-5l1-3l1-2l2-3l3-1l2-2l2-4l1-2l2,0l2,2l3-1l2,1l2,0l2-2l3-1l2-1l3-1l5-1l4,0l1,0l3-1l3,0l1,1l2,0l3-2l2,1l0,1l2-1l0,1l-1,2l0,1l1,1l-1,3l-2,2l1,2l1,0l1,2l1,1l3,1l2,0l2,0l4,2l1,3l2,1l4,1l3,2l2-1l1-1l-1-3l1-2l2-2l2,0l4,0l1,2l1,0l1,1l3,0l0,1l4,0l3,1l3,1l1,1l2-1l1-1l3-1l2,1l1,2l0-1l3,0l2,1l1-1l1-2l0-1l1-3l0-1l1-3l1-3l-1-3l1-1l-1-2l1-1l-2,0l-2-1l-2,2l-4,1l-2-2l-3,0l-1,1l-2,1l-3-2l-3,0l-1-4l-2-2l1-3l-2-1l3-4l4,0l1-3l5,1l3-2l3-1l4,0l5,2l4,1l3,0l2,0l3-2l1-1l-1-2l-2-2l-2,0l-1-1l-3-3l-4-1l-2-2l2-1l2-3l-2-1l4-1l-1-1l-2,1l-2,0l-1,1l-3,0l-2,1l0,2l1,0l1,1l3,0l-1,1l-3,1l-3,2l-1-1l0-2l-3-1l3-1l-1-1l-4-1l0-1l-3,0l-1,2l-1,3l-1,1l-1,0l-1,4l-1,1l-1,3l1,2l1,1l2,1l0,1l-3,0l-2,1l-2,2l-1-1l0-1l-1,0l-2-1l-3,1l2,2l-1,1l-2,0l-1-2l-1,1l1,2l1,2l-1,0l2,2l1,1l0,2l-2-1l1,2l-2,0l1,4l-2,0l-2-2l-1-3l-1-2l-1-2l-1-2l0-1l-1,0l0-1l-1-1l-1-2l1-2l0-1l-1-1l-1-1l-1-1l-2-1l-2-1l-2-1l-3-3l1,0l-1-2l0-1l-2,0l-1,1l-1-1l0-1l1,0l-2-1l-2,1l0,2l0,1l1,2l2,1l1,3l3,3l2,0l1,1l-1,0l3,2l2,1l2,2l0,1l-2-1l-2-1l-1,2l2,2l-1,2l-1,0l-1,3l-1,0l0-1l0-2l1-1l-1-2l-1-1l-1-1l-1-1l-2-1l-1-1l-2-1l-2-1l-2-2l-2-2l-1-4l-1,0l-2-1l-1,0l-2,2l-1,0l-2,2l-5-1l-4,1l-1,2l0,2l-2,2l-4,1l0,1l-2,2l-1,3l1,2l-2,2l-1,2l-2,1l-2,3l-3,0l-3,0l-2,1l-1,1l-1,0l-1-1l-1-2l-2-1l-2,1l-1,0l-1,0l0-3l0-2l-1,0l0-2l0-2l1-1l1-2l1-2l0-1l-1-2l0-1l1-2l-1-2l4-2l3,0l3,0l3,1l2,0l5,0l1-2l1-7l-2-3l-2-2l-3-1l0-3l3,0l4,1l0-4l2,1l6-2l1-3l2,0l2-1l1-1l3-4l3-2l2,0l1,0l2,0l2-1l-1-1l0-2l0-2l0-3l1-1l2,0l1-1l2-1l-1,1l0,1l0,1l1,1l0,1l-1-1l-2,2l1,2l0,1l2,1l0,1l3-1l1-1l3,2l1,1l1-1l4-2l3-1l3,1l0,1l2,0l1-2l3-1l-1-2l0-2l1-2l2-1l2,2l2,0l1-2l0-2l-1,0l-2,0l0-2l3-1l3,0l2,0l3,0l2-1l-2-2l-5,1l-3,1l-4,0l-2-1l-2-1l1-3l-2-2l1-2l2-1l5-3l1,0l0-1l-3-1l-4,0l-2,2l1,1l-4,2l-4,2l-1,4l1,2l3,1l-2,4l-3,0l-1,5l-1,3l-3-1l-1,3l-3,0l-1-3l-2-3l-1-4l-2-2l-4,3l-4,1l-3-1l0-3l0-7l2-1l6-2l4-3l4-3l5-5l4-1l6-3l4-1l3,0l3-1l4,0l4-1l6,2l-2,0l2,2l2-1l4,1l5,1l9,2l2,1l0,2l-2,1l-3,1l-10-2l-1,0l3,2l1,1l0,2l3,1l2,1l0-1l-1-2l1,0l5,1l2-1l-2-1l5-3l2,1l2,0l1-1l-3-2l1-1l-2-1l6,0l2,2l-3,0l1,1l2,1l3-1l0-1l4-1l6-2l2,0l-2,2l3,0l1-1l4,0l3-1l3,1l2-1l-3-1l1-1l6,1l3,0l9,3l1-1l-3-1l0-1l-3,0l0-1l-2-2l3-2l0-2l1,0l6,0l1,1l-1,2l1,1l2,1l1,3l3,1l0,2l-2,3l3,0l0-1l2,0l0-1l1-1l-2-2l0-1l-2,0l-1-1l0-3l-4-1l3-1l-1-2l1,0l1,1l1,2l2,0l-2-1l3-1l4,0l5,1l-3-1l-2-2l3-1l5,1l4-1l-2-1l1-1l3,0l3-1l5,0l5,0l2,0l3-1l4,0l1-1l4-1l4,1l-3,0l5,0l1,1l2,0l5,0l5,1l3,0l0,1l-2,0l-4,1l-1,1l3,0l3,1l2-1l2,1l1,0l2,0l7,0l1,1l9,0l-1-1l4,0l3,0l5,1l2,1l0,1l4,1l5,1l-1-2l4,1l3-1l5,1l4,0l-4-2l2-1l20,1l3,2l7,1l8,0l5,0l3,1l2,1l3,1l2-1l4,0l4,1l4,0l6,1l2,0l-4-2l-1,0l8,0l4,0l8,1l4,1l8,2l9,2l3,1l2,1l-3-2l6,0l8,3l-1,1l-3,0l4,2l0,1l-2,0l-3-1l-4-1l-2-1l-3,0l-2,0l-3-1l0-1l-2,1l3,1l0,1l-1,1l-3,0l4,1l4,2l2,1l2,1l0,1l-5-1l-3,2l-2,0l-1,2l-1,2l1,1l-6-2l-3,2l-2-1l-1,1l-3,0l1,2l1,3l1,1l3,0l5,4l-2,1l1,2l3,1l-3,2l3,3l-3,1l2,3l0,3l-3-2l-6-5l-8-6l-3-4l0-2l-1-1l3-1l0-3l0-3l2-2l-3-4l-3,0l2,2l-2,3l-6-3l-5,1l0,4l4,2l-5,1l-3,0l-2-2l-4,0l-1,1l-8,0l-7,0l-2,6l-2,7l4,0l2,2l3,1l1-2l2,0l7,4l2,2l1,3l3,4l3,5l-1,5l1,2l-1,4l-1,4l0,2l-2,2l-2,0l-3-2l-2,3l1,1l-1,0l-1,1l0,1l2,3l-1,0l-1,1l0,1l-1,1l-1,1l1,1l0,1l1,0l2,2l5,4l2,2l2,4l-1,2l-2,1l-1,2l-3,0l-1-2l-1-3l-2-4l1,0l-3-3l-2-1l0,1l-1-1l-1,0l-1-1l0-1l1-1l-1,0l0-2l-1-1l-1,0l-2-1l-3,1l-2,2l-2,1l1-2l-2-1l1-3l-2-2l-2,2l-2,2l0,2l-3,1l0,1l2,3l3,0l1,2l2,1l2-3l3,2l2,0l1,2l-3,1l0,2l-2,1l-1,3l4,2l3,4l3,3l3,3l1,3l-2,1l2,2l2,1l1,3l0,3l-2,0l0,4l-1,6l-1,4l-3,4l-4,3l-3,0l-1,2l-1-1l-2,2l-3,2l-3,0l0,5l-2,0l-1-3l0-2l-4-1l-1,1l-3,3l-2,4l0,3l3,4l3,5l4,2l2,4l2,7l1,7l-2,3l-3,2l-3,4l-3,4l-1-3l0-3l-2-2l-3-1l-1-2l-2-4l-3-2l-3,0l0-3l-2,0l0,5l-1,5l-1,4l1,3l2,0l1,4l1,3l2,3l2,0l2,2l0,1l2,2l2,3l0,2l0,2l0,2l0,2l1,1l2,4l0,1l-3,1l-2-4l-4-3l0-2l-2-3l-1-3l-1-2l0-3l-1-2l-1-1l-1-2l-1-3l-2-2l0,3l-1-2l0-3l1-4l-1-3l1-3l-2-2l0-5l-1-2l-2-5l-1-5l-2-3l-2,2l-2,3l-2,0l-2-1l0-5l-1-4l-3-5l0-1l-2-1l-2-3l-2-2l0-2l-1-2l-2-2l-2,0l0,2l0,2l-2-1l0,1l-1-1l-1,0l0,1l-2,0l-4,1l1,3l-1,2l-4,3l-3,5l-2,2l-2,3l0,2l-1,1l-3,1l-1,0l-1,3l1,5l1,4l-1,4l0,6l-1,1l-1,3l1,1l-3,1l-1,3l-1,1l-3-4l-2-5l-1-4l-1-2l-2-4l-1-5l-1-3l-3-5l-2-8l-2-5l-1-5l-1-3l-4,2l-2-1l-4-4l1-2l-1-1l-4-4l-2-1l-1-2l-3-3l-5,0l-5,1l-4,0l-5-1l-4-1l-3,0l-2-5l-1-1l-2,1l-3,2l-4-2l-3-3l-3-1l-2-3l-3-5l-1,0l-2-1l-1,2l-2-1l1,2l0,1l1,3l1,3l2,1l1,1l2,2l0,1l0,2l0,1l1,1l1,1l0,1l0-2l0-2l1-1l1,1l1,3l-1,2l1,1l1,1l2,0l2,0l2,0l2-3l1-2l2-3l1-1l0,2l0,1l0,3l2,2l2,2l2,0l2,1l1,2l1,1l1,1l0,1l0,2l-1,1l-1,2l-1,2l-1,0l0,1l-1,2l1,3l-2,0l-1,2l-1,1l0,1l-2,0l-1,1l0,2l-1,1l-2,0l-2,1l-1,0l-2,1l-1,2l0,1l-3,2l-4,2l-3,3l-1,0l-1,0l-2,1l-1,1l-3,0l-1,1l0,1l-1,0l0,1l-2,0l-1,0l-2,0l-1-2l0-2l0-1l-1-3l-1-2l1,0l-1-2l0-1l0-2l0-1l-1-1l0-2l-2-2l-2-3l-1-3l-2-3l-1,0l-3-4l0-3l0-2l-2-5l-1-1l-2-1l-1-2l0-1l-1-2l-1-1l-1-3l-2-3l-2-2l-1,0l0-2l0-2l0-1l0-1l0,2l-1,3l0,2l-1,0l-1-1l-1-2l-3-5l1,4l2,4l3,6l1,2l1,2l3,5l-1,0l1,3l3,3l1,1l1,4l-1,1l1,4l1,4l1,1l2,2l2,4l1,4l2,2l4,4l2,2l1,2l1,2l2,1l1,1l0,2l-2,1l1,1l1,1l1,1l1,2l2,0l3-1l3,0l2-2l2,0l1-1l2,0l1,0l1,0l1-1l2-1l1,0l0,1l0,2l0,2l-1,2l0,4l-2,5l-1,5l-3,6l-2,4l-4,6l-3,3l-4,4l-3,3l-3,5l-1,2l-1,1l-2,2l-1,2l-1,0l0,3l-1,1l-1,3zM602,113l1,2l3,1l2,2l4,1l4-1l0-1l-1-3l0-4l-3-1l1-2l-2,0l0-3l3,1l2-2l-3-2l-1-2l-2,1l0,3l-1-2l0-1l0-2l0-1l-4-1l-1-3l-2-1l0-1l2,0l0-2l2-1l2,1l0-4l-1-2l-2,1l-3-1l-2,1l-3,1l0,2l-3,0l-2,4l3,3l0,2l4,4l2,2l1,3l2,0l1,1l-3,0l0,3l0,1l-1,1zM918,43l-1-1l-2-1l-4-1l-1-2l-1-1l9,6zM111,37l3-2l2,0l1,1l4-2l1,1l3-1l1-1l0-1l3-1l-2,0l-3,1l-1,1l-1-1l-4,0l8-5l2,0l2,0l-3,1l5,0l1-1l-1-1l0-1l0-1l4-2l2,0l4-1l2-1l4-1l3,0l5-1l2,0l5-1l2,0l0,1l2,0l3,0l-1,1l2,0l3,0l3,0l4,0l1,1l3-1l2,1l2,0l3,1l2,1l1,0l4-1l3,0l3,0l4-1l4-1l1,1l2,0l2-1l1,0l1,2l4-2l-2,2l3,0l2-1l2,0l2,1l4,1l2,0l3,0l1,1l-4,1l3,1l6-1l2,0l1,1l3-1l-1-1l3,0l2-1l2,0l1,1l1,1l2,0l3,1l4-1l3,0l1-1l2,0l3,0l-3,3l4-2l1,0l4-2l-1-2l-2,0l3-3l4-1l3,0l1,1l0,2l-3,1l3,1l-2,2l4-2l1,2l-2,1l1,2l3-2l4-2l2-2l3,0l3,0l2,1l-1,2l-3,1l0,1l-1,1l-6,2l-3,0l-2-1l-1,1l-4,2l-2,1l-4,2l-3,0l-3,1l-2,2l-3,0l-4,2l-6,3l-3,2l-3,4l3,0l-1,3l0,2l3-1l4,1l1,2l1,1l2,1l2,1l3,0l3,0l-2,3l-2,3l0,3l2,3l2-1l3-3l2-5l0-1l4-2l5-2l2-2l1-2l1-2l-2-2l5-3l1-2l3-4l2-1l3,1l2,0l3-1l1,1l2,2l-1,1l4,0l-1,2l-2,4l2,0l0,2l5-2l4-3l2-1l0,2l1,4l1,3l-2,2l2,2l1,1l4,1l1,1l-1,3l2,0l0,1l-1,3l-3,2l-2,1l-4,1l-5,2l-4,1l-5-1l-4,0l-3,0l-3,3l-4,1l-6,4l-4,3l2,0l6-4l7-3l4,0l1,1l-3,2l-1,4l0,2l2,2l5,0l4-4l-1,2l1,1l-4,3l-6,2l-3,1l-4,2l-2,0l1-3l6-2l-5,0l-3,0l0,1l-3,2l-3,1l-4,1l-2,2l-1,1l-1,2l0,1l2,1l0-2l0,1l0,1l-2,1l-2,0l-2,0l-1,0l-2,0l-2,2l4-1l0,1l-4,1l-2,0l1-1l-2,1l1,0l-1,3l-4,3l1-1l-1-1l-1,1l1,1l-1,1l-1,2l-3,3l2-3l-1-1l1-3l-1,1l-1,3l-1-1l1,1l-1,4l1,0l-1,1l-1,4l-2,2l-4,2l-2,2l-2,0l-2,1l0,1l-4,3l-3,2l-2,2l-1,3l0,2l-1,3l1,3l-1,2l0,4l0,3l-1,1l-1,3l-1,0l-2,0l0-2l0-1l-1-3l0-3l0-2l1-2l0-2l-1-3l-1-1l-4,2l0-1l-1-1l-1-1l-4,0l-2,0l-2,0l-2,1l1,1l-1,1l0,1l-1,0l-2,1l-2,0l-1-2l-3,0l-1-1l-2,0l-3,1l-4,3l-3,2l-2,2l-1,1l-1,3l-1,2l0,1l-2,3l-1,3l-2,5l-1,2l0,2l0,2l0,3l1,3l1,3l0,2l3,1l1,1l3-1l2,0l3-1l2-1l2-1l1-3l1-3l1-1l2-1l3-1l3,0l2,0l0,1l0,2l-2,2l-2,2l1,1l-1,2l-1,3l-1-1l-1,0l1,0l0,2l-1,1l0,1l-1,1l0,1l0,2l-1,1l-1,0l-1,1l1,1l1-1l0,1l1,0l1-1l1,1l0-1l1,1l2,0l1-1l1,0l1,0l1,0l2,0l1,1l0,1l1,1l1,1l-1,1l1,2l-1,1l-1,2l0,1l0,1l0,2l-1,1l0,1l0,1l-1,1l0,1l0,1l1,2l1,2l1,2l1,1l0,1l1,0l1,1l1,0l2-2l2,0l1-2l2,1l-1,0l2,0l1,1l1,1l1,1l2,0l2-2l2-1l0-1l1-4l2-1l1-1l1,0l2,0l3-2l1-1l2-2l1,0l0,1l0,2l-1,1l-1,0l0,2l0,2l-1,2l0,4l2-1l1-3l-1-1l0-3l4-2l0-2l1-1l1,3l2,0l1,2l0,2l3,0l3-1l2,2l2,1l2-2l0-1l4,0l3,0l-2,1l1,2l2,0l2,2l0,4l2,0l1,0l2,2l2,3l0,2l1,0l1,2l1,1l4,1l0-1l3,0l3,1l1,1l2,0l3,4l1,2l1-1l0,3l2,7l2,0l0,3l-3,4l1,1l6,0l0,5l2-3l4,1l5,3l1,2l0,2l3-1l6,2l5,0l4,4l4,4l3,1l2,0l1,2l2,5l0,2l-1,7l-1,3l-4,5l-2,5l-2,3l-1,3l1,8l0,6l0,3l-1,1l0,6l-2,5l0,4l-2,1l-1,3l-3,0l-4,1l-2,2l-3,1l-3,3l-2,4l0,3l1,2l0,4l0,2l-1,2l-2,6l-2,3l-1,2l-1,4l-1,2l-1,2l-2,2l-2-1l-2,1l-3-2l-2,0l-2-2l1,2l4,3l0,3l3,1l0,2l-1,5l-4,2l-5,0l-3,0l2,2l0,3l1,2l-1,1l-3,0l-3-1l0,1l1,3l3,1l1-1l1,2l-2,1l-1,2l1,4l0,2l-2,0l-1,1l0,3l4,2l2,1l1,3l-2,2l0,3l-1,2l-1,1l3,3l3,2l-2,0l-2,0l0,1l-2,1l1,3l-1,0l-3-1l-4-2l-4-2l-2-2l-1-2l-2-2l-3-5l-1-4l1-2l-4-1l1-3l-2-6l3,2l-2-7l-2-1l1,4l-1-1l-2-4l-2-7l0-2l-2-4l-2-4l2,0l-1-6l0-6l-1-5l-2-6l0-3l-2-5l0-4l-1-8l-1-8l-1-8l-1-7l-2-5l-3-3l-1-1l-6-4l-6-5l-3-2l-2-3l1-2l-4-5l-3-7l-4-8l-1-2l-1-3l-3-3l-2-2l1-1l-2-4l1-3l2-3l2-3l-1-1l-1,1l-2-1l0-1l0-4l1-1l1-2l1-3l-1-2l2,0l2-2l0-1l1-1l0-2l1-1l1,0l1-3l2-2l-1-1l0-2l0-4l1-1l-1-4l-1-2l-1-1l0-2l1-1l-1-1l-1-1l-1-1l-1,0l-1,2l-1,1l-1,0l0,1l1,2l-1,0l0,1l-2,0l0-2l-1,0l-1,0l0-1l-1-1l-1,0l-1,0l-1,1l0-1l-1-1l-1-1l1,0l-1-1l0-1l-1-1l-1-1l0-1l-1,0l0,1l-1,1l0-1l-1-1l-1-1l1-1l0-1l-1-1l1-1l-1-1l-1-1l0-2l-1-1l-2-2l1,0l0-1l-1-1l0,1l-2,0l-1,0l-1-1l-2,0l0-1l-2-1l-2,0l-1-1l-1-1l-3-5l-1-1l-2-1l-2,0l-3,2l-1,0l-2-1l-2-1l-3-1l-2-1l-3-2l-2-2l0-1l-2,0l-3-1l0-2l-3-2l-1-3l0-2l1,0l0-1l1-1l0-2l0-1l0-2l0-2l-2-4l-2-3l0-2l-2-2l0-1l1-2l-1-1l-1-2l0-3l-1,0l-1-2l-1-2l1-1l0-3l0-3l1-1l-2-2l-1,1l-1-1l-1,1l-1,2l-1,3l1,1l1,3l0,1l0,1l1,0l-1,3l1,1l0,1l1,2l-1,4l1,1l0,2l-1,2l2,0l0,2l1,2l-1,0l-1,2l-1,0l0-3l-1-2l-1-2l-2-1l1-2l1-3l-1-1l-1-1l-1,0l0-1l-2-1l-1-2l1,0l1,0l2-2l0-1l-1-3l-1-1l0-2l0-3l0-3l1-3l0-2l0-2l-2-1l1-1l-2,0l0-1l-3,0l0-1l1-2l-1-4l1-5l0-2l0-3l1-2l0-2l3-3l2-3l1-3l3-3l3-3l2-3l3-5l2-2l1-2l0-1l3,2l-1,3l1-1l2-3l1-3l-2-3l-1-1l-3-1l1-3l3-2l-2-1l2-3l-1-2l2-2l0-1l-2-1l3-2l-1-2l2-3l-2,0l-4,0l-1-1l-1-3l-2-1l-3-1l-3,1l-3-2l-1-1l-3,1l-2,2l-2,0l-3,1l-4,0l-3,1l2-2l5-2l3-1l1-1l-5,2l-5,2l-6,1l0,2l-5,2l-4,1l-3,1l-2,1l-6,2l-3,1l-4,1l-1,0l-4,1l-3,1l-4,1l-5,1l0-1l5-1l3-1l5-2l3,0l3-1l6-2l1-1l3-1l3-2l4-1l-4,0l-3,1l1-1l-2,1l1-2l-4,1l-1,0l2-1l2-1l0-1l-4,0l0-1l9-6zM902,32l-4,0l-3-1l-5-2l1-1l2-1l9,5zM888,24l-2,0l-4-1l-1-1l2,0l5,2zM290,37l3-1l3,0l-1,1l-4,1l-1,0zM321,14l-1-1l1,0l1,0l4,0l2,1l-2,0l-2,0l-2,0zM297,38l2-1l1,0l0,1l-2,1l-1,0l0-1zM298,11l-2,0l-2,0l-2,0l2-1l3-1l1,1zM303,7l-1,0l-4,0l0-1l4,0l1,1zM299,5l2,0l-1,1l-3,0l-1,0l-1-1l1,0l2,0zM308,12l-3-1l-5,0l1-1l0-1l-1-1l-3,0l-2,0l1-1l4,0l2,1l4,0l1,0l-2,1l2,0l1,1l3,0l2,0l4-1l4,0l3,0l1,1l0,1l-2,0l-3,0l-2,0l-6,0zM271,6l2,0l-1,0l-4,1l-2-1l2,0zM273,5l2,0l-3,0l-3,0l3,0zM336,69l-2,2l-3,3l2-1l1,0l-1,2l2,0l1,0l2,1l-2,2l2-1l0,2l0,2l-2,3l-2,0l-1,0l2-3l-1-1l-4,3l-1,0l2-1l-2-1l-3,0l-5,0l0-1l2-1l0-1l3-2l5-5l2-2l3-1l1,0zM296,31l2,0l2,1l-1,1l2,0l0,1l-2,1l-3-1l0-1l-4,1l-4,2l1-2l-4,0l3-1l2-2l3-2l2,0l-1,1l2,0zM322,15l3-1l3,1l2,1l0,1l4,0l1,1l4,1l1,0l0,2l-4,1l3,2l3,0l2,2l3,1l-2,1l-6,3l-2-1l-1-2l-3,0l-2,1l2,2l2,1l0,3l-2,2l-3-1l-4-2l2,2l1,2l0,1l-6-1l-3-2l-2-1l1-1l-2-1l-2-1l-1,0l-6,1l-1-1l3-2l4,0l4,0l0-1l2-1l5-2l0-1l0-1l-2-1l-4-1l2,0l-1-2l-2,0l-1-1l-1,1l-4,0l-7,0l-4-1l-3,0l-1-1l3-1l-3,0l2-2l4-1l2-1l6,0l-3,1l1,1l3-2l6,0l1,1l-1,2zM295,12l4,0l3,0l-5,2l-3,0l-4,2l-2,0l1-2l1-1l2-1zM244,9l5-1l6-1l2,0l3-1l-2,2l-2,0l-2,0l-4,1l-4,0zM154,61l3-1l-5,4l0,2l-1,0l0-1l0-1l0-1l1-2l1-1zM284,4l3,1l5,0l0,1l-3,0l-2,0l-4,0l2-1l-2,0zM160,78l-1,0l-3-1l0-1l-1-1l0-1l-2-1l1-1l1-1l2,0l1,1l2,0l0,1l0,2l1,1zM242,11l3,1l4,0l2,0l1,1l-4,1l-6,1l-5,1l-1,1l-7,1l1-1l-4-1l2-1l4-1l4-1l-1-1zM272,9l3,0l1,0l0,1l-3,0l-7,1l-5,0l-4,1l1-1l5-1l-9,0l-2,0l5-1l2-1l5,1l2,1l3,0l0-2l2,0l2,0l-1,1zM268,14l2,1l-1,1l-2,2l3,1l2,1l-1,1l-4,0l0,1l-1,0l-4,0l-2-1l-3,1l-5,0l-5,1l-4,0l0-1l-2-1l-2,0l-1-1l2,0l4-1l2,0l4,0l-4,0l-4,0l-3,0l0-1l6-1l-4,0l-2,0l3-2l3-1l7-1l1,1l-2,1l5-1l2,1l3-1l1,1l0,1l2,0l1-2l2,0zM280,14l-1-1l3-1l2,1l4,0l-3,1l2,1l-2,1l-5,1l-1,0l-1-1l-3-1l1-1zM270,13l2,0l1,0l-3,1l-1-1zM292,8l1,1l-1,0l-3,1l-3,1l-2-1l1-1l-3,1l2-2l2,0l3,0l3,0zM304,3l1,0l2-1l4,0l2,1l3,0l3,0l0,1l2,0l-3,1l-5,1l-3,0l-4,0l-1-1l2-1l-3,0l-2,0l0-1zM314,2l3-1l2,0l4,0l3,0l2,0l2,0l2,0l2,0l4-1l5,0l1,1l6-1l3,0l4,0l5,1l4,0l3,0l-5,1l-5,0l-2,0l4,0l-5,1l-3,0l-4,1l-4,0l-2,0l-5,0l2,0l-2,1l1,0l-2,1l-3,0l-2,1l-3,0l3,0l0,1l-6,1l-5-1l-6,0l-2,0l-4,0l1-1l4,0l0-1l1,0l5,1l-2-1l-3,0l2-1l4,0l1-1l-2,0l0-1l5,0l1,0l4,0l-4,0l-7,0l-3,0l-1-1l-1,0zM320,25l-2,1l-3,0l1-1l2-1l2-1l1,1l-1,1zM280,21l1,1l-2,0l-2,0l-2,0l-2-1l2-1l3-1l1,1l1,0zM311,74l1-1l3,1l2,1l0,1l-1,0l-3-1zM308,83l0,1l2,1l2,0l-1,1l-1,0l-3-1l0-1zM10,182l1,2l-2,1l-1,1l-1,0l0-1l0-2l1,0l0-1l0-1l1,0zM9,179l-1,1l-1-1l0-1l1,0l1,0zM7,177l0,1l-1,0l0-1zM5,175l0,2l-1,0l0-1zM2,173l-1,1l0,1l-1-1l1-1zM915,43l2,0l2,1l-1,0l-2,0l-3-1zM119,49l1,0l0,1l-4,2l-3,1l-1-1l2-1l3-1zM890,34l2,0l1,0l2,1l3,0l0,1l-3-1l-1,0l-2,0l-1,0zM891,273l5,3l5,2l2,2l2,2l0,3l5,2l0,2l-2,1l0,3l2,2l2,5l2-1l-1,2l2,1l-1,1l3,1l0,1l-2,1l-1-1l-2-1l-3,0l-2-3l-2-2l-1-4l-4-1l-2,1l-2,1l0,3l-3,1l-1,0l-3,0l-3-4l-3-1l0,2l-4,0l1-4l2-1l0-4l-1-4l-6-3l-2,0l-5-4l-1,2l-1,0l0-1l0-2l-3-2l4-1l2,0l0-1l-5,0l-1-3l-3-1l-1-2l4-1l2-1l5,2l0,1l1,7l3,2l2-4l4-3l3,0l2,2l2,1zM926,277l1,2l0,2l-1,1l-1-2l0-2l-1-1l-2-2l-2-1l1-1l1,1l1,1l1,1zM921,286l-2,1l-1,1l-2,0l-2-1l-2-1l0-1l3,0l2,0l0-2l1,0l0,2l2,0l1-2l1-1l0-3l2,0l1,1l-1,2l-1,3l-1,0zM932,284l0,1l2,3l1,1l-1,1l-1,1l-1-2l-1-2l0-4zM841,301l-3,3l-2,1l-1-1l1-1l1-3l3-1l1-1l3-1l2,0l1-1l1,1l-1,1l-4,2zM869,291l0-4l1-1l0-1l1,1l0,2zM813,240l2-2l1-4l2,0l1,2l1,2l2,1l2,1l0,2l-2,0l1,2l-2,2l-2,3l2,4l0,2l3,4l-3,0l-1,3l0,4l-3,3l0,4l-2,6l0-2l-4,2l-1-2l-2,0l-1-2l-4,2l-1-2l-2,0l-2-1l-1-5l-1-1l-2-4l0-3l0-4l2-3l2,2l3-1l0-3l1-1l4-1l2-3l1-3l1-1zM855,274l4,1l1,3l-3-1l-2-1l-2,0l-2,0l1-2zM848,278l-2-1l-1-2l3,0l1,2zM851,254l0,2l2,0l1,2l-1,3l-1,0l-1,3l2,2l-1,0l-1-2l-1-6l0-3zM836,259l4,0l3-3l0,1l-2,4l-3,1l-2-1l-5,0l-3,1l-1,3l3,3l2-2l5-1l0,2l-1-1l-1,3l-3,1l3,5l-1,2l2,5l0,2l-1,1l-2-1l2-3l-3,1l-1-1l1-1l-2-3l0-4l-2,1l0,5l0,6l-2,1l-1-2l1-3l0-4l-2,0l-1-3l2-3l0-3l2-6l0-2l3-3l2,1zM826,304l-4-3l3,0l1,1l1,1l0,1zM830,297l2,0l3-2l-1,3l-5,1l-4-1l0-1l3-1zM820,296l2,0l1,2l-4,1l-2,0l-1,0l1-2l2,0l1-2zM792,289l0,1l6,0l1-1l5,2l1,2l4,1l4,3l-4,1l-3-2l-3,1l-3-1l-3,0l-3-2l-2,0l-1,0l-6-2l0-1l-3-1l2-4l4,1l2,1zM780,267l1,3l1,2l2,0l1,3l-1,5l0,6l-4,0l-2-3l-4-3l-1-3l-2-3l-1-3l-3-6l-2-3l-1-4l-1-3l-3-2l-2-4l-2-2l-4-5l0-2l2,0l5,1l3,4l2,3l2,2l3,4l3,0l2,3l2,3l2,2l-1,3l2,2zM306,460l2,1l2,3l4,2l4,0l0,2l-2,0l-2-1l0,1l-2,1l-1,0l-1,0l-3-1l-2-1l-4-1l-4-2l-5-3l2,0l5,2l4,1l0-1l-1-2l2-1zM254,190l-2-1l-1,0l-2,0l-2,1l-1-2l1-1l2,1l2,0l2-1l-1-2l0-1l-2-1l1-1l2,0l2,1l1-1l2,0l1,1l1,0l1,2l1,0l0,1l1,0l1,1l-1,2l-1-1l-2,0l-1,0l0,1l-1,0l-1-1l-1,1l-1,2l-1,0zM656,2l4,0l4,1l5,1l1,1l-4,0l-6,0l-3-1l-3-1l-2,0zM675,4l5,1l0,1l-10,0l2-2l1,0zM749,9l5,0l8,1l0,1l-7,0l-3,0l-5-1l0-1zM769,10l5,0l-1,1l-3,0l-5-1zM757,13l1,0l2-1l4,1l1,1l-3,0l-4-1zM565,3l4,0l3,0l1,0l2,0l3,0l-1,0l-2,0l-2,0l-2,1l-2-1zM586,13l4-2l-1-1l4,0l6-1l6-1l3,0l4-1l1,1l-1,1l-6,0l-6,1l-5,2l-2,1l-2,2l1,2l5,1l-2,0l-6,0l-1-1l-4,0l-1-1l2-1l0-1l3-1zM819,62l3,3l3,3l4,3l7,5l-5-1l2,5l5,3l2,3l-3-2l0,2l-3-2l-2-4l-3-3l-1-3l-3-4l-4-3l-4-4l1-1l-2-2l1,0zM843,17l2,0l4,0l-1,1l-3,0l-2,0l-1,0zM240,156l2-1l2,0l0,1l-4,1zM244,155l2,1l-1,3l-1,0l1-2l-1-2zM241,162l1,0l0,3l0,2l-1,0l0-2l-1-1zM323,458l2-2l2,1l1-2l3,2l0,1l-3,1l-2-1l-1,1zM510,4l1-1l3,0l2,1l6,1l-4,0l-2,1l-1,1l-1,1l-2,0l-4-1l1-1l-3,0l-3-1l-2-1l5-1l2,1zM533,3l-3,1l-5,0l-6,0l-3,0l-2-1l6,0l3,0l2,0l4,0zM528,6l-4,1l-3-1l1,0l-1,0l4-1l1,1zM397,1l6-1l7,0l2,0l7,0l14,0l11,1l-3,0l-7,0l-10,0l1,0l6,0l6,1l3-1l2,1l-3,0l5,0l9,0l6,0l1,0l-8,1l-1,0l-6,0l4,0l-3,1l-1,1l-1,2l2,0l-3,0l-4,1l4,1l0,1l-3,0l2,2l-4,0l2,0l-1,1l-3,0l-3,0l2,2l-4,0l-1,0l3,1l2,1l0,1l-4,1l-1-1l-2-1l0,1l-3,1l6,0l2,0l-6,2l-6,2l-7,1l-2,0l-3,1l-4,2l-5,2l-2,0l-3,0l-3,1l-3,1l-1,2l-2,2l-4,2l0,2l-2,2l-3,2l-3,1l-2-3l-5,0l-1-1l0-3l-2-3l0-1l1-3l-2-2l2-1l-1-1l4-3l4-1l1,0l2-2l-3,1l-2,0l-2,0l-2,0l1-2l2-1l2,0l4,1l-3-2l-1,0l-3,0l-1-1l4-1l-1-1l-1-1l0-2l-2-1l-4-1l-4,0l-5,0l-5,0l-2-1l-2-1l5,0l4,0l-8,0l-3-1l0-1l8,0l8-1l1,0l-5-1l2,0l7-1l3,0l4-1l6,0l6,0l2,1l5-1l4,0l3,0l3,1l-4-1zM646,447l1,1l2,1l-1,2l-4,0l1-2l1-1zM493,98l2-2l1,3l-1,3l-2-1l0-2zM270,188l2,0l0,1l-1,1l-2,0l-2,0l0-2l1,0zM237,188l2,0l1,1l1,1l-3,0l-1,1l-1-1l-1-1l0-1l1,0zM227,169l3,1l2,0l2,1l1,2l3-1l1,1l2,2l1,2l1,0l2,1l-1,1l2,0l2,2l0,1l-2,0l-2,0l-2,0l-5,0l3-2l-1-1l-2,0l-1-1l0-2l-2,0l-2-1l-1-1l-3-1l-1,0l1-1l-3-1l-2,2l-2,0l0,1l-2,1l-1-1l2-1l1-1l1-1l2-1l2,0zM613,313l1,2l0,2l1,5l0,2l0,2l-1,1l-1-2l0,1l0,3l0,2l-1,1l0,3l-2,5l-2,5l-2,7l-2,6l-1,4l-3,1l-3,2l-1-1l-2-1l-1-2l0-4l-1-3l0-3l1-3l1,0l1-2l1-3l1-2l-1-2l0-3l0-3l1-2l0-3l2,0l1-1l2-1l1,0l2-2l2-2l1-2l0-2l1,0l2-2l0-3l1-2zM962,327l1,2l-1,1l-1-2zM961,326l-1-1l1-3l1,1l0,3l-1,0zM541,124l0,1l-4,0l0-1l-4,0l1-2l1,1l2,0l3,0l0,1zM459,61l0,2l-2,3l-5,2l-3,0l2-4l-1-3l4-2l2-2l2,0l2,2zM951,347l2,3l0,2l-1,1l-1-2l-2-1l-1-2l-1-3l0-1l2,0l1,1l1,1zM951,305l1,1l-2,0l-1-2l2,1zM950,302l-2-3l0-3l1,0l0,4zM948,303l-1,0l-2-1l-1,0l1-2l2,1l0,1zM945,295l1,1l0,1l-2-2l-2-1l-1-1l1-1l1,1zM938,291l1,1l-1,1l-1-1l-1-2l0-1zM943,418l-2,2l-3,3l-3,1l0-1l-1,0l4-3l1-2l-2-1l1-2l3-1l2-3l2-2l0-2l1-1l-1-2l0-3l1-2l1-1l0,2l2,1l-2,3l0,4l2-2l0,1l-1,3l1,1l2,0l2-1l1,0l-3,3l-2,2l-2,0l-2,1l-1,2zM915,431l3-2l3-2l4-3l1,0l2-2l3-2l0,1l-1,2l3-2l0,2l-1,1l-2,2l-4,3l-3,1l0,2l-2,0l-4,1l-2,2l-5,3l-3,2l-2,1l-2,0l-1-1l-3,0l1-2l4-2l6-4l2,0zM864,421l1,0l-2,4l-2,2l-2,2l-1-1l-3,3l-1,0l-1,0l0-3l1-3l1-3l1-1l2,0l1,1l2,0zM821,390l-4,2l-3,1l-1,2l-2,1l-2,0l-2,1l-2-1l-2,0l-2,1l-3,1l-2,1l-2,2l-2-1l-2,0l-2-2l-1-1l1-2l1,0l1-1l1-1l1-3l0-2l0-4l1-2l0-2l0-3l0-1l0-1l0-3l0-3l0-2l0,2l0-4l2,1l0,2l0-2l0-3l0-2l0-1l1-2l0-1l1-2l1-2l1-3l0,3l2-3l2-1l2-2l3-1l1,0l1,0l3-1l1-1l1-1l1,0l2,0l3-1l2-2l1-2l2-2l1-2l0-2l3-3l1,3l1-1l-1-1l2-2l1,1l1-4l2-1l1-2l1-1l1-1l1,1l0-1l1-1l2-1l2,2l1,3l2,0l2,0l0-2l2-3l1-1l0-1l1-3l2-1l2,0l3,0l0-2l-2-2l2,0l1,1l2,1l2,1l1,0l2,1l2-1l1,0l1,2l-1,2l-1,1l-1,1l0,1l-1,2l-2,2l0,1l2,2l2,2l1,1l2,2l1,0l1,1l0,2l3,1l2-1l1-2l1-2l1-2l2-4l0-2l0-1l0-2l1-3l1-1l0-1l1-2l1-3l0-1l1-1l1,2l0,2l0,1l0,2l1,2l0,2l-1,1l1,3l2-1l1,2l1,1l-1,2l0,3l0,2l0,1l0,3l0,2l0,3l2,2l2,2l1,2l0,1l1,2l-1,4l2-1l0,2l1,0l-1,4l2,2l0,2l1,3l0,3l-1,2l-1,2l0,4l-2,3l-1,2l-2,3l-1,2l-2,3l-3,3l-3,2l-3,3l-2,2l-2,3l-2,2l-2,2l-2,3l-1,1l-2,1l-3,0l-4,2l-2,1l-2,2l-1-2l-2,0l2-2l-2,0l-4,3l-2-1l-1-1l-1,0l-2-1l-1-2l1-3l0-2l0-1l-3,0l2-2l1-3l-3,3l-3,0l3-2l1-2l2-2l1-2l-3,3l-3,1l-2,3l-2-2l1-2l0-2l-1-2l1,0l-3-3l-2,0l-1-2l-6,1l-4,1l-4,1zM711,232l0,4l-1,1l-3,1l-2-3l0-6l0-6l3,2l1,3zM789,189l-3-1l-1-4l1-1l3-1l2,0l1,1l-1,2l0,2zM819,165l0,6l-1,3l-2-3l-1-3l1-4l1-3l2,1zM509,113l2,0l-1,3l1,1l-1,2l-2-2l-1,0l-4-2l0-2l3,1zM493,104l2-1l1,2l0,5l-2-1l-1,2l-1-1l0-5l0-2zM504,55l0,1l-1,2l-3-1l0-1zM466,63l1-2l-2-2l-3-1l1-2l-1,0l-1,1l0-3l-1-1l2-3l2-3l2,1l2-1l-3,3l3,0l2,0l-1,2l-2,3l2,0l1,1l1,3l2,0l1,4l1,1l2,1l0,2l-1,1l0,1l-2,2l-3,0l-5,1l-1-1l-1,1l-3,0l-2,1l-1,0l4-4l3,0l-4-1l-1-1l3-1l-1-2l1-2zM447,27l-1,2l2,2l-3,1l-7,2l-2,1l-3-1l-6-1l3-1l-4-1l4,0l0-1l-5-1l2-1l4,0l3,1l3-1l3,1l4-2zM826,211l-2-3l3,0l1,2l0,3zM833,222l0-1l0-3l2,0l0,3l2-4l0,4l-1,1l-1,3l-1,1l-2-3zM845,228l0,3l1,2l-1,4l-1-4l-2,2l2,3l-1,2l-4-3l-1-3l1-1l-2-2l-1,1l-1,0l-2,2l-1-1l1-3l2-1l1-2l1,2l3-1l0-2l2,0l-1-3l3,2l1,2zM821,225l-4,3l1-2l2-3l2-3l1-4l1,4l-2,2zM827,189l-1,2l2,2l0,4l-2,1l1,3l1,3l1,1l2-1l4,3l0,2l1,1l0,2l-3-2l-1-2l-1,1l-2-2l-3,0l-1-1l0-1l0-1l-1-1l0,1l-2-2l0-2l-1-4l1,2l-1-7l1-3l1,0l2,1l1-1zM830,216l0-2l2,1l2,0l0,2l-1,2l-2,1l-1-2zM840,213l2,5l-3-1l1,1l1,2l-2,1l0-2l-1-1l-1-2l2,0l0-1l-3-3l3,0zM852,110l-1,3l2,4l1,3l1,2l0,2l-3,2l-4,0l-2,4l-3-1l-1-3l-5,1l-2,2l-3,0l4,3l1,6l-2,1l-1-1l-1-3l-2-1l-3-3l2-1l1-2l2-2l1-3l5-1l3,1l-1-7l3,2l2-4l1-1l-1-4l-3-4l0-2l3-1l4,5zM848,93l1-1l3,3l-3,1l0,4l-6-3l1,4l-3,0l-2-3l-1-3l3,0l-2-5l-1-2l5,3l3,1zM836,130l1-2l2,1l0-2l2,1l1,1l0,2l-2-1l-1,1l0,2l-2-1zM559,124l0-1l2,0l3-1l-2,2l0,1l-2,1l-2,0l-1-2zM280,219l2-1l0,3l-2,1l-1,0l1-2z'/%3E%3C/svg%3E");
+    --text: Barlow, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 48px 16px; background: var(--page); }
+
+  /* The poster: a title block over the plate, the plate in a double neatline, the note at the foot */
+  .poster { display: grid; grid-template-columns: minmax(0, 1fr); row-gap: 12px; max-width: 1080px; margin: 0 auto; padding: 44px 48px 26px;
+    background: var(--paper); color: var(--ink); font: 16px/1.5 var(--text);
+    grid-template-areas: "kicker" "headline" "dek" "chart" "note"; }
+  /* Behind the whole poster, the world's land in the ink: faint at the edges, fainter toward the middle, where the plate is */
+  .poster { position: relative; isolation: isolate; }
+  .poster::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: var(--ink); opacity: .09;
+    -webkit-mask: var(--world) center / cover no-repeat, radial-gradient(ellipse 75% 65% at 50% 60%, rgb(0 0 0 / .3), #000);
+    -webkit-mask-composite: source-in;
+    mask: var(--world) center / cover no-repeat, radial-gradient(ellipse 75% 65% at 50% 60%, rgb(0 0 0 / .3), #000);
+    mask-composite: intersect; }
+  .poster figcaption { display: contents; }
+  .poster .kicker { grid-area: kicker; font: 600 12px/1.3 var(--text); letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+  .poster .headline { grid-area: headline; max-width: 16em; font: 700 clamp(26px, 3.2vw + 16px, 48px)/1.04 var(--display); letter-spacing: -.01em; text-wrap: balance; }
+  .poster .dek { grid-area: dek; max-width: 46ch; font-size: 16.5px; line-height: 1.5; color: var(--soft); }
+  .poster .stage { grid-area: chart; min-width: 0; margin-top: 12px; }
+  .poster .note { grid-area: note; display: block; max-width: 92ch; margin-top: 6px; font-size: 12px; line-height: 1.5; color: var(--soft); }
+  @media (min-width: 900px) {
+    .poster { column-gap: 48px; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      grid-template-areas: "kicker kicker" "headline dek" "chart chart" "note note"; }
+    .poster .dek { align-self: end; }
+  }
+
+  /* The hint sits right above the plate it is about */
+  .hint { margin: 0 0 8px; font-size: 14px; line-height: 1.4; color: var(--soft); }
+  .hint b { color: var(--ink); font-weight: 600; }
+  /* The plate: a double neatline, as round a map */
+  .map { padding: 16px 16px 6px; border: 1.5px solid var(--ink); box-shadow: inset 0 0 0 3px var(--paper), inset 0 0 0 4px var(--ink); touch-action: manipulation; }
+  .unit { margin: 2px 0 4px; font-size: 12px; line-height: 1.3; text-align: right; color: var(--soft); }
+  .map:has(:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  @media (max-width: 640px) {
+    body { padding: 16px 16px 32px; }
+    .poster { padding: 24px 16px 18px; }
+    .poster .dek { font-size: 15px; }
+    .hint { font-size: 13px; }
+    .map { padding: 12px 9px 4px; }
+  }
+</style>
+<style id="recipe-navigation-styles">
+  .recipe-navigation { max-width: 1080px; margin: 0 auto 18px; text-align: left; }
+  .recipe-navigation a { display: inline-block; padding: 4px 0; font: 600 12.5px/1.4 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: #1d1b17; }
+  .recipe-navigation a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .recipe-navigation a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; border-radius: 2px; }
+</style>
+</head>
+<body>
+<div id="chart"></div>
+<script type="module">
+import { Chart, Plot, Scale, Dot, Tick, Bar, Label, Place, Poster, slat, every, html, render, createSignal, createMemo, onMount, onCleanup, Show } from "@bezda/rhp/standalone";
+
+// Data: life expectancy at birth in 2023, both sexes, in years, for the 193 UN member states, by continent.
+// Source: United Nations, World Population Prospects 2024 (estimates). Continents follow the UN's geographic regions,
+// with Central America and the Caribbean in North America.
+const LIFE = {
+  "Africa": [
+    ["Algeria", 76.3], ["Angola", 64.6], ["Benin", 60.8], ["Botswana", 69.2], ["Burkina Faso", 61.1],
+    ["Burundi", 63.7], ["Cabo Verde", 76.1], ["Cameroon", 63.7], ["Central African Republic", 57.4], ["Chad", 55.1],
+    ["Comoros", 66.8], ["Congo", 65.8], ["Côte d'Ivoire", 61.9], ["DR Congo", 61.9], ["Djibouti", 66.0],
+    ["Egypt", 71.6], ["Equatorial Guinea", 63.7], ["Eritrea", 68.6], ["Eswatini (Swaziland)", 64.1],
+    ["Ethiopia", 67.3], ["Gabon", 68.3], ["Gambia", 65.9], ["Ghana", 65.5], ["Guinea", 60.7], ["Guinea-Bissau", 64.1],
+    ["Kenya", 63.6], ["Lesotho", 57.4], ["Liberia", 62.2], ["Libya", 69.3], ["Madagascar", 63.6], ["Malawi", 67.4],
+    ["Mali", 60.4], ["Mauritania", 68.5], ["Mauritius", 74.9], ["Morocco", 75.3], ["Mozambique", 63.6],
+    ["Namibia", 67.4], ["Niger", 61.2], ["Nigeria", 54.5], ["Rwanda", 67.8], ["Senegal", 68.7], ["Seychelles", 72.9],
+    ["Sierra Leone", 61.8], ["Somalia", 58.8], ["South Africa", 66.1], ["South Sudan", 57.6], ["Sudan", 66.3],
+    ["São Tomé and Príncipe", 69.7], ["Tanzania", 67.0], ["Togo", 62.7], ["Tunisia", 76.5], ["Uganda", 68.3],
+    ["Zambia", 66.3], ["Zimbabwe", 62.8],
+  ],
+  "Asia": [
+    ["Afghanistan", 66.0], ["Armenia", 75.7], ["Azerbaijan", 74.4], ["Bahrain", 81.3], ["Bangladesh", 74.7],
+    ["Bhutan", 73.0], ["Brunei", 75.3], ["Cambodia", 70.7], ["China", 78.0], ["Cyprus", 81.6], ["Georgia", 74.5],
+    ["India", 72.0], ["Indonesia", 71.1], ["Iran", 77.7], ["Iraq", 72.3], ["Israel", 82.4], ["Japan", 84.7],
+    ["Jordan", 77.8], ["Kazakhstan", 74.4], ["Kuwait", 80.4], ["Kyrgyzstan", 71.7], ["Laos", 69.0], ["Lebanon", 77.8],
+    ["Malaysia", 76.7], ["Maldives", 81.0], ["Mongolia", 71.7], ["Myanmar", 66.9], ["Nepal", 70.4],
+    ["North Korea", 73.6], ["Oman", 80.0], ["Pakistan", 67.6], ["Philippines", 69.8], ["Qatar", 82.4],
+    ["Saudi Arabia", 78.7], ["Singapore", 83.7], ["South Korea", 84.3], ["Sri Lanka", 77.5], ["Syria", 72.1],
+    ["Tajikistan", 71.8], ["Thailand", 76.4], ["Timor-Leste", 67.7], ["Turkmenistan", 70.1],
+    ["Türkiye (Turkey)", 77.2], ["United Arab Emirates", 82.9], ["Uzbekistan", 72.4], ["Vietnam", 74.6],
+    ["Yemen", 69.3],
+  ],
+  "Europe": [
+    ["Albania", 79.6], ["Andorra", 84.0], ["Austria", 82.0], ["Belarus", 74.4], ["Belgium", 82.1],
+    ["Bosnia and Herzegovina", 77.9], ["Bulgaria", 75.6], ["Croatia", 78.6], ["Czechia", 79.8], ["Denmark", 81.9],
+    ["Estonia", 79.2], ["Finland", 81.9], ["France", 83.3], ["Germany", 81.4], ["Greece", 81.9], ["Hungary", 77.0],
+    ["Iceland", 82.7], ["Ireland", 82.4], ["Italy", 83.7], ["Latvia", 76.2], ["Liechtenstein", 83.6],
+    ["Lithuania", 76.0], ["Luxembourg", 82.2], ["Malta", 83.3], ["Moldova", 71.2], ["Monaco", 86.4],
+    ["Montenegro", 77.1], ["Netherlands", 82.2], ["North Macedonia", 77.4], ["Norway", 83.3], ["Poland", 78.6],
+    ["Portugal", 82.4], ["Romania", 75.9], ["Russia", 73.2], ["San Marino", 85.7], ["Serbia", 76.8],
+    ["Slovakia", 78.3], ["Slovenia", 81.6], ["Spain", 83.7], ["Sweden", 83.3], ["Switzerland", 84.0],
+    ["Ukraine", 73.4], ["United Kingdom", 81.3],
+  ],
+  "North America": [
+    ["Antigua and Barbuda", 77.6], ["Bahamas", 74.6], ["Barbados", 76.2], ["Belize", 73.6], ["Canada", 82.6],
+    ["Costa Rica", 80.8], ["Cuba", 78.1], ["Dominica", 71.1], ["Dominican Republic", 73.7], ["El Salvador", 72.1],
+    ["Grenada", 75.2], ["Guatemala", 72.6], ["Haiti", 64.9], ["Honduras", 72.9], ["Jamaica", 71.5], ["Mexico", 75.1],
+    ["Nicaragua", 74.9], ["Panama", 79.6], ["Saint Kitts and Nevis", 72.1], ["Saint Lucia", 72.7],
+    ["Saint Vincent and the Grenadines", 71.2], ["Trinidad and Tobago", 73.5], ["United States", 79.3],
+  ],
+  "South America": [
+    ["Argentina", 77.4], ["Bolivia", 68.6], ["Brazil", 75.8], ["Chile", 81.2], ["Colombia", 77.7], ["Ecuador", 77.4],
+    ["Guyana", 70.2], ["Paraguay", 73.8], ["Peru", 77.7], ["Suriname", 73.6], ["Uruguay", 78.1], ["Venezuela", 72.5],
+  ],
+  "Oceania": [
+    ["Australia", 83.9], ["Fiji", 67.3], ["Kiribati", 66.5], ["Marshall Islands", 66.9], ["Micronesia", 67.2],
+    ["Nauru", 62.1], ["New Zealand", 82.1], ["Palau", 69.3], ["Papua New Guinea", 66.1], ["Samoa", 71.7],
+    ["Solomon Islands", 70.5], ["Tonga", 72.9], ["Tuvalu", 67.1], ["Vanuatu", 71.5],
+  ],
+};
+const NOTE = "Source: United Nations, World Population Prospects 2024 (estimates for 2023). Continents follow the UN's geographic regions, with Central America and the Caribbean in North America. A median counts each country once, whatever its population.";
+
+// What depends on the data
+const one = new Intl.NumberFormat("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const ordinal = (n) => n + (n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] ?? "th");
+// The median, worked out in tenths of a year so that a half tenth rounds the same way everywhere
+const median = (values) => {
+  const t = values.map((v) => Math.round(v * 10)).sort((a, b) => a - b);
+  const m = t.length >> 1;
+  return Math.round(t.length % 2 ? t[m] : (t[m - 1] + t[m]) / 2) / 10;
+};
+// One lane per continent, highest median first; the first and the last are the story
+const LANES = Object.entries(LIFE)
+  .map(([continent, list]) => ({ continent, count: list.length, median: median(list.map((c) => c[1])) }))
+  .sort((a, b) => b.median - a.median)
+  .map((lane, k, all) => ({ ...lane, story: k === 0 || k === all.length - 1 }));
+const HIGH = LANES[0];
+const LOW = LANES.at(-1);
+// One row per country, lane by lane and, inside a lane, from the shortest life to the longest (the arrow keys' order)
+const ALL = Object.values(LIFE).flat().map((c) => c[1]);
+const ROWS = LANES.flatMap((lane, k) => LIFE[lane.continent]
+  .map(([name, years]) => ({ name, years, continent: lane.continent, lane: k }))
+  .sort((a, b) => a.years - b.years));
+ROWS.forEach((r) => {
+  const rank = 1 + ALL.filter((v) => v > r.years).length;
+  const tied = ALL.filter((v) => v === r.years).length > 1;
+  r.rank = `${tied ? "tied " : ""}${ordinal(rank)} of ${ALL.length}`;
+});
+// The scale: whole multiples of five years around the data
+const MIN = Math.floor(Math.min(...ALL) / 5) * 5;
+const MAX = Math.ceil(Math.max(...ALL) / 5) * 5;
+const GAP = Math.round(HIGH.median - LOW.median);
+
+// The plate's layout, in px, for a plot of a given width. Each country goes as near its lane's middle line as it
+// can without touching a dot placed before it (a beeswarm), so every dot keeps its exact place along the years.
+const NAME_ROW = 22; // the continent's name and its median, above its island
+const BETWEEN = 16; // water between two lanes
+const layoutFor = (width) => {
+  const d = width < 280 ? 7 : width < 520 ? 8 : 10; // a dot's size
+  const halo = d < 10 ? 5 : 7; // the land around each dot
+  const perYear = width / (MAX - MIN);
+  const y = new Array(ROWS.length);
+  const lanes = [];
+  let top = 0;
+  LANES.forEach((lane, k) => {
+    const placed = [];
+    ROWS.forEach((r, i) => {
+      if (r.lane !== k) return;
+      const x = (r.years - MIN) * perYear;
+      const near = placed.filter((p) => Math.abs(p.x - x) < d);
+      const spots = [0, ...near.flatMap((p) => {
+        const h = Math.sqrt(d * d - (p.x - x) ** 2);
+        return [p.y - h, p.y + h];
+      })].sort((a, b) => Math.abs(a) - Math.abs(b) || a - b);
+      const spot = spots.find((s) => near.every((p) => (p.x - x) ** 2 + (p.y - s) ** 2 >= d * d - 0.5));
+      placed.push({ i, x, y: spot });
+    });
+    const high = Math.min(...placed.map((p) => p.y));
+    const low = Math.max(...placed.map((p) => p.y));
+    const middle = top + NAME_ROW + halo + d / 2 - high;
+    const bottom = middle + low + d / 2 + halo;
+    placed.forEach((p) => (y[p.i] = middle + p.y));
+    lanes.push({ name: top + NAME_ROW / 2 - 2, lineTop: top + 1, bottom });
+    top = bottom + BETWEEN;
+  });
+  return { d, halo, y, lanes, height: Math.ceil(top - BETWEEN) + 2 };
+};
+
+// The chart's font and colors, read from the page's tokens
+const THEME = {
+  font: "var(--text)", ink: "var(--ink)", muted: "var(--soft)", grid: "var(--rule)", surface: "var(--paper)",
+  series: ["var(--dot)", "var(--accent)", "var(--land)", "var(--coast)"],
+};
+
+// Slat types
+// The scale under the plate, drawn as an atlas's scale bar: a segment every five years, inked and blank in turn,
+// with its number; a faint meridian runs up from each one
+const Years = slat({
+  room: { start: 4, end: 4, after: 52 },
+  css: `
+    .meridian { --rhp-tick-width: 1px; background: var(--rhp-grid); }
+    .seg { top: calc(100% + 21px); bottom: auto; height: 7px; --rhp-radius: 0px; background: var(--rhp-ink); box-shadow: 0 0 0 1px var(--rhp-ink); }
+    .blank .seg { background: var(--rhp-surface); }
+    .num { top: calc(100% + 32px); bottom: auto; translate: -50% 0; --rhp-label-gap: 0px; font-size: 12px; font-weight: 500; color: var(--rhp-ink); }
+    .first .num { translate: 0 0; }
+    .last .num { translate: -100% 0; }
+  `,
+}, (t) => html`
+  <div class=${() => [((t.at - MIN) / 5) % 2 ? "blank" : "", t.first ? "first" : "", t.last ? "last" : ""].join(" ")}>
+    <${Tick} at=${() => t.at} thick=${1} class="meridian" />
+    <${Bar} from=${() => t.at} to=${() => t.next} class="seg" />
+    <${Label} at=${() => t.at} class="num">${() => t.at}<//>
+  </div>`);
+
+// Land: a disc of sand round every country, and a slightly larger one in the coast's colour under it,
+// so a continent's countries join into an island with a coastline, broken where they are far apart
+const Coast = slat({ room: {} }, (d) => html`<${Dot} at=${() => d.years} cross=${() => d.cross} size=${() => d.size} color="series-4" />`);
+const Land = slat({ room: {} }, (d) => html`<${Dot} at=${() => d.years} cross=${() => d.cross} size=${() => d.size} color="series-3" />`);
+
+// A country: its dot, and a sentence for screen readers. The pointer passes through: the plate finds the nearest dot.
+const Country = slat({
+  room: {},
+  css: `
+    .country { pointer-events: none; outline: none; }
+    .country:focus-visible .dot { box-shadow: 0 0 0 2px var(--rhp-surface), 0 0 0 4px var(--rhp-ink); }
+    .say { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  `,
+}, (d) => html`
+  <div class="country" data-i=${() => d.index}>
+    <${Dot} at=${() => d.years} cross=${() => d.cross} size=${() => d.size} color="series-1" class="dot" />
+    <span class="say">${() => `${d.name}, ${d.continent}: ${one.format(d.years)} years, ${d.rank}`}</span>
+  </div>`);
+
+// A continent: its name in a map's spaced capitals, and its median, a line through its island with the years beside its top
+const Lane = slat({
+  room: {},
+  css: `
+    .name { position: absolute; left: 0; top: 0; translate: 0 -50%; font: 600 13px/1 Spectral, Georgia, serif; letter-spacing: .2em;
+      text-transform: uppercase; white-space: nowrap; color: var(--rhp-ink); }
+    .mid { position: absolute; top: 0; left: 0; translate: 6px -50%; font-size: 12.5px; font-weight: 600; line-height: 1;
+      font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--rhp-ink); }
+    .line { position: absolute; top: 0; left: -1px; width: 2px; background: var(--rhp-ink); }
+    .story .mid { color: var(--rhp-series-2); font-weight: 700; }
+    .story .line { background: var(--rhp-series-2); }
+    @container (max-width: 520px) { .name { font-size: 11.5px; letter-spacing: .14em; } .mid { font-size: 12px; } }
+  `,
+}, (d) => html`
+  <div class=${() => (d.story ? "lane story" : "lane")}>
+    <${Place} at=${MIN} cross=${() => d.nameAt}><span class="name">${() => d.continent}</span><//>
+    <${Place} at=${() => d.median} cross=${() => d.lineAt}><span class="line" style=${() => ({ height: `${d.lineLength}px` })}></span><//>
+    <${Place} at=${() => d.median} cross=${() => d.nameAt}><span class="mid">${() => one.format(d.median)}</span><//>
+  </div>`);
+
+// The country picked: its dot ringed in ink, and a flag with its name, its years and its rank, kept inside the plot
+// (it slides along its dot as far as the dot is along the scale, and wraps when it is wider than the plot)
+const Flag = slat({
+  room: {},
+  css: `
+    .pin { z-index: 2; background: var(--rhp-ink); box-shadow: 0 0 0 2px var(--rhp-surface), 0 0 0 3.5px var(--rhp-ink); }
+    .flag { position: absolute; left: 0; bottom: 11px; z-index: 3; translate: calc(var(--rhp-p) * -100%) 0; padding: 5px 9px 6px;
+      width: max-content; border-radius: 3px; background: var(--rhp-ink); color: var(--rhp-surface); font-size: 13px; line-height: 1.3;
+      box-shadow: 0 2px 6px rgb(15 42 53 / .25); }
+    .flag.below { bottom: auto; top: 11px; }
+    .flag b { font-weight: 600; }
+    .flag small { display: block; font-size: 12px; opacity: .9; }
+  `,
+}, (f) => html`
+  <div aria-hidden="true">
+    <${Show} when=${() => f.row}>
+      <${Dot} at=${() => f.row.years} cross=${() => f.cross} size=${() => f.size} class="pin" />
+      <${Place} at=${() => f.row.years} cross=${() => f.cross}>
+        <span class=${() => (f.below ? "flag below" : "flag")} style=${() => ({ "max-width": `${f.widest}px` })}>
+          <b>${() => f.row.name}</b>${() => ` ${one.format(f.row.years)} years`}
+          <small>${() => `${f.row.rank} · ${f.row.continent}`}</small>
+        </span>
+      <//>
+    <//>
+  </div>`);
+
+// Chart component: the reader points at, taps or reaches with the keys a country, and the flag names it
+function LifeAtlas() {
+  const [picked, setPicked] = createSignal(null);
+  const [pinned, setPinned] = createSignal(null); // the country a click or a tap picked: the plate comes back to it
+  const [width, setWidth] = createSignal(0);
+  const layout = createMemo(() => layoutFor(width() || 640));
+  const height = () => layout().height;
+  const cross = createMemo(() => layout().y.map((y) => height() - y));
+  const halo = () => layout().d + 2 * layout().halo;
+  let plot;
+  let map;
+  // The islands are laid out from the plot's width: measured as the chart mounts, before its first frame, and followed in
+  // the next frame when it changes (set inside the observer, it would resize the plot it watches in the same frame)
+  onMount(() => {
+    setWidth(plot.clientWidth);
+    const watch = new ResizeObserver(() => requestAnimationFrame(() => setWidth(plot.clientWidth)));
+    watch.observe(plot);
+    onCleanup(() => watch.disconnect());
+    const away = (e) => !map.contains(e.target) && unpin();
+    document.addEventListener("click", away);
+    onCleanup(() => document.removeEventListener("click", away));
+  });
+  // The country nearest the pointer, within 24px, or null
+  const nearest = (e) => {
+    const r = plot.getBoundingClientRect();
+    let best = null;
+    let reach = 24 ** 2;
+    ROWS.forEach((row, i) => {
+      const dx = ((row.years - MIN) / (MAX - MIN)) * r.width - (e.clientX - r.left);
+      const dy = (layout().y[i] / height()) * r.height - (e.clientY - r.top);
+      if (dx * dx + dy * dy < reach) {
+        reach = dx * dx + dy * dy;
+        best = i;
+      }
+    });
+    return best;
+  };
+  // The country of the dot an element is in (the dot the keyboard focuses), or null
+  const rowOf = (el) => {
+    const root = el.closest("[data-i]");
+    return root ? +root.dataset.i : null;
+  };
+  // A mouse or a pen picks the nearest dot as it moves; with no dot in reach the pick stays
+  const point = (e) => {
+    const i = nearest(e);
+    if (i != null) setPicked(i);
+  };
+  // A tap or a click on a dot in reach picks it and pins it; one with no dot in reach, on the plate or anywhere else on
+  // the page, lets the pick go
+  const unpin = () => {
+    setPinned(null);
+    setPicked(null);
+  };
+  const pin = (e) => {
+    const i = nearest(e);
+    if (i == null) return unpin();
+    setPicked(i);
+    setPinned(i);
+  };
+  // The keyboard picks the dot it focuses
+  const focus = (e) => {
+    const i = rowOf(e.target);
+    if (i != null) setPicked(i);
+  };
+  // Leaving the plate: back to the dot that has focus (the keyboard's pick), else the pinned one, else none
+  const leave = (e) => {
+    if (e.pointerType === "touch") return; // a finger sends pointerleave as it lifts after a tap
+    setPicked(e.currentTarget.contains(document.activeElement) ? rowOf(document.activeElement) : pinned());
+  };
+  return html`
+    <${Poster}
+      kicker="Life expectancy at birth, 2023"
+      title=${`${LOW.continent}'s typical country trails ${HIGH.continent}'s by ${GAP} years`}
+      dek=${`How long a baby born in 2023 can expect to live, in each of the ${ALL.length} UN member states. Every dot is a country; a continent's countries gather into one island, and the line through it marks its median country: ${one.format(HIGH.median)} years in ${HIGH.continent}, ${one.format(LOW.median)} in ${LOW.continent}.`}
+      note=${NOTE}>
+      <div class="stage">
+        <p class="hint"><b>Point at a dot or tap it</b> to name its country. With a keyboard, Tab to the plate and use the arrow keys.</p>
+        <div class="map" ref=${(el) => (map = el)}
+          onPointerMove=${(e) => e.pointerType !== "touch" && point(e)} onClick=${pin} onFocusIn=${focus}
+          onPointerLeave=${leave} onFocusOut=${(e) => !e.currentTarget.contains(e.relatedTarget) && setPicked(pinned())}>
+          <${Chart} scale=${[MIN, MAX]} cross=${() => [0, height()]} height=${height} crossTicks=${false} crossGrid=${false} theme=${THEME}
+            label=${`Life expectancy at birth in 2023 for ${ALL.length} countries, one dot per country, grouped by continent`}>
+            <${Scale} ticks=${every(5)}>${Years}<//>
+            <${Plot} overlap=${true} rows=${ROWS} cross=${cross} size=${() => `${halo() + 2}px`} style=${{ "pointer-events": "none" }}>${Coast}<//>
+            <${Plot} overlap=${true} rows=${ROWS} cross=${cross} size=${() => `${halo()}px`} style=${{ "pointer-events": "none" }}>${Land}<//>
+            <${Plot} overlap=${true} keyboard=${true} rows=${ROWS} cross=${cross} size=${() => `${layout().d}px`} ref=${(el) => (plot = el)}>${Country}<//>
+            <${Plot} overlap=${true} rows=${LANES} style=${{ "pointer-events": "none" }}
+              nameAt=${() => layout().lanes.map((l) => height() - l.name)}
+              lineAt=${() => layout().lanes.map((l) => height() - l.lineTop)}
+              lineLength=${() => layout().lanes.map((l) => l.bottom - l.lineTop)}>${Lane}<//>
+            <${Plot} overlap=${true} slats=${1} style=${{ "pointer-events": "none" }}
+              row=${() => (picked() == null ? null : ROWS[picked()])}
+              cross=${() => (picked() == null ? 0 : cross()[picked()])}
+              below=${() => picked() != null && layout().y[picked()] < 64}
+              size=${() => `${layout().d + 2}px`} widest=${() => (width() || 640) - 4}>${Flag}<//>
+          <//>
+          <p class="unit">Years a newborn can expect to live</p>
+        </div>
+      </div>
+    <//>`;
+}
+
+render(() => html`<${LifeAtlas} />`, document.getElementById("chart"));
+</script>
+</body>
+</html>

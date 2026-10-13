@@ -1,0 +1,93 @@
+---
+import "./quizmark.css";
+---
+
+<div class="quizmark">
+  <figure class="player" id="demo" data-state="prelude">
+    <div class="stage">
+      <div class="screen">
+        <img
+          class="frame"
+          src="/quizmark/assets/media/frame-board.webp"
+          srcset="/quizmark/assets/media/frame-board-800.webp 800w, /quizmark/assets/media/frame-board.webp 1600w"
+          sizes="(min-width: 1080px) 60vw, 100vw"
+          width="1600"
+          height="900"
+          alt="A lecturer at a chalkboard with Git snapshots, blobs and a commit graph drawn on it."
+          fetchpriority="high"
+        />
+        <p class="cc" aria-hidden="true">
+          <span>Any questions so far?</span>
+        </p>
+        <p class="ev-tag" hidden></p>
+      </div>
+      <div class="bar">
+        <div class="seek" style="--p:22.26%">
+          <div class="seek-track" aria-hidden="true"></div>
+          <div class="seek-span" aria-hidden="true"></div>
+          <div class="seek-played" aria-hidden="true"></div>
+          <div class="seek-marks"></div>
+          <div class="seek-head" aria-hidden="true"></div>
+        </div>
+        <div class="controls">
+          <button class="pp" type="button" data-act="toggle" aria-label="Play the demo">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+              <path class="i-play" d="M7 4.5v15l12.5-7.5z" />
+              <path class="i-pause" d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z" />
+            </svg>
+          </button>
+          <span class="time">
+            <span data-now>15:29</span> / 1:09:32
+          </span>
+          <span class="chapter" data-chapter>
+            Data model, as pseudocode
+          </span>
+          <button class="back-pill" type="button" data-act="back" hidden>
+            Back to quiz
+          </button>
+        </div>
+      </div>
+      <div class="tip" id="demo-tip" hidden></div>
+      <div class="dim"></div>
+      <div class="quiz" aria-live="polite">
+        <div class="card" data-view="prelude">
+          <p class="q-kicker">Quiz 1 of 4</p>
+          <h2 class="q-title">Introduction → Data model, as pseudocode</h2>
+          <p class="q-desc">
+            How Git represents snapshots of code as trees and blobs, and how commits form a history
+            graph.
+          </p>
+          <dl class="q-stats">
+            <div>
+              <dt>Questions</dt>
+              <dd>3</dd>
+            </div>
+            <div>
+              <dt>Difficulty</dt>
+              <dd>Medium</dd>
+            </div>
+            <div>
+              <dt>Covers</dt>
+              <dd>0:00–15:28</dd>
+            </div>
+          </dl>
+          <div class="q-row q-center">
+            <button class="pill pill-blue" type="button" data-act="start">
+              Start
+            </button>
+            <button class="pill" type="button" data-act="skipquiz">
+              Skip this quiz
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption class="demo-note">
+      Try it. These are real questions Quizmark generated for MIT’s lecture on Git.
+    </figcaption>
+  </figure>
+</div>
+
+<script>
+  import "./demo.js";
+</script>

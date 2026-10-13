@@ -1,0 +1,165 @@
+{
+  "updated": "2026-10-13",
+  "weeks": [
+    {
+      "start": "2026-04-21",
+      "downloads": 37360
+    },
+    {
+      "start": "2026-04-28",
+      "downloads": 41557
+    },
+    {
+      "start": "2026-05-05",
+      "downloads": 50602
+    },
+    {
+      "start": "2026-05-12",
+      "downloads": 49670
+    },
+    {
+      "start": "2026-05-19",
+      "downloads": 64086
+    },
+    {
+      "start": "2026-05-26",
+      "downloads": 64681
+    },
+    {
+      "start": "2026-06-02",
+      "downloads": 58230
+    },
+    {
+      "start": "2026-06-09",
+      "downloads": 60610
+    },
+    {
+      "start": "2026-06-16",
+      "downloads": 56695
+    },
+    {
+      "start": "2026-06-23",
+      "downloads": 47796
+    },
+    {
+      "start": "2026-06-30",
+      "downloads": 55667
+    },
+    {
+      "start": "2026-07-07",
+      "downloads": 83100
+    },
+    {
+      "start": "2026-07-14",
+      "downloads": 80209
+    },
+    {
+      "start": "2026-07-21",
+      "downloads": 74823
+    },
+    {
+      "start": "2026-07-28",
+      "downloads": 55558
+    },
+    {
+      "start": "2026-08-04",
+      "downloads": 55092
+    },
+    {
+      "start": "2026-08-11",
+      "downloads": 58878
+    },
+    {
+      "start": "2026-08-18",
+      "downloads": 60999
+    },
+    {
+      "start": "2026-08-25",
+      "downloads": 17996
+    },
+    {
+      "start": "2026-09-01",
+      "downloads": 22475
+    },
+    {
+      "start": "2026-09-08",
+      "downloads": 31512
+    },
+    {
+      "start": "2026-09-15",
+      "downloads": 36384
+    },
+    {
+      "start": "2026-09-22",
+      "downloads": 42024
+    },
+    {
+      "start": "2026-09-29",
+      "downloads": 38568
+    },
+    {
+      "start": "2026-10-06",
+      "downloads": 32911
+    }
+  ],
+  "pypi": {
+    "streamlit-code-editor": {
+      "lastMonth": 134513
+    },
+    "streamlit-float": {
+      "lastMonth": 14409
+    },
+    "streamlit-dnd": {
+      "lastMonth": 5911
+    },
+    "streamlit-reveal-slides": {
+      "lastMonth": 233
+    }
+  },
+  "npm": {
+    "@bezda/rhp": {
+      "lastMonth": 1573
+    },
+    "@bezda/rhp-mcp": {
+      "lastMonth": 442
+    },
+    "pr-ui-compare": {
+      "lastMonth": 508
+    },
+    "react-list-player": {
+      "lastMonth": 23
+    }
+  },
+  "github": {
+    "bezda-team/rhp": {
+      "stars": 9
+    },
+    "bouzidanas/pynote-notebook-editor": {
+      "stars": 71
+    },
+    "bouzidanas/streamlit-code-editor": {
+      "stars": 167
+    },
+    "bouzidanas/streamlit-float": {
+      "stars": 91
+    },
+    "bouzidanas/streamlit-dnd": {
+      "stars": 4
+    },
+    "bouzidanas/streamlit-reveal-slides": {
+      "stars": 34
+    },
+    "bouzidanas/react-list-player": {
+      "stars": 54
+    },
+    "bouzidanas/react-reveal-slides": {
+      "stars": 53
+    },
+    "bouzidanas/lyr-ix": {
+      "stars": 9
+    },
+    "bouzidanas/playwright-comparison-gif-maker": {
+      "stars": 2
+    }
+  }
+}

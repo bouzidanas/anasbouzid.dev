@@ -1,0 +1,90 @@
+---
+title: Quizmark
+summary: A Chrome extension that pauses long YouTube videos at natural breaks, asks a few questions about what you just watched, and shows the moment each answer came from.
+order: 3
+years: Since 2026
+role: Creator
+stack: [TypeScript, React, WXT, Zod, IndexedDB, LLM APIs, Vitest, Playwright]
+links:
+  - { label: Website, href: "https://getquizmark.com" }
+  - {
+      label: Chrome Web Store,
+      href: "https://chromewebstore.google.com/detail/quizmark-for-youtube/jgioigmgkjknmokdpinigoafjhacbbpc",
+    }
+poster: ../../assets/projects/quizmark.png
+video: /media/quizmark.mp4
+---
+
+The player above is the interactive demo from Quizmark's website, with real questions it generated for MIT's lecture on Git.
+Quizmark needs no account, and I run no server for it.
+It works with your own key for one of seven AI providers, or with a model running on your computer.
+Firefox and Safari versions are in progress.
+
+## Why a browser extension
+
+YouTube doesn't allow a web app to draw over its embedded player, and a quiz card would do exactly that.
+An extension runs in the viewer's own browser instead.
+The viewer stays signed in, ads still play, and the creator's watch time is unaffected.
+YouTube also blocks servers that fetch captions, but the extension reads them from the player with the viewer's own session.
+
+## Every question cites its evidence
+
+Quizmark splits a video into sections of about 15 minutes, and each section ends with a quiz.
+Each question carries the span of the video that answers it.
+That span drives the checks below, the Watch button, and the seek when a question appears.
+Quizmark clamps or widens a span that's slightly off to fit its section.
+A span that misses the section entirely is a made-up citation, and Quizmark rejects the question.
+
+## Five checks before you see a question
+
+Generating questions is cheap, so Quizmark spends its effort on rejecting bad ones.
+Every question goes through five checks.
+Each check runs in a fresh context, and none of them sees the intended answer.
+
+| Check                    | Rejects the question when                            |
+| :----------------------- | :--------------------------------------------------- |
+| Span sanity              | the cited span is empty, too short or out of range   |
+| Answerable from the span | the span doesn't settle the question                 |
+| Answer is offered        | the real answer isn't among the options              |
+| Blind answerability      | the wrong options are weak enough to rule out unseen |
+| Single correct option    | more than one option can be defended                 |
+
+Asked which of four options is correct, a model picks the least-bad one.
+It won't say that the right answer is missing.
+So the "answer is offered" check first works out the answer from the span with no options in view, then asks whether any option says the same thing.
+
+## The check that emptied the quiz
+
+Blind answerability used to reject any question an expert model could answer without the video.
+On the reference lecture, about Git, it rejected 13 of 14 questions.
+One of them was "what kind of graph is Git's history?", exactly what a quiz should ask a learner.
+An expert model is a poor stand-in for someone who is watching because they don't know the subject yet.
+
+Now the check labels questions instead of rejecting them.
+It marks each question as a general concept or specific to the lecture, and it rejects only distractors that are too easy to rule out.
+The span check now runs first, so a question the span doesn't support fails there, before the blind check sees it.
+On the same 15-minute section of the video, the accept rate went from 0% to 56%, and the span check rejected none of the questions.
+
+## JSON from local models
+
+Small local models often return malformed JSON, even when the prompt asks for JSON only.
+Quizmark tries native structured output first, where the server supports it.
+Then it strips code fences and matches braces, and as a last step it sends the validation error back to the model in a repair turn.
+Each test case is a response a local model produced.
+
+## Staying ahead of the viewer
+
+A quiz only has to be ready when the viewer reaches the end of its section, so each section's questions can take as long as the section takes to watch.
+With a local Qwen3 14B model, generating a section's questions took 0.18 to 0.61 times as long as watching it, on the reference lecture.
+
+## Tests
+
+The extension has about 1,600 tests in 94 Vitest files and 11 Playwright suites.
+They check, for example, that quiz history and saved progress survive a browser restart, that results download as a real Word file, and that a stale tab's answers don't merge into a newer attempt.
+One test fails if the extension depends on the server it replaced.
+
+## Before the extension did everything
+
+The first version generated questions on a Python and FastAPI server.
+It returned a cached section right away, or started generating in the background while the extension polled until the section was ready.
+I moved the whole pipeline into the extension and retired the server.

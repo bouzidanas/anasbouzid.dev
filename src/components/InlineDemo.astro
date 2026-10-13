@@ -1,0 +1,28 @@
+---
+interface Props {
+  src: string;
+  title: string;
+}
+
+const { src, title } = Astro.props;
+---
+
+<figure class="inline-demo">
+  <iframe src={src} title={title} loading="lazy"></iframe>
+</figure>
+
+<style>
+  .inline-demo {
+    height: 26rem;
+    margin-block: 1.5rem;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+</style>

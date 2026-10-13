@@ -1,0 +1,47 @@
+---
+import stats from "../../data/stats.json";
+import { formatNumber } from "../../lib/format";
+import DownloadsChart from "../solid/DownloadsChart";
+
+const sum = (values: number[]) => values.reduce((total, value) => total + value, 0);
+
+const downloads = sum(
+  [...Object.values(stats.pypi), ...Object.values(stats.npm)].map((entry) => entry.lastMonth),
+);
+const stars = sum(Object.values(stats.github).map((repo) => repo.stars));
+
+const figures = [
+  {
+    value: Math.round(downloads / 1000),
+    suffix: "K",
+    exact: formatNumber(downloads),
+    label: "package downloads in the last 30 days",
+  },
+  { value: stars, suffix: "", exact: formatNumber(stars), label: "GitHub stars on my projects" },
+];
+---
+
+<section class="wrap" aria-labelledby="numbers-title">
+  <header class="section-head">
+    <h2 id="numbers-title">In use</h2>
+  </header>
+
+  <figure>
+    <DownloadsChart client:visible weeks={stats.weeks} figures={figures} />
+    <figcaption>
+      Weekly downloads of my <a href="/work/streamlit/">Streamlit</a>,{" "}
+      <a href="/work/react/">React</a>, <a href="/work/rhp/">rhp</a> and{" "}
+      <a href="/work/tools/">agent tool</a> packages on PyPI and npm combined, drawn with rhp. Point
+      at a week to read it.
+    </figcaption>
+  </figure>
+</section>
+
+<style>
+  figcaption {
+    max-width: 64ch;
+    margin-top: 1rem;
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+</style>

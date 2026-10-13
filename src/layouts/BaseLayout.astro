@@ -1,0 +1,100 @@
+---
+import { Font } from "astro:assets";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "Frontend engineer building interactive web apps, charting libraries and developer tools with React, TypeScript and Python.",
+} = Astro.props;
+
+const pageTitle = title ? `${title} | Anas Bouzid` : "Anas Bouzid | Frontend engineer";
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL("/og.png", Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <Font cssVariable="--font-display" preload />
+    <Font cssVariable="--font-sans" preload />
+    <Font cssVariable="--font-mono" />
+    <Font cssVariable="--font-poster" />
+    <script is:inline>
+      try {
+        const theme = localStorage.getItem("theme");
+        if (theme) document.documentElement.dataset.theme = theme;
+      } catch {}
+
+      // Only the project being opened or returned to morphs between pages. Naming every card would lift them all
+      // out of their rounded cards and over the header while the transition runs.
+      const projectOf = (url) => url && new URL(url).pathname.match(/^\/work\/([^/]+)\/$/)?.[1];
+
+      const morph = (transition, from, to) => {
+        const id = projectOf(to) ?? projectOf(from);
+        const media = id && document.querySelector(`[data-media="${id}"]`);
+        if (!transition || !media) return;
+        media.style.viewTransitionName = `media-${id}`;
+        transition.finished.finally(() => (media.style.viewTransitionName = ""));
+      };
+
+      addEventListener("pageswap", (event) =>
+        morph(event.viewTransition, location.href, event.activation?.entry?.url),
+      );
+      addEventListener("pagereveal", (event) =>
+        morph(event.viewTransition, window.navigation?.activation?.from?.url, location.href),
+      );
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">
+      Skip to content
+    </a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  body {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .skip {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 10;
+    padding: 0.5rem 0.9rem;
+    border-radius: 0.5rem;
+    background: var(--ink);
+    color: var(--paper);
+    translate: 0 -200%;
+  }
+
+  .skip:focus {
+    translate: 0;
+  }
+</style>

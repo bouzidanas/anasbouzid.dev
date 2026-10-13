@@ -1,0 +1,89 @@
+---
+import { contributions } from "../../data/contributions";
+
+const merged = contributions
+  .filter((contribution) => contribution.merged)
+  .reduce((total, contribution) => total + contribution.pulls.length, 0);
+---
+
+<section id="open-source" class="wrap" aria-labelledby="open-source-title">
+  <header class="section-head">
+    <h2 id="open-source-title">Open source</h2>
+    <p>{merged} pull requests merged into other people's projects, and one still open.</p>
+  </header>
+  <ul class="contributions" role="list">
+    {contributions.map((contribution) => (
+      <li class="reveal">
+        <span class="project">
+          {contribution.project}
+          <span class="date">{contribution.date}</span>
+        </span>
+        <span class="summary">{contribution.summary}</span>
+        <span class="pulls">
+          {contribution.pulls.map((pull) => (
+            <a href={`https://github.com/${contribution.repo}/pull/${pull}`}>#{pull}</a>
+          ))}
+          <span class:list={["status", { open: !contribution.merged }]}>
+            {contribution.merged ? "Merged" : "Open"}
+          </span>
+        </span>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .contributions li {
+    display: grid;
+    grid-template-columns: 11rem 1fr auto;
+    align-items: baseline;
+    gap: 0.25rem 1.5rem;
+    padding: 1.1rem 0.75rem;
+    border-bottom: 1px solid var(--rule);
+    transition: background-color 200ms var(--ease-out);
+  }
+
+  .contributions li:hover {
+    background: color-mix(in oklch, var(--accent) 9%, transparent);
+  }
+
+  .project {
+    display: grid;
+    font-weight: 500;
+  }
+
+  .date {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    font-weight: 400;
+  }
+
+  .pulls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: end;
+    align-items: baseline;
+    gap: 0.25rem 0.75rem;
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+  }
+
+  .status {
+    color: var(--muted);
+  }
+
+  .status.open {
+    color: var(--accent-text);
+  }
+
+  @media (width < 44rem) {
+    .contributions li {
+      grid-template-columns: 1fr;
+    }
+
+    .pulls {
+      justify-content: start;
+    }
+  }
+</style>

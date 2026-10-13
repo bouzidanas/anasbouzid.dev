@@ -1,0 +1,27 @@
+---
+import About from "../components/home/About.astro";
+import Contact from "../components/home/Contact.astro";
+import Hero from "../components/home/Hero.astro";
+import Numbers from "../components/home/Numbers.astro";
+import OpenSource from "../components/home/OpenSource.astro";
+import Work from "../components/home/Work.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout>
+  <div class="home">
+    <Hero />
+    <Numbers />
+    <Work />
+    <OpenSource />
+    <About />
+    <Contact />
+  </div>
+</BaseLayout>
+
+<style>
+  .home {
+    display: grid;
+    gap: clamp(5rem, 12vw, 9rem);
+  }
+</style>

@@ -1,0 +1,826 @@
+/* The interactive demo from Quizmark's website (packages/landing in its repository), with its rules nested
+   under .quizmark so its tokens and base styles stay inside the player. */
+
+@font-face {
+  font-family: "Schibsted Grotesk";
+  src: url("/quizmark/assets/fonts/SchibstedGrotesk.woff2") format("woff2");
+  font-weight: 400 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Plex Mono";
+  src: url("/quizmark/assets/fonts/IBMPlexMono-500.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+
+.quizmark {
+  --bg: #fbfbf9;
+  --ink: #131715;
+  --ink-2: #484f4b;
+  --ink-3: #676e6a;
+  --rule: #e3e4df;
+  --tint: #f1f3ef;
+  --teal: #079690;
+  --teal-ink: #04625e;
+  --pl-bg: #0b0d0f;
+  --pl-card: #1b1e23;
+  --pl-text: #f2f4f7;
+  --pl-muted: #a6adbb;
+  --pl-blue: #4f8cff;
+  --pl-green: #3fbf7f;
+  --pl-red: #ef5f6b;
+  --pl-ready: #26c2b4;
+  --sans: "Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  color: var(--ink);
+  font: 400 17px/1.55 var(--sans);
+  font-feature-settings: "kern";
+
+  & img {
+    display: block;
+    max-width: 100%;
+  }
+  & h2,
+  & h3 {
+    margin: 0;
+    font-family: inherit;
+    font-weight: 800;
+    line-height: inherit;
+    letter-spacing: -0.028em;
+    text-wrap: balance;
+  }
+  & p {
+    margin: 0;
+    text-wrap: pretty;
+  }
+  & button {
+    font: inherit;
+    color: inherit;
+  }
+  & a {
+    color: inherit;
+    text-decoration-color: currentColor;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  & :focus-visible {
+    outline: 3px solid var(--teal);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* ---------- The player (interactive demo) ---------- */
+
+  .player {
+    margin: 0;
+  }
+  .stage {
+    position: relative;
+    container-type: inline-size;
+    /* Video, then controls. On a narrow player the quiz spans both rows, so a
+       card taller than the video grows the player instead of leaving it. */
+    display: grid;
+    grid-template-rows: 1fr auto;
+    grid-template-columns: minmax(0, 1fr);
+    background: var(--pl-bg);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow:
+      0 1px 2px rgba(19, 23, 21, 0.08),
+      0 24px 60px -24px rgba(19, 23, 21, 0.45);
+    color: var(--pl-text);
+    isolation: isolate;
+    /* Its own compositing layer, so the rounded clip also holds for children
+       animating on theirs (dim, quiz, frame fade). Without it the corners can
+       come back square after the page scrolls away and returns. */
+    transform: translateZ(0);
+  }
+  .screen {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    grid-row: 1;
+    grid-column: 1;
+  }
+  .stage > .bar {
+    grid-row: 2;
+    grid-column: 1;
+  }
+  .frame {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.35s ease;
+  }
+  .frame.is-swapping {
+    opacity: 0.15;
+  }
+  .cc {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: clamp(8px, 2.4cqw, 20px);
+    text-align: center;
+    padding-inline: 8%;
+    font-size: clamp(12px, 2.15cqw, 20px);
+    line-height: 1.35;
+    font-weight: 500;
+    pointer-events: none;
+  }
+  .cc span {
+    background: rgba(8, 8, 8, 0.78);
+    padding: 0.12em 0.45em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+  .cc:empty,
+  .cc span:empty {
+    display: none;
+  }
+  /* Over the whole player, seek bar included, as the extension's own backdrop
+     is: nothing behind a quiz competes with it. */
+  .dim {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: rgba(4, 5, 6, 0.68);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+
+  .bar {
+    position: relative;
+    padding: 0 14px 6px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.35));
+  }
+  .seek {
+    position: relative;
+    height: 16px;
+  }
+  .seek > div {
+    position: absolute;
+    top: 6px;
+    height: 4px;
+    left: 0;
+  }
+  .seek-track {
+    right: 0;
+    display: flex;
+    gap: 2px;
+  }
+  .seek-track i {
+    display: block;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.26);
+  }
+  .seek-played {
+    width: var(--p, 0%);
+    background: #f03;
+    border-radius: 2px 0 0 2px;
+    transition: width 0.2s linear;
+  }
+  .seek-span {
+    left: var(--a, 0%);
+    width: var(--w, 0%);
+    background: var(--pl-blue);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .seek-head {
+    left: var(--p, 0%);
+    top: 2px !important;
+    width: 12px;
+    height: 12px !important;
+    margin-left: -6px;
+    background: #f03;
+    border-radius: 50%;
+    transition: left 0.2s linear;
+  }
+  .seek-marks {
+    right: 0;
+    top: 2px !important;
+    height: 12px !important;
+  }
+  /* The extension's marker states, each filled with its own border colour:
+     ready is the one waiting for you, generating breathes. */
+  .mark {
+    position: absolute;
+    left: var(--x);
+    top: 0;
+    width: 12px;
+    height: 12px;
+    margin-left: -6px;
+    padding: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    appearance: none;
+    background: var(--c);
+    border: 2px solid var(--c);
+  }
+  .mark::before {
+    content: "";
+    position: absolute;
+    inset: -8px;
+  }
+  .mark.is-ready {
+    --c: var(--pl-blue);
+    box-shadow:
+      0 0 0 3px rgba(79, 140, 255, 0.18),
+      0 0 9px 1px rgba(79, 140, 255, 0.7);
+  }
+  .mark.is-generating {
+    --c: #ffc53d;
+    animation: mark-pulse 1.4s ease-in-out infinite;
+  }
+  .mark.is-final {
+    border-radius: 2px;
+    transform: rotate(45deg) scale(0.86);
+    margin-left: -9px;
+  }
+  .mark.is-final.is-generating {
+    --c: #e8b233;
+    animation-name: mark-pulse-final;
+  }
+  .mark:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+  }
+  /* The extension's hover card for a mark. */
+  .tip {
+    position: absolute;
+    z-index: 1;
+    left: clamp(90px, var(--left), calc(100% - 90px));
+    transform: translateX(-50%);
+    min-width: 140px;
+    max-width: 180px;
+    padding: 9px 11px 10px;
+    border-radius: 9px;
+    background: rgba(18, 20, 24, 0.97);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.55);
+    color: var(--pl-text);
+    font-size: 12px;
+    line-height: 1.35;
+  }
+  .tip[hidden] {
+    display: none;
+  }
+  .tip-title {
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .tip-state {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--pl-muted);
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+  .tip-range {
+    flex: none;
+    font-variant-numeric: tabular-nums;
+  }
+  .tip-go {
+    width: 100%;
+    padding: 6px 10px;
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    background: #2f6fe0;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .tip-go:hover:not(:disabled) {
+    background: #3f7cec;
+  }
+  .tip-go:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 38px;
+    font-size: 13px;
+    color: var(--pl-muted);
+    min-width: 0;
+  }
+  .pp {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    margin-left: -6px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    color: #fff;
+  }
+  .pp:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .pp svg path {
+    fill: currentColor;
+  }
+  .pp .i-pause {
+    display: none;
+  }
+  .player.is-playing .pp .i-play {
+    display: none;
+  }
+  .player.is-playing .pp .i-pause {
+    display: inline;
+  }
+  .time {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: #e9ecf1;
+    white-space: nowrap;
+  }
+  .chapter {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .back-pill {
+    flex: none;
+    margin-left: auto;
+    height: 28px;
+    padding: 0 12px 0 10px;
+    border-radius: 999px;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .back-pill::before {
+    content: "";
+    width: 11px;
+    height: 9px;
+    background:
+      linear-gradient(currentColor 0 0) 0 0 / 100% 2px no-repeat,
+      linear-gradient(currentColor 0 0) 0 50% / 70% 2px no-repeat,
+      linear-gradient(currentColor 0 0) 0 100% / 100% 2px no-repeat;
+  }
+  .back-pill:hover {
+    background: rgba(255, 255, 255, 0.16);
+  }
+  .back-pill.is-ready {
+    background: #2f6fe0;
+    border-color: #2f6fe0;
+  }
+  .back-pill[hidden] {
+    display: none;
+  }
+  .ev-tag {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    z-index: 2;
+    padding: 5px 10px;
+    border-radius: 8px;
+    background: rgba(12, 14, 16, 0.82);
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .ev-tag span {
+    font: 500 12px var(--mono);
+    color: #b9c8ff;
+    margin-left: 6px;
+  }
+  .ev-tag[hidden] {
+    display: none;
+  }
+
+  /* The quiz sits over the whole stage, video and controls, as in the extension. */
+  .quiz {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    padding: clamp(10px, 2.2cqw, 24px) 0;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.3s ease,
+      visibility 0s linear 0.3s;
+  }
+  .player[data-state="prelude"] .dim,
+  .player[data-state="question"] .dim,
+  .player[data-state="summary"] .dim,
+  .player[data-state="end"] .dim {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .player[data-state="prelude"] .quiz,
+  .player[data-state="question"] .quiz,
+  .player[data-state="summary"] .quiz,
+  .player[data-state="end"] .quiz {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease;
+  }
+
+  .card {
+    width: 80%;
+    max-height: 100%;
+    overflow: auto;
+    background: rgba(27, 30, 35, 0.97);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: clamp(14px, 2.6cqw, 26px);
+    font-size: clamp(13px, 1.75cqw, 15px);
+    line-height: 1.45;
+    scrollbar-width: thin;
+  }
+  .card.is-entering {
+    animation: card-in 0.32s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .q-kicker {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 0.82em;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--pl-muted);
+  }
+  .chip {
+    font-size: 0.9em;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #cfd4dc;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 1px 9px;
+  }
+  .q-title {
+    margin-top: 0.5em;
+    font-size: 1.55em;
+    line-height: 1.2;
+    font-weight: 750;
+    letter-spacing: -0.015em;
+    color: #fff;
+  }
+  .q-desc {
+    margin-top: 0.7em;
+    color: #c9ced8;
+  }
+  .q-stats {
+    display: flex;
+    gap: 2.2em;
+    margin: 1.1em 0 0;
+  }
+  .q-stats div {
+    display: grid;
+    gap: 2px;
+  }
+  .q-stats dt {
+    font-size: 0.74em;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--pl-muted);
+  }
+  .q-stats dd {
+    margin: 0;
+    font-size: 1.12em;
+    font-weight: 700;
+    color: #fff;
+  }
+  [data-view="prelude"] {
+    text-align: center;
+  }
+  [data-view="prelude"] .q-kicker,
+  [data-view="prelude"] .q-stats {
+    justify-content: center;
+  }
+  [data-view="prelude"] .q-desc {
+    max-width: 46ch;
+    margin-inline: auto;
+  }
+  /* The results card is centred, like the extension's. */
+  [data-view="summary"] {
+    text-align: center;
+  }
+  [data-view="summary"] .q-kicker,
+  [data-view="summary"] .q-row {
+    justify-content: center;
+  }
+  [data-view="summary"] .muted {
+    max-width: 46ch;
+    margin-inline: auto;
+  }
+
+  .q-text {
+    margin-top: 0.55em;
+    font-size: 1.28em;
+    line-height: 1.3;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.01em;
+  }
+  .opts {
+    display: grid;
+    gap: 0.42em;
+    margin: 0.85em 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .opt {
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+    width: 100%;
+    padding: 0.5em 0.75em;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    color: #eef0f4;
+    transition:
+      border-color 0.12s ease,
+      background-color 0.12s ease;
+  }
+  .opt:hover:not(:disabled) {
+    border-color: rgba(255, 255, 255, 0.32);
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .opt b {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 1.7em;
+    height: 1.7em;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    font-size: 0.78em;
+    font-weight: 700;
+  }
+  .opt[aria-checked="true"] {
+    border-color: var(--pl-blue);
+    background: rgba(79, 140, 255, 0.1);
+  }
+  .opt.is-right {
+    border-color: var(--pl-green);
+    background: rgba(63, 191, 127, 0.12);
+  }
+  .opt.is-wrong {
+    border-color: var(--pl-red);
+    background: rgba(239, 95, 107, 0.1);
+  }
+  .opt.is-right::after,
+  .opt.is-wrong::after {
+    margin-left: auto;
+    font-weight: 700;
+  }
+  .opt.is-right::after {
+    content: "✓";
+    color: var(--pl-green);
+  }
+  .opt.is-wrong::after {
+    content: "✕";
+    color: var(--pl-red);
+    font-size: 0.9em;
+  }
+  .opt:disabled {
+    cursor: default;
+  }
+
+  .verdict {
+    display: flex;
+    align-items: center;
+    gap: 0.55em;
+    margin-top: 0.8em;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.86em;
+  }
+  .verdict::before {
+    content: "";
+    width: 1.5625em;
+    height: 1.5625em;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    font-size: 0.8em;
+    letter-spacing: 0;
+    line-height: 1;
+    -webkit-text-stroke: 0.6px currentColor;
+  }
+  .verdict.ok {
+    color: var(--pl-green);
+  }
+  .verdict.ok::before {
+    content: "\2713";
+  }
+  .verdict.no {
+    color: var(--pl-red);
+  }
+  .verdict.no::before {
+    content: "\2715";
+  }
+  .explain {
+    margin-top: 0.5em;
+    padding: 0.55em 0.9em;
+    border-left: 3px solid var(--pl-blue);
+    background: rgba(255, 255, 255, 0.045);
+    border-radius: 0 8px 8px 0;
+    color: #c9ced8;
+  }
+
+  .q-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    margin-top: 0.9em;
+  }
+  .q-row .spacer {
+    flex: 1;
+  }
+  .q-center {
+    justify-content: center;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    height: 2.35em;
+    padding: 0 1.05em;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    color: #fff;
+    font-weight: 550;
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      background-color 0.12s ease,
+      opacity 0.12s ease;
+  }
+  .pill:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .pill svg {
+    width: 0.85em;
+    height: 0.85em;
+    fill: currentColor;
+  }
+  /* Deeper than the extension's #4f8cff so white text meets 4.5:1. */
+  .pill-blue {
+    background: #2f6fe0;
+    border-color: #2f6fe0;
+    font-weight: 700;
+    padding: 0 1.4em;
+  }
+  .pill-blue:hover:not(:disabled) {
+    background: #3f7cec;
+  }
+  .pill:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .pill-green {
+    background: var(--pl-green);
+    border-color: var(--pl-green);
+    color: #06150d;
+    font-weight: 700;
+  }
+  .pill-green:hover:not(:disabled) {
+    background: #5ad194;
+  }
+  .pill-light {
+    background: #fff;
+    border-color: #fff;
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .pill-light:hover:not(:disabled) {
+    background: #e8ebea;
+  }
+
+  .dots {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 0.8em;
+    padding-top: 0.75em;
+    border-top: 1px solid rgba(255, 255, 255, 0.09);
+  }
+  .dots i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.22);
+  }
+  .dots i.on {
+    background: #fff;
+  }
+  .dots i.ok {
+    background: var(--pl-green);
+  }
+  .dots i.no {
+    background: var(--pl-red);
+  }
+
+  .score {
+    font-size: 2.4em;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #fff;
+    margin-top: 0.2em;
+    font-variant-numeric: tabular-nums;
+  }
+  .card .muted {
+    color: #c9ced8;
+    margin-top: 0.4em;
+  }
+
+  .demo-note {
+    margin-top: 14px;
+    font-size: 14px;
+    color: var(--ink-3);
+  }
+
+  /* Narrow players: the card still covers the video, at full width. A 16:9
+     frame at phone width is shorter than any readable quiz, so while a quiz is
+     open the player grows to the card's height and the video fills it. */
+  @container (max-width: 559px) {
+    .quiz {
+      position: relative;
+      inset: auto;
+      grid-row: 1 / 3;
+      grid-column: 1;
+      display: none;
+      padding: 10px 8px;
+    }
+    .player[data-state="prelude"] .quiz,
+    .player[data-state="question"] .quiz,
+    .player[data-state="summary"] .quiz,
+    .player[data-state="end"] .quiz {
+      display: grid;
+    }
+    /* The video fills whatever height the card needs, at least 16:9. */
+    .screen {
+      aspect-ratio: auto;
+      min-height: 56.25cqw;
+    }
+    .card {
+      width: 100%;
+      max-height: none;
+      font-size: 15px;
+      padding: 18px 16px 20px;
+    }
+    .q-title {
+      font-size: 1.35em;
+    }
+    .q-stats {
+      gap: 1.4em;
+    }
+  }
+}
+
+@keyframes mark-pulse {
+  50% {
+    opacity: 0.45;
+    transform: scale(0.86);
+  }
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+}
+
+@keyframes mark-pulse-final {
+  50% {
+    opacity: 0.45;
+    transform: rotate(45deg) scale(0.74);
+  }
+}

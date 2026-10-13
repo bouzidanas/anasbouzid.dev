@@ -1,0 +1,27 @@
+---
+import type { ImageMetadata } from "astro";
+import LoopVideo from "./LoopVideo.astro";
+
+interface Props {
+  src: string;
+  poster: ImageMetadata;
+  label: string;
+}
+
+const { src, poster, label } = Astro.props;
+---
+
+<figure class="clip">
+  <LoopVideo src={src} poster={poster} label={label} />
+</figure>
+
+<style>
+  .clip {
+    aspect-ratio: 16 / 10;
+    margin-block: 1.5rem;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--raised);
+  }
+</style>

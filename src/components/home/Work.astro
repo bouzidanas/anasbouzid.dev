@@ -1,0 +1,127 @@
+---
+import { getCollection } from "astro:content";
+import ProjectCard from "../ProjectCard.astro";
+
+const SHOWN = 4;
+
+const projects = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
+const shown = projects.slice(0, SHOWN);
+const more = projects.slice(SHOWN);
+---
+
+<section id="work" class="wrap" aria-labelledby="work-title">
+  <header class="section-head">
+    <h2 id="work-title">Selected work</h2>
+  </header>
+  <div class="projects">
+    {shown.map((project) => (
+      <ProjectCard project={project} />
+    ))}
+  </div>
+  {more.length > 0 && (
+    <details class="more">
+      <summary class="button quiet">
+        <span class="closed">Show {more.length} more projects</span>
+        <span class="opened">Show fewer projects</span>
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+          <path class="vertical" d="M8 2v12" stroke="currentColor" stroke-width="1.5" />
+          <path d="M2 8h12" stroke="currentColor" stroke-width="1.5" />
+        </svg>
+      </summary>
+      <div class="projects">
+        {more.map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+    </details>
+  )}
+</section>
+
+<script>
+  // Lights each tile where the pointer is.
+  document.querySelectorAll<HTMLElement>(".projects .tile").forEach((tile) => {
+    tile.addEventListener("pointermove", (event) => {
+      const rect = tile.getBoundingClientRect();
+      tile.style.setProperty("--x", `${event.clientX - rect.left}px`);
+      tile.style.setProperty("--y", `${event.clientY - rect.top}px`);
+    });
+  });
+</script>
+
+<style>
+  .projects {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .projects > :global(*) {
+    grid-column: span 12;
+  }
+
+  @media (width >= 56rem) {
+    .projects > :global(:nth-child(4n + 1)),
+    .projects > :global(:nth-child(4n + 4)) {
+      grid-column: span 7;
+    }
+
+    .projects > :global(:nth-child(4n + 2)),
+    .projects > :global(:nth-child(4n + 3)) {
+      grid-column: span 5;
+    }
+  }
+
+  .more {
+    margin-top: clamp(1.5rem, 3vw, 2rem);
+    interpolate-size: allow-keywords;
+  }
+
+  summary {
+    display: flex;
+    width: fit-content;
+    margin-inline: auto;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .vertical {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: scale 250ms var(--ease-out);
+  }
+
+  .more[open] .vertical {
+    scale: 1 0;
+  }
+
+  .more:not([open]) .opened,
+  .more[open] .closed {
+    display: none;
+  }
+
+  .more[open] summary {
+    margin-bottom: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  /* Browsers that can animate to an auto height open the section smoothly; others open it at once. */
+  .more::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 500ms var(--ease-out),
+      content-visibility 500ms allow-discrete;
+  }
+
+  .more[open]::details-content {
+    block-size: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .more::details-content {
+      transition: none;
+    }
+  }
+</style>

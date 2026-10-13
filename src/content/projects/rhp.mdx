@@ -1,0 +1,107 @@
+---
+title: rhp
+summary: A charting library that builds charts out of HTML elements and CSS instead of SVG or canvas. It's built on SolidJS and has a React adapter and a chart checker for AI agents.
+order: 1
+years: "2026"
+role: Creator
+stack: [SolidJS, TypeScript, CSS, React, Playwright, MCP]
+links:
+  - { label: Documentation, href: "https://rhp.vercel.app" }
+  - { label: Source, href: "https://github.com/bezda-team/rhp" }
+  - { label: npm, href: "https://www.npmjs.com/package/@bezda/rhp" }
+---
+
+import stats from "../../data/stats.json";
+import { formatNumber } from "../../lib/format";
+
+The six charts above are live.
+Three are posters from rhp's gallery, and three are recipes from the skill that teaches AI coding agents to use rhp.
+Point at them, click them or tab into them.
+Turn on **Show writes** to outline each element rhp writes to during an update.
+Only the elements whose values changed get an outline.
+
+## Charts made of elements
+
+rhp draws charts with HTML elements that CSS puts in place.
+You describe one _slat_, the template for a single row of data, from eight blocks: Bar, Dot, Tick, Label, Cell, Place, Area and Line.
+rhp draws a slat for every row and keeps each one in place as the data changes.
+
+```jsx
+const Fruit = slat({ thickness: 32, room: { start: 80, end: 40 } }, (d) => (
+  <div>
+    <Label edge="start">{d.name}</Label>
+    <Bar to={d.sold} />
+    <Label at={d.sold}>{d.sold}</Label>
+  </div>
+));
+
+<Chart scale={[0, 30]}>
+  <Plot name={["Apples", "Bananas", "Cherries"]} sold={[12, 18, 7]}>
+    {Fruit}
+  </Plot>
+</Chart>;
+```
+
+A bar is a `div`, so hover styles, focus, keyboard navigation, find in page, screen readers and the element inspector all work on a chart.
+rhp scopes a slat's CSS to that slat.
+The page's CSS can't change a chart's layout, and a chart's CSS can't reach the page.
+
+## Why I rebuilt it on SolidJS
+
+The first version of rhp was a set of React components.
+To stop one changed value from re-rendering every bar, each bar read its data through Legend-State selectors, and every component had to opt into that.
+I built version 2 on SolidJS, where updating a signal re-runs only the code that reads it.
+A new value now changes one CSS variable on one element, and rhp batches those writes into the next animation frame.
+A bar chart adds 18 kB gzipped, or 25 kB with Solid.
+
+## React without a second implementation
+
+rhp works in React apps through an adapter.
+`toReact` turns an rhp chart into a React component.
+React owns the props.
+Inside the component, the chart keeps Solid's fine-grained updates, so a new number in a prop moves one bar and leaves the rest of the chart alone.
+
+```jsx
+const FruitChart = toReact((props) => html`
+  <${Chart} scale=${[0, 30]}>
+    <${Plot} fruit=${() => props.fruit} sold=${() => props.sold}>${row}<//>
+  <//>`);
+
+export function App() {
+  const [sold, setSold] = useState([12, 18, 7]);
+  return <FruitChart fruit={["Apples", "Bananas", "Cherries"]} sold={sold} />;
+}
+```
+
+The adapter's browser tests mount it in React's StrictMode.
+They check that the chart draws once, that a new number moves only its own bar without recreating any element, and that unmounting removes the chart.
+
+## Rendered on the server
+
+rhp renders charts to HTML on the server, and the browser takes them over without drawing them again.
+Astro renders the download chart on my [home page](/) at build time, so it shows before any JavaScript runs.
+rhp's tests render charts on the server and let the browser take them over.
+They compare screenshots from before and after, and they fail on any hydration warning.
+
+## Tested in three browser engines
+
+Every push runs the browser tests in Chromium, WebKit and Firefox, as three parallel CI jobs on macOS, so WebKit is Safari's engine.
+A separate job tests the chart checker.
+
+## A checker for charts written by AI
+
+Coding agents write a lot of chart code, and they can't see what they drew.
+`@bezda/rhp-mcp` is an MCP server and command-line tool.
+It renders a chart file in a real browser and reports what's wrong with it, using static analysis, runtime checks and a screenshot.
+Its regression suite is a set of broken charts, each with the findings it should produce.
+The [tools page](/work/tools/) has more on it.
+
+```sh
+npx -y @bezda/rhp-mcp check chart.jsx
+```
+
+## In numbers
+
+- {formatNumber(stats.npm["@bezda/rhp"].lastMonth)} npm downloads of `@bezda/rhp` in the last 30 days, and {formatNumber(stats.npm["@bezda/rhp-mcp"].lastMonth)} of the checker
+- 23 example charts in the [gallery](https://rhp.vercel.app/gallery/), including candlestick and Gantt charts
+- 3 browser engines in CI on every push

@@ -1,0 +1,63 @@
+---
+title: PyNote
+summary: A Python notebook that runs entirely in the browser. Python code can build live UI controls, cells can re-run reactively, and sessions survive a refresh.
+order: 2
+years: Since 2025
+role: Creator
+stack: [SolidJS, TypeScript, Pyodide, Web Workers, CodeMirror, Vitest, Playwright]
+links:
+  - { label: Open the app, href: "https://pynote-notebook.vercel.app/?open=tutorial" }
+  - { label: Source, href: "https://github.com/bouzidanas/pynote-notebook-editor" }
+poster: ../../assets/projects/pynote.png
+video: /media/pynote.mp4
+embed: "https://pynote-notebook.vercel.app/?open=tutorial_ui_part1&theme=play_light"
+embedDark: "https://pynote-notebook.vercel.app/?open=tutorial_ui_part1&theme=lucide_dark"
+---
+
+PyNote needs no install, account or server.
+Python runs on your own machine, inside the browser, so your code and data stay with you.
+I prototyped it as Streamlit apps in 2025, then built it as a standalone browser app.
+The notebook above is the real app, open at the tutorial for its UI components.
+Python starts the first time it loads.
+
+## Python off the main thread
+
+Python runs in Pyodide, CPython compiled to WebAssembly, inside a Web Worker.
+The editor and the interpreter only talk through messages, so a long-running cell never freezes typing or scrolling.
+
+## UI controls written in Python
+
+The `pynote_ui` module lets Python code render sliders, toggles, inputs, forms and layouts.
+Components are live objects.
+When Python sets a property, the control updates in place without re-running the cell.
+A small message protocol between the worker and the SolidJS interface keeps controls, charts and Python state in sync.
+
+```python
+from pynote_ui import Slider, Text, Group
+
+demo_slider = Slider(min=0, max=100, value=50, label="Adjust Me")
+output_text = Text(content="Value: 50")
+
+def on_change(data):
+    output_text.content = f"Value: {int(data['value'])}"
+
+demo_slider.on_update(on_change)
+Group([demo_slider, output_text])
+```
+
+## Reactive execution
+
+In reactive mode, PyNote tracks which cells read which variables and re-runs the cells that depend on a change, as marimo does.
+Sequential, Hybrid and Concurrent modes give you manual control.
+
+## Nothing lost on refresh
+
+Notebooks and settings survive refreshes and closed tabs.
+Undo and redo cover structural changes like adding, moving and deleting cells.
+Files live in an in-browser file system that Python can read, and a side panel manages them.
+
+## Tests
+
+Vitest covers the execution queue, the dependency graph and component lifecycles.
+Playwright runs the app end to end: executing Python, editing, the files panel, plotting with matplotlib, undo and redo, and restoring a session after a reload.
+CI runs the type checks and publishes coverage reports.

@@ -1,0 +1,56 @@
+---
+import type { ImageMetadata } from "astro";
+import LoopVideo from "./LoopVideo.astro";
+
+interface Props {
+  src: string;
+  darkSrc?: string;
+  title: string;
+  video: string;
+  poster: ImageMetadata;
+}
+
+const { src, darkSrc, title, video, poster } = Astro.props;
+---
+
+<div class="live-embed">
+  <LoopVideo src={video} poster={poster} label={`${title}, recorded`} />
+  <iframe
+    title={title}
+    data-light={src}
+    data-dark={darkSrc}
+    onload="this.parentElement.dataset.loaded = ''; this.previousElementSibling?.remove();"
+  ></iframe>
+</div>
+
+<script>
+  import { isDark } from "../lib/theme";
+
+  // The app opens in the look that matches this site's theme, when it has one.
+  document.querySelectorAll<HTMLIFrameElement>(".live-embed iframe").forEach((frame) => {
+    frame.src = (isDark() && frame.dataset.dark) || frame.dataset.light!;
+  });
+</script>
+
+<style>
+  .live-embed {
+    display: grid;
+    width: 100%;
+    height: 100%;
+  }
+
+  .live-embed > :global(*) {
+    grid-area: 1 / 1;
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    opacity: 0;
+  }
+
+  .live-embed[data-loaded] iframe {
+    opacity: 1;
+  }
+</style>

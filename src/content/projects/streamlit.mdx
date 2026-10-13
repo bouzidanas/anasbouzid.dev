@@ -1,0 +1,64 @@
+---
+title: Streamlit components
+summary: Python packages that put React components into Streamlit apps. streamlit-code-editor and streamlit-float are the most used.
+order: 6
+years: Since 2023
+role: Creator and maintainer
+stack: [Python, React, TypeScript, Streamlit, PyPI]
+links:
+  - { label: streamlit-code-editor, href: "https://github.com/bouzidanas/streamlit-code-editor" }
+  - { label: streamlit-float, href: "https://github.com/bouzidanas/streamlit-float" }
+  - { label: streamlit-dnd, href: "https://github.com/bouzidanas/streamlit-dnd" }
+  - { label: streamlit-reveal-slides, href: "https://github.com/bouzidanas/streamlit-reveal-slides" }
+poster: ../../assets/projects/streamlit-editor.png
+video: /media/streamlit-editor.mp4
+---
+
+import Clip from "../../components/Clip.astro";
+import dndPoster from "../../assets/projects/streamlit-dnd.png";
+import floatPoster from "../../assets/projects/streamlit-float.png";
+import slidesPoster from "../../assets/projects/streamlit-slides.png";
+import stats from "../../data/stats.json";
+import { formatNumber } from "../../lib/format";
+
+export const total = Object.values(stats.pypi).reduce((sum, entry) => sum + entry.lastMonth, 0);
+
+Together, these four packages had {formatNumber(total)} downloads from PyPI in the last 30 days.
+I recorded the clips on this page from the packages running on my machine, in Streamlit's dark theme.
+
+## streamlit-code-editor
+
+streamlit-code-editor is a code editor component for [Streamlit](https://streamlit.io) apps, built on react-ace.
+Python passes in the code, the language, the theme and a layout of custom buttons and info bars.
+The React side sends back the edited text and the button that was pressed, as in the clip above.
+PyPI counted {formatNumber(stats.pypi["streamlit-code-editor"].lastMonth)} downloads in the last 30 days, and the repository has {stats.github["bouzidanas/streamlit-code-editor"].stars} stars on GitHub.
+
+Some fixes belonged in react-ace itself.
+I kept a fork of react-ace for them, and react-ace merged my fix for its `foldStyle` option in [pull request #1804](https://github.com/securingsincity/react-ace/pull/1804).
+
+## streamlit-float
+
+Streamlit lays out containers one after another down the page and has no option to fix one in place.
+streamlit-float fixes a container to the viewport instead, so it stays in view while the page scrolls.
+You call `float()` on a container, or `float_parent()` inside one, and pass CSS to place and style it.
+`float_css_helper` returns that CSS from arguments like `bottom` and `background`.
+PyPI counted {formatNumber(stats.pypi["streamlit-float"].lastMonth)} downloads in the last 30 days, and the repository has {stats.github["bouzidanas/streamlit-float"].stars} stars.
+
+<Clip src="/media/streamlit-float.mp4" poster={floatPoster} label="A Streamlit page scrolls while a message bar stays fixed at the bottom" />
+
+## streamlit-dnd
+
+streamlit-dnd adds drag-and-drop reordering to the keyed children of Streamlit containers, inside one container or between several.
+You can put headings and controls between the cards without breaking the list's indices.
+I first released it in June 2026 and test it against Streamlit 1.58 through 1.63.
+PyPI counted {formatNumber(stats.pypi["streamlit-dnd"].lastMonth)} downloads in the last 30 days.
+
+<Clip src="/media/streamlit-dnd.mp4" poster={dndPoster} label="A Markdown block is dragged below a Metrics block in a Streamlit app" />
+
+## streamlit-reveal-slides
+
+streamlit-reveal-slides renders [reveal.js](https://revealjs.com) presentations inside a Streamlit app.
+You write the slides in Markdown and pass them to one function, with reveal.js themes, transitions and fragments.
+PyPI counted {formatNumber(stats.pypi["streamlit-reveal-slides"].lastMonth)} downloads in the last 30 days.
+
+<Clip src="/media/streamlit-slides.mp4" poster={slidesPoster} label="A reveal.js presentation steps through its slides and fragments inside a Streamlit app" />

@@ -1,0 +1,150 @@
+---
+import { email, resumeRequest } from "../../lib/contact";
+import BarName from "../solid/BarName";
+---
+
+<section class="hero wrap">
+  <p class="label meta">
+    <span>Frontend engineer</span>
+    <span>Lincoln, NE</span>
+    <span>Open to relocation</span>
+  </p>
+
+  <h1 class="visually-hidden">Anas Bouzid</h1>
+  <div class="name" aria-hidden="true">
+    <div class="bars">
+      <BarName client:idle words={["ANAS", "BOUZID"]} />
+    </div>
+  </div>
+  <p class="label note">
+    This is my name as an <a href="/work/rhp/">rhp</a> bar chart. Point at it or click it.
+  </p>
+
+  <div class="below">
+    <p class="lede">
+      I build interactive web apps, charting libraries and developer tools, mostly with React,
+      TypeScript and Python.
+    </p>
+    <div class="actions">
+      <a class="button" href={resumeRequest}>Request my résumé</a>
+      <a class="button quiet" href={`mailto:${email}`}>Email</a>
+      <span class="profiles">
+        <a class="external" href="https://github.com/bouzidanas">GitHub</a>
+        <a class="external" href="https://www.linkedin.com/in/bouzidanas/">LinkedIn</a>
+      </span>
+    </div>
+  </div>
+</section>
+
+<script>
+  const bars = document.querySelector<HTMLElement>(".hero .bars")!;
+
+  bars.addEventListener("pointermove", (event) => {
+    const column = (event.target as Element).closest<HTMLElement>("[data-i]");
+    if (!column) return;
+    const rect = column.getBoundingClientRect();
+    const within = (event.clientX - rect.left) / rect.width - 0.5;
+    bars.style.setProperty("--px", String(Number(column.dataset.i) + within));
+  });
+
+  bars.addEventListener("pointerleave", () => bars.style.removeProperty("--px"));
+</script>
+
+<style>
+  @property --px {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: -99;
+  }
+
+  .hero {
+    display: grid;
+    gap: clamp(1.25rem, 3vw, 2rem);
+    padding-block: clamp(3rem, 10vw, 7.5rem) clamp(3rem, 8vw, 6rem);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+  }
+
+  .name {
+    container-type: inline-size;
+  }
+
+  .bars {
+    --col: calc(100cqi / 61);
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: calc(3 * var(--col));
+    row-gap: calc(1.5 * var(--col));
+    padding-top: calc(0.8 * var(--col));
+    touch-action: pan-y;
+  }
+
+  .bars :global(.word) {
+    width: calc(var(--cols) * var(--col));
+  }
+
+  @container (width < 40rem) {
+    .bars {
+      --col: calc(100cqi / 35);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .bars {
+      animation: sweep 1.6s 1.1s ease-in-out backwards;
+    }
+  }
+
+  @keyframes sweep {
+    from {
+      --px: -6;
+    }
+    to {
+      --px: 66;
+    }
+  }
+
+  .note {
+    justify-self: end;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .below {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem 3rem;
+    margin-top: clamp(1rem, 3vw, 2rem);
+  }
+
+  .lede {
+    max-width: 30ch;
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 350;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .profiles {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .external {
+    padding: 0.6em 0.4em;
+  }
+</style>

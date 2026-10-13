@@ -1,0 +1,235 @@
+---
+import { getCollection, render } from "astro:content";
+import ProjectMedia from "../../components/ProjectMedia.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const projects = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
+  return projects.map((project, index) => ({
+    params: { id: project.id },
+    props: { project, next: projects[(index + 1) % projects.length] },
+  }));
+}
+
+const { project, next } = Astro.props;
+const { Content } = await render(project);
+const { title, summary, years, role, stack, links } = project.data;
+---
+
+<BaseLayout title={title} description={summary}>
+  <div class="progress" aria-hidden="true"></div>
+
+  <article class="case">
+    <header class="column intro">
+      <a class="back" href="/#work">
+        ← All work
+      </a>
+      <p class="label">
+        {years} · {role}
+      </p>
+      <h1>{title}</h1>
+      <p class="summary">{summary}</p>
+    </header>
+
+    <div class:list={["stage", { bleed: project.id === "quizmark" }]}>
+      <ProjectMedia project={project} page />
+    </div>
+
+    <div class="column body">
+      <aside class="facts">
+        <dl>
+          <div>
+            <dt>Role</dt>
+            <dd>{role}</dd>
+          </div>
+          <div>
+            <dt>When</dt>
+            <dd>{years}</dd>
+          </div>
+          <div>
+            <dt>Built with</dt>
+            <dd>{stack.join(", ")}</dd>
+          </div>
+          <div>
+            <dt>Links</dt>
+            <dd>
+              <ul role="list">
+                {links.map((link) => (
+                  <li>
+                    <a class="external" href={link.href}>
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        </dl>
+      </aside>
+
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+
+    <nav class="column next" aria-label="Next project">
+      <span class="label">Next project</span>
+      <a href={`/work/${next.id}/`}>
+        {next.data.title}&nbsp;
+        <span class="arrow" aria-hidden="true">
+          →
+        </span>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
+
+<style>
+  .case {
+    --column: 64rem;
+    padding-bottom: clamp(4rem, 10vw, 7rem);
+  }
+
+  .column {
+    width: min(100% - 2 * var(--gutter), var(--column));
+    margin-inline: auto;
+  }
+
+  .progress {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 6;
+    height: 3px;
+    background: var(--accent);
+    transform-origin: left;
+    scale: 0 1;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .progress {
+      animation: progress linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+
+  @keyframes progress {
+    to {
+      scale: 1 1;
+    }
+  }
+
+  .intro {
+    display: grid;
+    gap: 0.75rem;
+    padding-block: clamp(2rem, 6vw, 4rem) clamp(2rem, 4vw, 3rem);
+  }
+
+  .back {
+    justify-self: start;
+    margin-bottom: 1.5rem;
+    color: var(--muted);
+    font-size: var(--step--1);
+    text-decoration: none;
+  }
+
+  .back:hover {
+    color: var(--ink);
+  }
+
+  h1 {
+    font-size: var(--step-4);
+    font-weight: 350;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .summary {
+    max-width: 46ch;
+    font-size: var(--step-1);
+    line-height: 1.45;
+  }
+
+  .stage {
+    width: min(100% - 2 * var(--gutter), 96rem);
+    margin-inline: auto;
+  }
+
+  .stage.bleed {
+    width: 100%;
+  }
+
+  .body {
+    display: grid;
+    grid-template-columns: minmax(10rem, 13rem) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    margin-top: clamp(2.5rem, 6vw, 4.5rem);
+  }
+
+  .facts {
+    position: sticky;
+    top: 6rem;
+    align-self: start;
+  }
+
+  .facts dl {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  dt {
+    margin-bottom: 0.25rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+  }
+
+  dd {
+    margin: 0;
+    font-size: var(--step--1);
+  }
+
+  dd ul {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  @media (width < 48rem) {
+    .body {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .facts {
+      position: static;
+    }
+
+    .facts dl {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .next {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: clamp(4rem, 10vw, 7rem);
+    padding-top: 2rem;
+    border-top: 1px solid var(--ink);
+  }
+
+  .next a {
+    justify-self: start;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    font-weight: 350;
+    text-decoration: none;
+  }
+
+  .arrow {
+    display: inline-block;
+    color: var(--accent-text);
+    transition: translate 250ms var(--ease-out);
+  }
+
+  .next a:hover .arrow {
+    translate: 0.3em 0;
+  }
+</style>

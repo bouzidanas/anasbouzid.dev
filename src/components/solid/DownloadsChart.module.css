@@ -1,0 +1,110 @@
+@property --n {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 0;
+}
+
+.downloads {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 2rem;
+  margin-bottom: clamp(2rem - 10px, 5vw - 10px, 3.5rem - 10px);
+}
+
+.figures li {
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+}
+
+.count,
+.readout {
+  font-family: var(--font-display);
+  font-size: var(--step-4);
+  font-weight: 350;
+  font-variant-numeric: tabular-nums lining-nums;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.count {
+  counter-reset: n var(--n);
+}
+
+.count::before {
+  content: counter(n) attr(data-suffix);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .count {
+      animation: count linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 45%;
+    }
+  }
+}
+
+@keyframes count {
+  from {
+    --n: 0;
+  }
+}
+
+.readout {
+  color: var(--gold);
+}
+
+.what {
+  color: var(--muted);
+}
+
+.plot {
+  border-bottom: 1px solid var(--ink);
+  touch-action: pan-y;
+}
+
+.axis {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+}
+
+.end {
+  transition: opacity 150ms;
+}
+
+.end[data-hidden] {
+  opacity: 0;
+}
+
+/* Kept a few characters from each edge so a date under the first or last week stays whole. */
+.picked {
+  position: absolute;
+  top: 0;
+  left: clamp(3ch, var(--x), calc(100% - 3ch));
+  translate: -50% 0;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+.picked::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  width: 1px;
+  height: 0.6rem;
+  margin-bottom: 0.15rem;
+  background: var(--gold);
+}

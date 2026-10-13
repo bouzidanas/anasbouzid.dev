@@ -1,0 +1,62 @@
+---
+import { resumeRequest } from "../../lib/contact";
+import CopyEmail from "../CopyEmail.astro";
+---
+
+<section id="contact" class="contact" aria-labelledby="contact-title">
+  <div class="wrap">
+    <h2 id="contact-title">Let's talk.</h2>
+    <p class="note">
+      I'm looking for frontend and full-stack roles, remote or on-site. I'm based in Lincoln,
+      Nebraska, and happy to relocate.
+    </p>
+    <CopyEmail />
+    <ul class="links" role="list">
+      <li>
+        <a class="button" href={resumeRequest}>
+          Request my résumé
+        </a>
+      </li>
+      <li>
+        <a class="external" href="https://github.com/bouzidanas">
+          GitHub
+        </a>
+      </li>
+      <li>
+        <a class="external" href="https://www.linkedin.com/in/bouzidanas/">
+          LinkedIn
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .contact .wrap {
+    display: grid;
+    gap: 1.25rem;
+    padding-bottom: clamp(4rem, 10vw, 7rem);
+  }
+
+  h2 {
+    font-size: clamp(3.5rem, 2rem + 8vw, 9rem);
+    font-weight: 350;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+  }
+
+  .note {
+    max-width: 44ch;
+    margin-bottom: 1rem;
+    font-size: var(--step-1);
+    line-height: 1.45;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.75rem;
+    margin-top: 0.5rem;
+  }
+</style>

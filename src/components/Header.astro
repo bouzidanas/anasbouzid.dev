@@ -1,0 +1,88 @@
+---
+import ThemeToggle from "./ThemeToggle.astro";
+
+const links = [
+  { href: "/#work", label: "Work" },
+  { href: "/#about", label: "About" },
+  { href: "/#contact", label: "Contact" },
+];
+---
+
+<header class="header">
+  <div class="wrap bar">
+    <a class="name" href="/">
+      Anas Bouzid
+    </a>
+    <nav aria-label="Main">
+      <ul role="list">
+        {links.map((link) => (
+          <li>
+            <a href={link.href}>{link.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <ThemeToggle />
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    border-bottom: 1px solid transparent;
+    background: color-mix(in oklch, var(--paper) 82%, transparent);
+    backdrop-filter: blur(12px);
+    view-transition-name: header;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .header {
+      animation: settle linear both;
+      animation-timeline: scroll();
+      animation-range: 0 5rem;
+    }
+  }
+
+  @keyframes settle {
+    to {
+      border-color: var(--rule);
+    }
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 3vw, 2rem);
+    height: 4rem;
+  }
+
+  .name {
+    margin-right: auto;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    text-decoration: none;
+  }
+
+  ul {
+    display: flex;
+    gap: clamp(0.9rem, 3vw, 1.75rem);
+  }
+
+  nav a {
+    font-size: var(--step--1);
+    font-weight: 500;
+    text-decoration-color: transparent;
+  }
+
+  nav a:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  @media (width < 30rem) {
+    .name {
+      font-size: var(--step-0);
+    }
+  }
+</style>

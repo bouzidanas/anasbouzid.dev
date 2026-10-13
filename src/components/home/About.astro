@@ -1,0 +1,38 @@
+<section id="about" class="wrap" aria-labelledby="about-title">
+  <header class="section-head">
+    <h2 id="about-title">About</h2>
+  </header>
+  <div class="bio">
+    <p class="lead">
+      I studied mathematics and physics at the University of Nebraska-Lincoln. I spent years there
+      as a research and teaching assistant, building scientific software: web apps for setting up
+      simulations and getting their results, analysis pipelines in Python, and an Android inventory
+      app.
+    </p>
+    <p>
+      Since 2024 I've worked as an AI training consultant at DataAnnotation. I build reference apps
+      in Python and React, and I review and repair AI-generated code and tests. The rest of my time
+      goes into the projects above, which I design, build, test, release and support myself.
+    </p>
+  </div>
+</section>
+
+<style>
+  .bio {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+    gap: 1.5rem clamp(2rem, 6vw, 5rem);
+    align-items: start;
+  }
+
+  .lead {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 350;
+    line-height: 1.25;
+  }
+
+  .bio p:last-child {
+    color: var(--muted);
+  }
+</style>

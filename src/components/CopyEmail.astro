@@ -1,0 +1,56 @@
+---
+import { email } from "../lib/contact";
+---
+
+<div class="copy-email">
+  <a class="address" href={`mailto:${email}`}>
+    {email}
+  </a>
+  <button type="button" class="button quiet" data-email={email}>
+    Copy
+  </button>
+  <span class="visually-hidden" role="status"></span>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>(".copy-email").forEach((box) => {
+    const button = box.querySelector("button")!;
+    const status = box.querySelector("[role=status]")!;
+
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.email!);
+        button.textContent = "Copied";
+        status.textContent = "Email address copied";
+        setTimeout(() => {
+          button.textContent = "Copy";
+          status.textContent = "";
+        }, 2000);
+      } catch {
+        location.href = `mailto:${button.dataset.email}`;
+      }
+    });
+  });
+</script>
+
+<style>
+  .copy-email {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+  }
+
+  .address {
+    font-family: var(--font-display);
+    font-size: min(var(--step-3), 7.4vw);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    overflow-wrap: anywhere;
+  }
+
+  button {
+    min-width: 5.5em;
+    justify-content: center;
+  }
+</style>

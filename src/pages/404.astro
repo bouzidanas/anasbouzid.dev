@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Page not found">
+  <section class="wrap missing">
+    <p class="label">404</p>
+    <h1>This page doesn't exist.</h1>
+    <p>
+      It may have moved. <a href="/">Go to the home page</a> or <a href="/#work">see my work</a>.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .missing {
+    display: grid;
+    gap: 1rem;
+    padding-block: clamp(4rem, 14vw, 10rem);
+  }
+
+  h1 {
+    font-size: var(--step-3);
+    font-weight: 350;
+  }
+</style>
