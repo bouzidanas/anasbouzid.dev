@@ -1,4 +1,4 @@
-import { createMemo, createSelector, createSignal, For, Show } from "solid-js";
+import { createMemo, createSelector, createSignal, For, onCleanup, onMount, Show } from "solid-js";
 import { Bar, Chart, Plot, nice, slat, type Row } from "@bezda/rhp";
 import { formatDay, formatNumber } from "../../lib/format";
 import { theme } from "../../lib/rhp";
@@ -57,11 +57,24 @@ const Column = slat<Week & { dim: boolean }>(
 
 export default function DownloadsChart(props: Props) {
   const [active, setActive] = createSignal<number>();
+  const [figuresInView, setFiguresInView] = createSignal(true);
   const isActive = createSelector(active);
   const scrubbing = createMemo(() => active() !== undefined);
   const latest = () => props.weeks[props.weeks.length - 1];
   const week = () => props.weeks[active() ?? props.weeks.length - 1];
+  const x = () => `${((active()! + 0.5) / props.weeks.length) * 100}%`;
   const top = nice(0, Math.max(...props.weeks.map((week) => week.downloads)), 4).max;
+  let figures!: HTMLUListElement;
+
+  // Under the sticky header counts as out of view, and scroll-padding-top covers the header.
+  onMount(() => {
+    const header = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    const observer = new IntersectionObserver(([entry]) => setFiguresInView(entry.isIntersecting), {
+      rootMargin: `${-header}px 0px 0px`,
+    });
+    observer.observe(figures);
+    onCleanup(() => observer.disconnect());
+  });
 
   // An end date steps aside only when the picked week's date would cover it.
   const near = (end: "start" | "end") => {
@@ -82,7 +95,7 @@ export default function DownloadsChart(props: Props) {
 
   return (
     <div class={styles.downloads}>
-      <ul class={styles.figures} role="list">
+      <ul class={styles.figures} role="list" ref={figures}>
         <For each={props.figures}>
           {(figure) => (
             <li>
@@ -131,6 +144,15 @@ export default function DownloadsChart(props: Props) {
             {Column}
           </Plot>
         </Chart>
+        <Show when={scrubbing() && !figuresInView()}>
+          <span
+            class={styles.tip}
+            style={{ "--x": x(), "--y": `${(week().downloads / top) * 100}%` }}
+            aria-hidden="true"
+          >
+            {formatNumber(week().downloads)}
+          </span>
+        </Show>
       </div>
       <div class={styles.axis} aria-hidden="true">
         <span class={styles.end} data-hidden={near("start") ? "" : undefined}>
@@ -139,11 +161,8 @@ export default function DownloadsChart(props: Props) {
         <span class={styles.end} data-hidden={near("end") ? "" : undefined}>
           {formatDay(latest().start)}
         </span>
-        <Show when={active() !== undefined}>
-          <span
-            class={styles.picked}
-            style={{ "--x": `${((active()! + 0.5) / props.weeks.length) * 100}%` }}
-          >
+        <Show when={scrubbing()}>
+          <span class={styles.picked} style={{ "--x": x() }}>
             {formatDay(week().start)}
           </span>
         </Show>

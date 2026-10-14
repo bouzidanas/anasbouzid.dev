@@ -33,6 +33,8 @@ The bars are reused by index, so rhp's own transitions move them.
 **The download chart.**
 `src/components/solid/DownloadsChart.tsx` shows weekly downloads of all the packages added up.
 Pointing at a week, tapping it, or tabbing into the chart and using the arrow keys updates the gold readout and puts the week's date under its bar.
+Once the figures have scrolled up under the header, the week's value also shows over its bar.
+An `IntersectionObserver` watches the figures, with the page's `scroll-padding-top` as its top margin so that the header counts as out of view.
 
 **The counters.**
 Each number is a CSS counter that reads `--n`, an integer registered with `@property`.

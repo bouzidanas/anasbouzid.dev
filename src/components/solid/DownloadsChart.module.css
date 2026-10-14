@@ -67,8 +67,27 @@
 }
 
 .plot {
+  position: relative;
   border-bottom: 1px solid var(--ink);
   touch-action: pan-y;
+}
+
+/* Over rhp's plot, which sits on z-index 1. */
+.tip {
+  position: absolute;
+  z-index: 1;
+  bottom: calc(var(--y) + 0.4rem);
+  left: clamp(4ch, var(--x), calc(100% - 4ch));
+  translate: -50% 0;
+  color: var(--accent-text);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  white-space: nowrap;
+  text-shadow:
+    0 0 3px var(--paper),
+    0 0 3px var(--paper),
+    0 0 3px var(--paper);
+  pointer-events: none;
 }
 
 .axis {

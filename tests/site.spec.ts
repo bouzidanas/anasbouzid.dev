@@ -80,6 +80,29 @@ test("the download chart can be read from the keyboard", async ({ page }) => {
   await expect(page.getByText(/downloads, week of/)).not.toHaveText(first!);
 });
 
+test("the picked week's value shows over its bar once the figures scroll away", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await hydrated(page, "[data-week]");
+  const week = page.locator("[data-week]").nth(4);
+  const figures = page.getByRole("list").filter({ hasText: "packages on PyPI and npm" });
+  const tip = page.locator("[class*=_tip_]");
+
+  await week.focus();
+  await figures.scrollIntoViewIfNeeded();
+  await expect(tip).toHaveCount(0);
+
+  await figures.evaluate((list) => scrollBy(0, list.getBoundingClientRect().bottom));
+  await expect(tip).toBeVisible();
+  await expect(week).toContainText(`: ${await tip.textContent()} downloads`);
+
+  const { violations } = await new AxeBuilder({ page })
+    .include("section[aria-labelledby=numbers-title]")
+    .analyze();
+  expect(violations.map((violation) => `${violation.id}: ${violation.help}`)).toEqual([]);
+});
+
 test("clicking my name turns it into a bar chart and back", async ({ page }) => {
   await page.goto("/");
   await hydrated(page, "[data-i]");
