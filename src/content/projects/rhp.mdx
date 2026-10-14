@@ -1,6 +1,6 @@
 ---
 title: rhp
-summary: A charting library that builds charts out of HTML elements and CSS instead of SVG or canvas. It's built on SolidJS and has a React adapter and a chart checker for AI agents.
+summary: A SolidJS charting library that draws charts with HTML and CSS, in the browser or on the server. In my benchmark, a data change reaches the screen in 2.4 ms, while Recharts, Chart.js and ECharts take 12 to 16 ms.
 order: 1
 years: "2026"
 role: Creator
@@ -11,6 +11,8 @@ links:
   - { label: npm, href: "https://www.npmjs.com/package/@bezda/rhp" }
 ---
 
+import BenchmarkChart from "../../components/solid/BenchmarkChart";
+import { benchmarkUrl } from "../../data/benchmark";
 import stats from "../../data/stats.json";
 import { formatNumber } from "../../lib/format";
 
@@ -53,6 +55,24 @@ To stop one changed value from re-rendering every bar, each bar read its data th
 I built version 2 on SolidJS, where updating a signal re-runs only the code that reads it.
 A new value now changes one CSS variable on one element, and rhp batches those writes into the next animation frame.
 A bar chart adds 18 kB gzipped, or 25 kB with Solid.
+
+## How it compares
+
+rhp's repository has a benchmark that draws the same bar chart with 16 libraries.
+Each version follows its library's own docs and default settings.
+In the test below, one value changes, and the time is how long the new bar takes to reach the screen.
+
+<BenchmarkChart />
+
+rhp (CSS) is rhp with its default settings, and it takes 2.4 ms.
+Recharts takes 12 ms, and Chart.js, ECharts and ApexCharts take 16.
+Plain DOM, Charts.css and Vega-Lite are faster on this test.
+None of the three animate by default, and plain DOM sets each bar's width by hand.
+
+Counting all the work a change causes, including its animation, rhp keeps the browser busy for 8.8 ms per change, Chart.js for 54 ms and Recharts for 81 ms.
+
+These numbers come from one run in Chromium on an Apple M5 in October 2026, so other machines will give other numbers.
+The <a href={benchmarkUrl}>full results</a> also cover the time to draw a chart, memory use and bundle size.
 
 ## React without a second implementation
 

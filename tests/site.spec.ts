@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
+import { updates } from "../src/data/benchmark";
 
 const pages = [
   "/",
@@ -121,6 +122,14 @@ test("Show writes outlines what a strike of the bell changes", async ({ page }) 
   const [, written, total] = (await report.textContent())!.match(/(\d+) of (\d+)/)!.map(Number);
   expect(written).toBeGreaterThan(0);
   expect(written).toBeLessThanOrEqual(total);
+});
+
+test("the benchmark chart is drawn without a script", async ({ page }) => {
+  await page.goto("/work/rhp/");
+
+  const chart = page.getByRole("figure", { name: /from a data change to the new frame/ });
+  await expect(chart.getByRole("listitem")).toHaveCount(updates.length);
+  await expect(chart.locator("xpath=ancestor::astro-island")).toHaveCount(0);
 });
 
 test("the Quizmark demo opens its first question", async ({ page }) => {

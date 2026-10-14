@@ -77,6 +77,9 @@ It writes them to `src/data/stats.json`.
 If a source is down, the build keeps the last numbers it had.
 The open-source list lives in `src/data/contributions.ts`, newest first.
 
+The benchmark chart on the rhp page reads `src/data/benchmark.ts`, which holds the update times from one of rhp's benchmark results files.
+`BenchmarkChart.tsx` has no `client:` directive, so Astro renders it to HTML and the page ships no script for it.
+
 ## Media
 
 I recorded the clips with Playwright and cut them with FFmpeg into 960×600 H.264 files with poster frames.
@@ -94,6 +97,7 @@ The icon is the A from my name on the amber tile, drawn on whole pixels so it st
 - `public/rhp/` holds three recipe pages and the beeswarm poster from rhp's documentation site.
 - `src/components/solid/gallery/` holds two gallery posters from the same site.
 - `src/components/quizmark/demo.js` and `lecture.js` come from Quizmark's `packages/landing`.
+- `src/data/benchmark.ts` comes from rhp's `bench/` results, and its link points at the file it was copied from.
 
 ## Browser features
 
@@ -124,6 +128,7 @@ If your system asks for less motion, the videos stay still and the animations ar
 Playwright runs the tests against the production build, in Chromium, WebKit and a phone viewport.
 They check every page for console errors, sideways scrolling and the problems axe finds, leaving out the apps embedded from other sites.
 They also drive the download chart with a pointer, a finger and the keyboard, click my name, switch the theme, turn on Show writes and start the Quizmark demo.
+One more checks that the benchmark chart is on the page with every library and isn't hydrated.
 CI runs them on every push and pull request.
 
 ## Type and color
