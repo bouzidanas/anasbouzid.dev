@@ -1,133 +1,133 @@
 {
-  "updated": "2026-10-13",
+  "updated": "2026-10-14",
   "weeks": [
     {
-      "start": "2026-04-21",
-      "downloads": 37360
+      "start": "2026-04-22",
+      "downloads": 37138
     },
     {
-      "start": "2026-04-28",
-      "downloads": 41557
+      "start": "2026-04-29",
+      "downloads": 43029
     },
     {
-      "start": "2026-05-05",
-      "downloads": 50602
+      "start": "2026-05-06",
+      "downloads": 50950
     },
     {
-      "start": "2026-05-12",
-      "downloads": 49670
+      "start": "2026-05-13",
+      "downloads": 54623
     },
     {
-      "start": "2026-05-19",
-      "downloads": 64086
+      "start": "2026-05-20",
+      "downloads": 61454
     },
     {
-      "start": "2026-05-26",
-      "downloads": 64681
+      "start": "2026-05-27",
+      "downloads": 64886
     },
     {
-      "start": "2026-06-02",
-      "downloads": 58230
+      "start": "2026-06-03",
+      "downloads": 58294
     },
     {
-      "start": "2026-06-09",
-      "downloads": 60610
+      "start": "2026-06-10",
+      "downloads": 60291
     },
     {
-      "start": "2026-06-16",
-      "downloads": 56695
+      "start": "2026-06-17",
+      "downloads": 54665
     },
     {
-      "start": "2026-06-23",
-      "downloads": 47796
+      "start": "2026-06-24",
+      "downloads": 45817
     },
     {
-      "start": "2026-06-30",
-      "downloads": 55667
+      "start": "2026-07-01",
+      "downloads": 61816
     },
     {
-      "start": "2026-07-07",
-      "downloads": 83100
+      "start": "2026-07-08",
+      "downloads": 82863
     },
     {
-      "start": "2026-07-14",
-      "downloads": 80209
+      "start": "2026-07-15",
+      "downloads": 80561
     },
     {
-      "start": "2026-07-21",
-      "downloads": 74823
+      "start": "2026-07-22",
+      "downloads": 70901
     },
     {
-      "start": "2026-07-28",
-      "downloads": 55558
+      "start": "2026-07-29",
+      "downloads": 57293
     },
     {
-      "start": "2026-08-04",
-      "downloads": 55092
+      "start": "2026-08-05",
+      "downloads": 54403
     },
     {
-      "start": "2026-08-11",
-      "downloads": 58878
+      "start": "2026-08-12",
+      "downloads": 61752
     },
     {
-      "start": "2026-08-18",
-      "downloads": 60999
+      "start": "2026-08-19",
+      "downloads": 51230
     },
     {
-      "start": "2026-08-25",
-      "downloads": 17996
+      "start": "2026-08-26",
+      "downloads": 18385
     },
     {
-      "start": "2026-09-01",
-      "downloads": 22475
+      "start": "2026-09-02",
+      "downloads": 24109
     },
     {
-      "start": "2026-09-08",
-      "downloads": 31512
+      "start": "2026-09-09",
+      "downloads": 33212
     },
     {
-      "start": "2026-09-15",
-      "downloads": 36384
+      "start": "2026-09-16",
+      "downloads": 37331
     },
     {
-      "start": "2026-09-22",
-      "downloads": 42024
+      "start": "2026-09-23",
+      "downloads": 41325
     },
     {
-      "start": "2026-09-29",
-      "downloads": 38568
+      "start": "2026-09-30",
+      "downloads": 38334
     },
     {
-      "start": "2026-10-06",
-      "downloads": 32911
+      "start": "2026-10-07",
+      "downloads": 32294
     }
   ],
   "pypi": {
     "streamlit-code-editor": {
-      "lastMonth": 134513
+      "lastMonth": 138311
     },
     "streamlit-float": {
-      "lastMonth": 14409
+      "lastMonth": 14774
     },
     "streamlit-dnd": {
-      "lastMonth": 5911
+      "lastMonth": 5964
     },
     "streamlit-reveal-slides": {
-      "lastMonth": 233
+      "lastMonth": 244
     }
   },
   "npm": {
     "@bezda/rhp": {
-      "lastMonth": 1573
+      "lastMonth": 1579
     },
     "@bezda/rhp-mcp": {
-      "lastMonth": 442
+      "lastMonth": 444
     },
     "pr-ui-compare": {
-      "lastMonth": 508
+      "lastMonth": 511
     },
     "react-list-player": {
-      "lastMonth": 23
+      "lastMonth": 22
     }
   },
   "github": {
