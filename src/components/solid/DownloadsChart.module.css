@@ -94,7 +94,7 @@
   top: 0;
   left: clamp(3ch, var(--x), calc(100% - 3ch));
   translate: -50% 0;
-  color: var(--gold);
+  color: var(--accent-text);
   white-space: nowrap;
 }
 
@@ -106,5 +106,5 @@
   width: 1px;
   height: 0.6rem;
   margin-bottom: 0.15rem;
-  background: var(--gold);
+  background: var(--accent-text);
 }
