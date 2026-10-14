@@ -13,13 +13,13 @@ const packages = Object.keys(stats.pypi).length + Object.keys(stats.npm).length;
 
 const figures = [
   { value: packages, suffix: "", exact: String(packages), label: "packages on PyPI and npm" },
+  { value: stars, suffix: "", exact: formatNumber(stars), label: "GitHub stars on my projects" },
   {
     value: Math.round(downloads / 1000),
     suffix: "K",
     exact: formatNumber(downloads),
     label: "package downloads in the last 30 days",
   },
-  { value: stars, suffix: "", exact: formatNumber(stars), label: "GitHub stars on my projects" },
 ];
 ---
 
