@@ -36,12 +36,17 @@ Pointing at a week, tapping it, or tabbing into the chart and using the arrow ke
 Once the figures have scrolled up under the header, the week's value also shows over its bar.
 An `IntersectionObserver` watches the figures, with the page's `scroll-padding-top` as its top margin so that the header counts as out of view.
 The first time the chart scrolls into view, its bars grow one after another.
-If the chart is below the screen when the island hydrates, the bars wait at zero until the chart reaches the top 60% of the window.
-Without JavaScript, or if the chart is already on screen, the bars are simply drawn.
 
 **The counters.**
 Each number is a CSS counter that reads `--n`, an integer registered with `@property`.
-A scroll-driven animation runs `--n` up from 0 as the number comes into view.
+The first time the numbers come into view, an animation runs `--n` up from 0.
+The counter reads it through `calc()`, which rounds it, because Safari animates a registered integer through fractions and a counter ignores a fraction.
+
+**Entrances.**
+The counters and the bars share one rule for when they play.
+If they're below the screen when the island hydrates, their animations start out paused.
+Each one plays once nearly all of it is on screen, or as much of it as fits in a short window, so a number never sits at 0 while you're reading it.
+Without JavaScript, or if they're already on screen, they're simply drawn.
 
 **The project tiles.**
 A pointer listener in `Work.astro` sets `--x` and `--y` on the tile under the pointer, and a radial gradient lights the tile at that spot.
@@ -112,7 +117,7 @@ A browser that lacks one still shows the page, without that effect.
 | Feature                      | Where                                                                      |
 | :--------------------------- | :------------------------------------------------------------------------- |
 | View Transitions             | The card-to-page morph and the theme reveal                                |
-| Scroll-driven animations     | The header's border, the section reveals, the counters and the reading bar |
+| Scroll-driven animations     | The header's border, the section reveals and the reading bar               |
 | `@property`                  | Integer counters, and color tokens that resolve `light-dark()` at the root |
 | `light-dark()` and `oklch()` | One line per color for both themes                                         |
 | Container queries            | My name sizes itself to its box                                            |
@@ -134,7 +139,7 @@ Playwright runs the tests against the production build, in Chromium, WebKit and 
 They check every page for console errors, sideways scrolling and the problems axe finds, leaving out the apps embedded from other sites.
 They also drive the download chart with a pointer, a finger and the keyboard, click my name, switch the theme, turn on Show writes and start the Quizmark demo.
 One more checks that the benchmark chart is on the page with every library and isn't hydrated.
-Two more check that the scroll-driven animations are still in the built CSS and that the download bars wait for the chart to come into view.
+Two more check that the scroll-driven animations are still in the built CSS, and that the counters and the bars wait until they come into view.
 CI runs them on every push and pull request.
 
 ## Type and color

@@ -21,7 +21,28 @@ interface Props {
   figures: Figure[];
 }
 
-const Column = slat<Week & { dim: boolean; entrance?: "hold" | "grow" }>(
+type Entrance = "hold" | "play";
+
+// Something below the screen holds its animation, and plays it once nearly all of it is on screen,
+// or as much of it as fits.
+function entrance(element: Element, set: (state: Entrance) => void) {
+  const { top, height } = element.getBoundingClientRect();
+  if (top < innerHeight) return;
+  const threshold = Math.min(0.95, (0.9 * innerHeight) / height);
+  set("hold");
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.intersectionRatio < threshold) return;
+      set("play");
+      observer.disconnect();
+    },
+    { threshold },
+  );
+  observer.observe(element);
+  onCleanup(() => observer.disconnect());
+}
+
+const Column = slat<Week & { dim: boolean; entrance?: Entrance }>(
   {
     inset: 0.16,
     room: { start: 0, end: 0, before: 0, after: 0 },
@@ -38,11 +59,11 @@ const Column = slat<Week & { dim: boolean; entrance?: "hold" | "grow" }>(
       .column[data-dim] .fill { opacity: 0.28; }
       .say { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
       @media (prefers-reduced-motion: no-preference) {
-        .column[data-entrance="hold"] .fill { transform: scaleY(0); }
-        .column[data-entrance="grow"] .fill {
+        .column[data-entrance] .fill {
           animation: grow 900ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
           animation-delay: calc(var(--i) * 24ms);
         }
+        .column[data-entrance="hold"] .fill { animation-play-state: paused; }
       }
       @keyframes grow { from { transform: scaleY(0); } }
     `,
@@ -67,7 +88,7 @@ const Column = slat<Week & { dim: boolean; entrance?: "hold" | "grow" }>(
 export default function DownloadsChart(props: Props) {
   const [active, setActive] = createSignal<number>();
   const [figuresInView, setFiguresInView] = createSignal(true);
-  const [entrance, setEntrance] = createSignal<"hold" | "grow">();
+  const [grow, setGrow] = createSignal<Entrance>();
   const isActive = createSelector(active);
   const scrubbing = createMemo(() => active() !== undefined);
   const latest = () => props.weeks[props.weeks.length - 1];
@@ -87,21 +108,7 @@ export default function DownloadsChart(props: Props) {
     onCleanup(() => observer.disconnect());
   });
 
-  // Bars still below the screen wait at zero, and grow once the chart is in the top 60% of it.
-  onMount(() => {
-    if (plot.getBoundingClientRect().top < innerHeight) return;
-    setEntrance("hold");
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setEntrance("grow");
-        observer.disconnect();
-      },
-      { rootMargin: "0px 0px -40%" },
-    );
-    observer.observe(plot);
-    onCleanup(() => observer.disconnect());
-  });
+  onMount(() => entrance(plot, setGrow));
 
   // An end date steps aside only when the picked week's date would cover it.
   const near = (end: "start" | "end") => {
@@ -124,18 +131,26 @@ export default function DownloadsChart(props: Props) {
     <div class={styles.downloads}>
       <ul class={styles.figures} role="list" ref={figures}>
         <For each={props.figures}>
-          {(figure) => (
-            <li>
-              <span
-                class={styles.count}
-                style={{ "--n": figure.value }}
-                data-suffix={figure.suffix}
-                aria-hidden="true"
-              />
-              <span class="visually-hidden">{figure.exact}</span>
-              <span class={styles.what}>{figure.label}</span>
-            </li>
-          )}
+          {(figure) => {
+            const [countUp, setCountUp] = createSignal<Entrance>();
+            let count!: HTMLSpanElement;
+            onMount(() => entrance(count, setCountUp));
+
+            return (
+              <li>
+                <span
+                  ref={count}
+                  class={styles.count}
+                  style={{ "--n": figure.value }}
+                  data-suffix={figure.suffix}
+                  data-entrance={countUp()}
+                  aria-hidden="true"
+                />
+                <span class="visually-hidden">{figure.exact}</span>
+                <span class={styles.what}>{figure.label}</span>
+              </li>
+            );
+          }}
         </For>
         <li>
           <span class={styles.readout}>{formatNumber(week().downloads)}</span>
@@ -167,7 +182,7 @@ export default function DownloadsChart(props: Props) {
           <Plot
             rows={props.weeks}
             dim={(d: Row<Week>) => scrubbing() && !isActive(d.index)}
-            entrance={entrance}
+            entrance={grow}
             keyboard
           >
             {Column}

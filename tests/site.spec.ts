@@ -50,7 +50,6 @@ test("scroll-driven animations survive the build", async ({ page }) => {
   );
   expect(await animationName(".tile")).toBe("reveal");
   expect(await animationName(".header")).toBe("settle");
-  expect(await animationName("[class*=_count_]")).not.toBe("none");
 
   await page.goto("/work/rhp/");
   expect(await animationName(".progress")).toBe("progress");
@@ -100,21 +99,32 @@ test("the download chart can be read from the keyboard", async ({ page }) => {
   await expect(page.getByText(/downloads, week of/)).not.toHaveText(first!);
 });
 
-test("the download bars grow when the chart first comes into view", async ({ page }) => {
+test("the figures count up and the bars grow when they first come into view", async ({ page }) => {
   await page.goto("/");
+  const count = page.locator("[class*=_count_]").nth(1);
   const plot = page.getByRole("figure", {
     name: "Weekly downloads of my packages on PyPI and npm",
   });
   const week = page.locator("[data-week]").first();
 
-  // Bring the figures into view, with the chart still below the screen.
-  await plot.evaluate((element) =>
-    scrollBy(0, element.getBoundingClientRect().top - innerHeight - 50),
-  );
+  // Close enough for the island to hydrate, with all of it still below the screen.
+  await page
+    .locator("[class*=_figures_]")
+    .evaluate((element) => scrollBy(0, element.getBoundingClientRect().top - innerHeight - 50));
+  await expect(count).toHaveAttribute("data-entrance", "hold");
   await expect(week).toHaveAttribute("data-entrance", "hold");
 
+  await count.scrollIntoViewIfNeeded();
+  await expect(count).toHaveAttribute("data-entrance", "play");
+  // Partway through, the counter still holds a whole number, which Safari needs calc() for.
+  const counterReset = await count.evaluate((element) => {
+    element.getAnimations()[0].currentTime = 600;
+    return getComputedStyle(element).counterReset;
+  });
+  expect(counterReset).toMatch(/^n \d+$/);
+
   await plot.scrollIntoViewIfNeeded();
-  await expect(week).toHaveAttribute("data-entrance", "grow");
+  await expect(week).toHaveAttribute("data-entrance", "play");
 });
 
 test("the picked week's value shows over its bar once the figures scroll away", async ({

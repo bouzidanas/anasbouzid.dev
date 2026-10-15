@@ -34,8 +34,9 @@
   letter-spacing: -0.03em;
 }
 
+/* calc() rounds, since Safari animates the <integer> --n through fractions and a counter ignores those. */
 .count {
-  counter-reset: n var(--n);
+  counter-reset: n calc(var(--n));
 }
 
 .count::before {
@@ -43,12 +44,12 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .count {
-      animation: count linear both;
-      animation-timeline: view();
-      animation-range: entry 20% cover 45%;
-    }
+  .count[data-entrance] {
+    animation: count 1.2s var(--ease-out);
+  }
+
+  .count[data-entrance="hold"] {
+    animation-play-state: paused;
   }
 }
 
