@@ -48,11 +48,27 @@ test("scroll-driven animations survive the build", async ({ page }) => {
     !(await page.evaluate(() => CSS.supports("animation-timeline: view()"))),
     "no scroll-driven animations",
   );
-  expect(await animationName(".tile")).toBe("reveal");
   expect(await animationName(".header")).toBe("settle");
 
   await page.goto("/work/rhp/");
   expect(await animationName(".progress")).toBe("progress");
+});
+
+test("project tiles that come into view together appear one after another", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, "phones show one tile per row");
+  await page.goto("/");
+  const tiles = page.locator(".projects > .tile");
+  await expect(tiles.first()).toHaveAttribute("data-entrance", "hold");
+
+  await tiles.first().scrollIntoViewIfNeeded();
+  await expect(tiles.nth(1)).toHaveAttribute("data-entrance", "play");
+  const delays = await tiles.evaluateAll((elements) =>
+    elements.slice(0, 2).map((element) => getComputedStyle(element).animationDelay),
+  );
+  expect(delays).toEqual(["0s", "0.2s"]);
 });
 
 // Safari has no requestIdleCallback, so a client:idle or client:visible island hydrates a moment after load.

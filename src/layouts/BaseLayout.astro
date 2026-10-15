@@ -79,6 +79,34 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   </body>
 </html>
 
+<script>
+  // What's still below the screen fades up once it comes into view, one after another when several arrive together.
+  // Coming back to a page skips this, so the card a project page morphs back into is already there.
+  const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
+
+  if (navigation?.type !== "back_forward") {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries
+          .filter((entry) => entry.isIntersecting)
+          .forEach((entry, i) => {
+            const element = entry.target as HTMLElement;
+            element.style.setProperty("--i", String(i));
+            element.dataset.entrance = "play";
+            observer.unobserve(element);
+          });
+      },
+      { rootMargin: "0px 0px -15%" },
+    );
+
+    document.querySelectorAll<HTMLElement>(".reveal").forEach((element) => {
+      if (element.getBoundingClientRect().top < innerHeight) return;
+      element.dataset.entrance = "hold";
+      observer.observe(element);
+    });
+  }
+</script>
+
 <style>
   body {
     display: grid;

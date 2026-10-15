@@ -225,17 +225,19 @@ ul[role="list"] {
 @keyframes reveal {
   from {
     opacity: 0;
-    translate: 0 1.5rem;
+    translate: 0 2rem;
   }
 }
 
+/* Set by the reveal script in BaseLayout.astro, with --i counting the ones that arrive together. */
 @media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .reveal {
-      animation: reveal linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 60%;
-    }
+  .reveal[data-entrance] {
+    animation: reveal 700ms var(--ease-out) backwards;
+    animation-delay: calc(var(--i, 0) * 200ms);
+  }
+
+  .reveal[data-entrance="hold"] {
+    animation-play-state: paused;
   }
 }
 

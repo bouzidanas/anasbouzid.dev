@@ -51,6 +51,12 @@ Without JavaScript, or if they're already on screen, they're simply drawn.
 **The project tiles.**
 A pointer listener in `Work.astro` sets `--x` and `--y` on the tile under the pointer, and a radial gradient lights the tile at that spot.
 
+**The reveals.**
+Project tiles and open-source rows that are below the screen when the page loads fade up once they come into view.
+A script in `BaseLayout.astro` watches them with an `IntersectionObserver`.
+The ones that arrive together get a growing delay, so the two tiles in a row appear one after another.
+Coming back to the page with the back button skips this, so the tile a project page morphs back into is already there.
+
 **The theme switch.**
 `ThemeToggle.astro` changes the theme inside a View Transition and grows the new theme out of the button with a `clip-path` circle.
 
@@ -117,7 +123,7 @@ A browser that lacks one still shows the page, without that effect.
 | Feature                      | Where                                                                      |
 | :--------------------------- | :------------------------------------------------------------------------- |
 | View Transitions             | The card-to-page morph and the theme reveal                                |
-| Scroll-driven animations     | The header's border, the section reveals and the reading bar               |
+| Scroll-driven animations     | The header's border and the reading bar                                    |
 | `@property`                  | Integer counters, and color tokens that resolve `light-dark()` at the root |
 | `light-dark()` and `oklch()` | One line per color for both themes                                         |
 | Container queries            | My name sizes itself to its box                                            |
@@ -139,7 +145,7 @@ Playwright runs the tests against the production build, in Chromium, WebKit and 
 They check every page for console errors, sideways scrolling and the problems axe finds, leaving out the apps embedded from other sites.
 They also drive the download chart with a pointer, a finger and the keyboard, click my name, switch the theme, turn on Show writes and start the Quizmark demo.
 One more checks that the benchmark chart is on the page with every library and isn't hydrated.
-Two more check that the scroll-driven animations are still in the built CSS, and that the counters and the bars wait until they come into view.
+Others check that the scroll-driven animations are still in the built CSS, that the counters and the bars wait until they come into view, and that tiles arriving together appear one after another.
 CI runs them on every push and pull request.
 
 ## Type and color
