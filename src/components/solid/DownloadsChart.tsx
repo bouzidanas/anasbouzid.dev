@@ -21,7 +21,7 @@ interface Props {
   figures: Figure[];
 }
 
-const Column = slat<Week & { dim: boolean }>(
+const Column = slat<Week & { dim: boolean; entrance?: "hold" | "grow" }>(
   {
     inset: 0.16,
     room: { start: 0, end: 0, before: 0, after: 0 },
@@ -34,17 +34,26 @@ const Column = slat<Week & { dim: boolean }>(
         background: var(--accent);
         transform-origin: bottom;
         transition: opacity 150ms;
-        animation: grow 900ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
-        animation-delay: calc(var(--i) * 24ms);
       }
       .column[data-dim] .fill { opacity: 0.28; }
       .say { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+      @media (prefers-reduced-motion: no-preference) {
+        .column[data-entrance="hold"] .fill { transform: scaleY(0); }
+        .column[data-entrance="grow"] .fill {
+          animation: grow 900ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+          animation-delay: calc(var(--i) * 24ms);
+        }
+      }
       @keyframes grow { from { transform: scaleY(0); } }
-      @media (prefers-reduced-motion: reduce) { .fill { animation: none; } }
     `,
   },
   (d) => (
-    <div class="column" data-week={d.index} data-dim={d.dim ? "" : undefined}>
+    <div
+      class="column"
+      data-week={d.index}
+      data-dim={d.dim ? "" : undefined}
+      data-entrance={d.entrance}
+    >
       <Bar to={d.downloads} color="transparent">
         <span class="fill" style={{ "--i": d.index }} />
       </Bar>
@@ -58,6 +67,7 @@ const Column = slat<Week & { dim: boolean }>(
 export default function DownloadsChart(props: Props) {
   const [active, setActive] = createSignal<number>();
   const [figuresInView, setFiguresInView] = createSignal(true);
+  const [entrance, setEntrance] = createSignal<"hold" | "grow">();
   const isActive = createSelector(active);
   const scrubbing = createMemo(() => active() !== undefined);
   const latest = () => props.weeks[props.weeks.length - 1];
@@ -65,6 +75,7 @@ export default function DownloadsChart(props: Props) {
   const x = () => `${((active()! + 0.5) / props.weeks.length) * 100}%`;
   const top = nice(0, Math.max(...props.weeks.map((week) => week.downloads)), 4).max;
   let figures!: HTMLUListElement;
+  let plot!: HTMLDivElement;
 
   // Under the sticky header counts as out of view, and scroll-padding-top covers the header.
   onMount(() => {
@@ -73,6 +84,22 @@ export default function DownloadsChart(props: Props) {
       rootMargin: `${-header}px 0px 0px`,
     });
     observer.observe(figures);
+    onCleanup(() => observer.disconnect());
+  });
+
+  // Bars still below the screen wait at zero, and grow once the chart is in the top 60% of it.
+  onMount(() => {
+    if (plot.getBoundingClientRect().top < innerHeight) return;
+    setEntrance("hold");
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setEntrance("grow");
+        observer.disconnect();
+      },
+      { rootMargin: "0px 0px -40%" },
+    );
+    observer.observe(plot);
     onCleanup(() => observer.disconnect());
   });
 
@@ -122,6 +149,7 @@ export default function DownloadsChart(props: Props) {
 
       <div
         class={styles.plot}
+        ref={plot}
         onPointerMove={pick}
         onPointerDown={pick}
         onPointerLeave={release}
@@ -139,6 +167,7 @@ export default function DownloadsChart(props: Props) {
           <Plot
             rows={props.weeks}
             dim={(d: Row<Week>) => scrubbing() && !isActive(d.index)}
+            entrance={entrance}
             keyboard
           >
             {Column}

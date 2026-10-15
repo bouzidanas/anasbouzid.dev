@@ -35,6 +35,9 @@ The bars are reused by index, so rhp's own transitions move them.
 Pointing at a week, tapping it, or tabbing into the chart and using the arrow keys updates the gold readout and puts the week's date under its bar.
 Once the figures have scrolled up under the header, the week's value also shows over its bar.
 An `IntersectionObserver` watches the figures, with the page's `scroll-padding-top` as its top margin so that the header counts as out of view.
+The first time the chart scrolls into view, its bars grow one after another.
+If the chart is below the screen when the island hydrates, the bars wait at zero until the chart reaches the top 60% of the window.
+Without JavaScript, or if the chart is already on screen, the bars are simply drawn.
 
 **The counters.**
 Each number is a CSS counter that reads `--n`, an integer registered with `@property`.
@@ -131,6 +134,7 @@ Playwright runs the tests against the production build, in Chromium, WebKit and 
 They check every page for console errors, sideways scrolling and the problems axe finds, leaving out the apps embedded from other sites.
 They also drive the download chart with a pointer, a finger and the keyboard, click my name, switch the theme, turn on Show writes and start the Quizmark demo.
 One more checks that the benchmark chart is on the page with every library and isn't hydrated.
+Two more check that the scroll-driven animations are still in the built CSS and that the download bars wait for the chart to come into view.
 CI runs them on every push and pull request.
 
 ## Type and color
@@ -141,5 +145,7 @@ Astro's font API self-hosts them with fallbacks sized to match, so the page does
 ## Known issues upstream
 
 - rhp's `all: initial` on `.rhp-body` also resets `color-scheme`; adding `color-scheme: inherit` after it would fix it in rhp itself.
+- Lightning CSS, Vite's default CSS minifier, folds `animation-timeline` into the `animation` shorthand when it has no browser targets, and Astro builds with none.
+  Browsers don't accept a timeline in the shorthand and drop the whole declaration, so `astro.config.mjs` has Vite minify CSS with esbuild instead.
 - Quizmark's `demo.js` has three unused variables, which `astro check` reports as hints.
 - streamlit-float's `__init__.py` has a regex in a normal string, which raises a `SyntaxWarning` on Python 3.12 and later.

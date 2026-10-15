@@ -29,7 +29,11 @@ const figures = [
   </header>
 
   <figure>
-    <DownloadsChart client:visible weeks={stats.weeks} figures={figures} />
+    <DownloadsChart
+      client:visible={{ rootMargin: "300px" }}
+      weeks={stats.weeks}
+      figures={figures}
+    />
     <figcaption>
       Weekly downloads of my <a href="/work/streamlit/">Streamlit</a>,{" "}
       <a href="/work/react/">React</a>, <a href="/work/rhp/">rhp</a> and{" "}

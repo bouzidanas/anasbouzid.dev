@@ -36,6 +36,26 @@ for (const path of pages) {
   });
 }
 
+test("scroll-driven animations survive the build", async ({ page }) => {
+  const animationName = (selector: string) =>
+    page
+      .locator(selector)
+      .first()
+      .evaluate((element) => getComputedStyle(element).animationName);
+
+  await page.goto("/");
+  test.skip(
+    !(await page.evaluate(() => CSS.supports("animation-timeline: view()"))),
+    "no scroll-driven animations",
+  );
+  expect(await animationName(".tile")).toBe("reveal");
+  expect(await animationName(".header")).toBe("settle");
+  expect(await animationName("[class*=_count_]")).not.toBe("none");
+
+  await page.goto("/work/rhp/");
+  expect(await animationName(".progress")).toBe("progress");
+});
+
 // Safari has no requestIdleCallback, so a client:idle or client:visible island hydrates a moment after load.
 async function hydrated(page: Page, inside: string) {
   await page.locator(inside).first().scrollIntoViewIfNeeded();
@@ -78,6 +98,23 @@ test("the download chart can be read from the keyboard", async ({ page }) => {
 
   await expect(weeks.nth(1)).toBeFocused();
   await expect(page.getByText(/downloads, week of/)).not.toHaveText(first!);
+});
+
+test("the download bars grow when the chart first comes into view", async ({ page }) => {
+  await page.goto("/");
+  const plot = page.getByRole("figure", {
+    name: "Weekly downloads of my packages on PyPI and npm",
+  });
+  const week = page.locator("[data-week]").first();
+
+  // Bring the figures into view, with the chart still below the screen.
+  await plot.evaluate((element) =>
+    scrollBy(0, element.getBoundingClientRect().top - innerHeight - 50),
+  );
+  await expect(week).toHaveAttribute("data-entrance", "hold");
+
+  await plot.scrollIntoViewIfNeeded();
+  await expect(week).toHaveAttribute("data-entrance", "grow");
 });
 
 test("the picked week's value shows over its bar once the figures scroll away", async ({

@@ -9,6 +9,10 @@ export default defineConfig({
   site: "https://anasbouzid.dev",
   integrations: [mdx(), sitemap(), solid()],
   devToolbar: { enabled: false },
+  vite: {
+    // Lightning CSS folds animation-timeline into the animation shorthand, which browsers reject.
+    build: { cssMinify: "esbuild" },
+  },
   markdown: {
     shikiConfig: {
       themes: { light: "github-light-high-contrast", dark: "github-dark" },
