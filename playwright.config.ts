@@ -6,7 +6,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   reporter: process.env.CI ? "github" : "list",
   use: {
-    baseURL: "http://localhost:4400",
+    baseURL: "https://localhost:4401",
+    ignoreHTTPSErrors: true,
   },
   projects: [
     { name: "chromium", use: { ...devices["Desktop Chrome"] } },
@@ -14,8 +15,10 @@ export default defineConfig({
     { name: "mobile", use: { ...devices["Pixel 7"] } },
   ],
   webServer: {
-    command: "npm run preview -- --port 4400",
-    url: "http://localhost:4400",
-    reuseExistingServer: !process.env.CI,
+    // Match production: its security policy upgrades asset requests to HTTPS.
+    command: "npm run preview:worker -- --port 4401 --local-protocol https",
+    url: "https://localhost:4401",
+    ignoreHTTPSErrors: true,
+    reuseExistingServer: false,
   },
 });

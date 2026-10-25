@@ -40,6 +40,8 @@ The first time the chart scrolls into view, its bars grow one after another.
 **The counters.**
 Each number is a CSS counter that reads `--n`, an integer registered with `@property`.
 The first time the numbers come into view, an animation runs `--n` up from 0.
+When fresh statistics arrive, a transition moves `--n` from its displayed value to the new one.
+The figure elements stay in place, so a refresh does not restart their entrance.
 The counter reads it through `calc()`, which rounds it, because Safari animates a registered integer through fractions and a counter ignores a fraction.
 
 **Entrances.**
@@ -88,9 +90,25 @@ Its lines type in with a `clip-path` reveal once it's on screen, so any text tha
 ## Data
 
 `scripts/fetch-stats.mjs` runs before each build.
-It fetches daily downloads from pypistats and the npm API, adds every package up into 25 whole weeks, and fetches stars from GitHub.
+It shares `scripts/stats-source.mjs` with the live endpoint in `worker/index.mjs`.
+The loader fetches daily downloads from pypistats and the npm API, adds every package up into 25 calendar weeks, and fetches stars from GitHub.
+The monthly figures cover 30 calendar days ending on the latest date shared by every download source.
 It writes them to `src/data/stats.json`.
-If a source is down, the build keeps the last numbers it had.
+Requests run in parallel, with an eight-second timeout for each source.
+If a download source fails or returns unusable data, all download figures and weeks keep their last values so the reporting windows stay consistent.
+A failed GitHub request keeps that repository's last star count.
+
+The page shows its build-time statistics immediately.
+When the download chart hydrates, `src/lib/stats.ts` requests `/api/stats` and updates the figures, weekly bars, dates and accessible text when the response arrives.
+The inline figures on project pages use `src/components/Stat.astro` and share one request per page.
+Failed requests leave the saved figures visible, and reduced motion disables the counter transitions.
+
+Cloudflare serves the HTML as static assets and routes `/api/*` through the Worker.
+The endpoint caches statistics for six hours, retains them for up to seven days as an outage fallback, and retries incomplete refreshes after five minutes.
+Concurrent requests in one Worker instance share a refresh, and query strings cannot bypass the cache.
+The optional Worker secret `GITHUB_TOKEN` authenticates GitHub requests without exposing it to browsers.
+`npm run dev -- --background` uses the same endpoint with a process-local cache.
+`npm run preview:worker` serves the production build with the actual Worker and asset routing.
 The open-source list lives in `src/data/contributions.ts`, newest first.
 
 The benchmark chart on the rhp page reads `src/data/benchmark.ts`, which holds the update times from one of rhp's benchmark results files.
@@ -147,6 +165,8 @@ They also drive the download chart with a pointer, a finger and the keyboard, cl
 One more checks that the benchmark chart is on the page with every library and isn't hydrated.
 Others check that the scroll-driven animations are still in the built CSS, that the counters and the bars wait until they come into view, and that tiles arriving together appear one after another.
 CI runs them on every push and pull request.
+The live statistics tests delay responses to check the saved figures, then verify animated updates, updated chart values, inline figures, reduced motion and failure fallbacks.
+Node tests cover reporting windows, parallel requests, invalid upstream data, request coalescing and cache refreshes during outages.
 
 ## Type and color
 

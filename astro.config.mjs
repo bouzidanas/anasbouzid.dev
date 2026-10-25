@@ -3,6 +3,7 @@ import { defineConfig, fontProviders } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import solid from "@astrojs/solid-js";
+import { statsDev } from "./scripts/stats-dev.mjs";
 
 // https://astro.build/config
 export default defineConfig({
@@ -10,6 +11,7 @@ export default defineConfig({
   integrations: [mdx(), sitemap(), solid()],
   devToolbar: { enabled: false },
   vite: {
+    plugins: [statsDev()],
     // Lightning CSS folds animation-timeline into the animation shorthand, which browsers reject.
     build: { cssMinify: "esbuild" },
   },

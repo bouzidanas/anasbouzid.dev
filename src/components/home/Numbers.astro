@@ -1,26 +1,6 @@
 ---
 import stats from "../../data/stats.json";
-import { formatNumber } from "../../lib/format";
 import DownloadsChart from "../solid/DownloadsChart";
-
-const sum = (values: number[]) => values.reduce((total, value) => total + value, 0);
-
-const downloads = sum(
-  [...Object.values(stats.pypi), ...Object.values(stats.npm)].map((entry) => entry.lastMonth),
-);
-const stars = sum(Object.values(stats.github).map((repo) => repo.stars));
-const packages = Object.keys(stats.pypi).length + Object.keys(stats.npm).length;
-
-const figures = [
-  { value: packages, suffix: "", exact: String(packages), label: "packages on PyPI and npm" },
-  { value: stars, suffix: "", exact: formatNumber(stars), label: "GitHub stars on my projects" },
-  {
-    value: Math.round(downloads / 1000),
-    suffix: "K",
-    exact: formatNumber(downloads),
-    label: "package downloads in the last 30 days",
-  },
-];
 ---
 
 <section class="wrap" aria-labelledby="numbers-title">
@@ -29,11 +9,7 @@ const figures = [
   </header>
 
   <figure>
-    <DownloadsChart
-      client:visible={{ rootMargin: "300px" }}
-      weeks={stats.weeks}
-      figures={figures}
-    />
+    <DownloadsChart client:visible={{ rootMargin: "300px" }} initial={stats} />
     <figcaption>
       Weekly downloads of my <a href="/work/streamlit/">Streamlit</a>,{" "}
       <a href="/work/react/">React</a>, <a href="/work/rhp/">rhp</a> and{" "}

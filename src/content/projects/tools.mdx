@@ -11,8 +11,7 @@ links:
   - { label: rhp-mcp on npm, href: "https://www.npmjs.com/package/@bezda/rhp-mcp" }
 ---
 
-import stats from "../../data/stats.json";
-import { formatNumber } from "../../lib/format";
+import Stat from "../../components/Stat.astro";
 
 A coding agent can change a UI or write a chart, but it can't see the result.
 Both tools open the agent's work in a real browser and return what they find as text and images the agent can read.
@@ -51,7 +50,7 @@ For a change that doesn't move, the tool runs the same steps and then saves a si
 In VS Code, PR UI Compare is a language model tool, an agent skill and a command-palette wizard.
 The same engine runs as an MCP server over stdio for Claude Code, Codex, Cursor and Zed.
 I added it to HOL Guard's extensions in [pull request #3118](https://github.com/hashgraph-online/hol-guard/pull/3118).
-npm counted {formatNumber(stats.npm["pr-ui-compare"].lastMonth)} downloads of the server in the last 30 days.
+npm counted <Stat source="npm" name="pr-ui-compare" /> downloads of the server in the last 30 days.
 
 Unit tests cover the renderer.
 End-to-end tests in VS Code record a working tree with uncommitted changes against a commit and render the GIF.
@@ -68,4 +67,4 @@ The terminal above shows its real output for a chart whose scale runs backward.
 
 As an MCP server, it gives an agent the guide, the references, the recipes and the checker as four tools, and it returns the screenshots as images the agent can see.
 Its regression suite is a set of broken charts, each with the findings it should produce.
-npm counted {formatNumber(stats.npm["@bezda/rhp-mcp"].lastMonth)} downloads in the last 30 days.
+npm counted <Stat source="npm" name="@bezda/rhp-mcp" /> downloads in the last 30 days.

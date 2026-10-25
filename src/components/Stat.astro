@@ -1,0 +1,41 @@
+---
+import saved from "../data/stats.json";
+import { formatNumber } from "../lib/format";
+
+interface Props {
+  source: "pypi" | "npm" | "github";
+  name?: string;
+}
+
+const { source, name } = Astro.props;
+const entries = saved[source] as Record<string, { stars?: number; lastMonth?: number }>;
+const value = (entry: { stars?: number; lastMonth?: number }) =>
+  entry.stars ?? entry.lastMonth ?? 0;
+const initial = name
+  ? value(entries[name])
+  : Object.values(entries).reduce((sum, entry) => sum + value(entry), 0);
+---
+
+<span data-stat-source={source} data-stat-name={name}>
+  {formatNumber(initial)}
+</span>
+
+<script>
+  import { latestStats } from "../lib/stats";
+  import { formatNumber } from "../lib/format";
+
+  void latestStats().then((stats) => {
+    if (!stats) return;
+    for (const element of document.querySelectorAll<HTMLElement>("[data-stat-source]")) {
+      const source = element.dataset.statSource as "pypi" | "npm" | "github";
+      const entries = stats[source] as Record<string, { stars?: number; lastMonth?: number }>;
+      const selected = element.dataset.statName
+        ? [entries[element.dataset.statName]]
+        : Object.values(entries);
+      if (selected.some((entry) => !entry)) continue;
+      element.textContent = formatNumber(
+        selected.reduce((sum, entry) => sum + (entry.stars ?? entry.lastMonth ?? 0), 0),
+      );
+    }
+  });
+</script>

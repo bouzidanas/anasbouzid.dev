@@ -13,8 +13,7 @@ links:
 
 import BenchmarkChart from "../../components/solid/BenchmarkChart";
 import { benchmarkUrl } from "../../data/benchmark";
-import stats from "../../data/stats.json";
-import { formatNumber } from "../../lib/format";
+import Stat from "../../components/Stat.astro";
 
 The six charts above are live.
 Three are posters from rhp's gallery, and three are recipes from the skill that teaches AI coding agents to use rhp.
@@ -122,6 +121,6 @@ npx -y @bezda/rhp-mcp check chart.jsx
 
 ## In numbers
 
-- {formatNumber(stats.npm["@bezda/rhp"].lastMonth)} npm downloads of `@bezda/rhp` in the last 30 days, and {formatNumber(stats.npm["@bezda/rhp-mcp"].lastMonth)} of the checker
+- <Stat source="npm" name="@bezda/rhp" /> npm downloads of `@bezda/rhp` in the last 30 days, and <Stat source="npm" name="@bezda/rhp-mcp" /> of the checker
 - 23 example charts in the [gallery](https://rhp.vercel.app/gallery/), including candlestick and Gantt charts
 - 3 browser engines in CI on every push

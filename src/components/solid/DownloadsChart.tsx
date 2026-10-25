@@ -1,24 +1,25 @@
-import { createMemo, createSelector, createSignal, For, onCleanup, onMount, Show } from "solid-js";
+import {
+  createMemo,
+  createSelector,
+  createSignal,
+  Index,
+  onCleanup,
+  onMount,
+  Show,
+} from "solid-js";
 import { Bar, Chart, Plot, nice, slat, type Row } from "@bezda/rhp";
 import { formatDay, formatNumber } from "../../lib/format";
 import { theme } from "../../lib/rhp";
 import styles from "./DownloadsChart.module.css";
+import { figuresFor, latestStats, type Stats } from "../../lib/stats";
 
 interface Week {
   start: string;
   downloads: number;
 }
 
-interface Figure {
-  value: number;
-  suffix: string;
-  exact: string;
-  label: string;
-}
-
 interface Props {
-  weeks: Week[];
-  figures: Figure[];
+  initial: Stats;
 }
 
 type Entrance = "hold" | "play";
@@ -86,15 +87,30 @@ const Column = slat<Week & { dim: boolean; entrance?: Entrance }>(
 );
 
 export default function DownloadsChart(props: Props) {
+  const [stats, setStats] = createSignal(props.initial);
+  const figuresData = createMemo(() => figuresFor(stats()));
+  const weeks = () => stats().weeks;
+  onMount(() => {
+    let disposed = false;
+    void latestStats().then((fresh) => {
+      if (fresh && !disposed) {
+        setActive(undefined);
+        setStats(fresh);
+      }
+    });
+    onCleanup(() => {
+      disposed = true;
+    });
+  });
   const [active, setActive] = createSignal<number>();
   const [figuresInView, setFiguresInView] = createSignal(true);
   const [grow, setGrow] = createSignal<Entrance>();
   const isActive = createSelector(active);
   const scrubbing = createMemo(() => active() !== undefined);
-  const latest = () => props.weeks[props.weeks.length - 1];
-  const week = () => props.weeks[active() ?? props.weeks.length - 1];
-  const x = () => `${((active()! + 0.5) / props.weeks.length) * 100}%`;
-  const top = nice(0, Math.max(...props.weeks.map((week) => week.downloads)), 4).max;
+  const latest = () => weeks()[weeks().length - 1];
+  const week = () => weeks()[active() ?? weeks().length - 1];
+  const x = () => `${((active()! + 0.5) / weeks().length) * 100}%`;
+  const top = () => nice(0, Math.max(...weeks().map((week) => week.downloads)), 4).max;
   let figures!: HTMLUListElement;
   let plot!: HTMLDivElement;
 
@@ -114,7 +130,7 @@ export default function DownloadsChart(props: Props) {
   const near = (end: "start" | "end") => {
     const index = active();
     if (index === undefined) return false;
-    return end === "start" ? index < 3 : index > props.weeks.length - 4;
+    return end === "start" ? index < 3 : index > weeks().length - 4;
   };
 
   const pick = (event: Event) => {
@@ -130,7 +146,7 @@ export default function DownloadsChart(props: Props) {
   return (
     <div class={styles.downloads}>
       <ul class={styles.figures} role="list" ref={figures}>
-        <For each={props.figures}>
+        <Index each={figuresData()}>
           {(figure) => {
             const [countUp, setCountUp] = createSignal<Entrance>();
             let count!: HTMLSpanElement;
@@ -141,17 +157,17 @@ export default function DownloadsChart(props: Props) {
                 <span
                   ref={count}
                   class={styles.count}
-                  style={{ "--n": figure.value }}
-                  data-suffix={figure.suffix}
+                  style={{ "--n": figure().value }}
+                  data-suffix={figure().suffix}
                   data-entrance={countUp()}
                   aria-hidden="true"
                 />
-                <span class="visually-hidden">{figure.exact}</span>
-                <span class={styles.what}>{figure.label}</span>
+                <span class="visually-hidden">{figure().exact}</span>
+                <span class={styles.what}>{figure().label}</span>
               </li>
             );
           }}
-        </For>
+        </Index>
         <li>
           <span class={styles.readout}>{formatNumber(week().downloads)}</span>
           <span class={styles.what}>
@@ -173,14 +189,14 @@ export default function DownloadsChart(props: Props) {
       >
         <Chart
           orientation="vertical"
-          scale={[0, top]}
+          scale={[0, top()]}
           ticks={false}
           aspect={2.8}
           theme={theme}
           label="Weekly downloads of my packages on PyPI and npm"
         >
           <Plot
-            rows={props.weeks}
+            rows={weeks()}
             dim={(d: Row<Week>) => scrubbing() && !isActive(d.index)}
             entrance={grow}
             keyboard
@@ -191,7 +207,7 @@ export default function DownloadsChart(props: Props) {
         <Show when={scrubbing() && !figuresInView()}>
           <span
             class={styles.tip}
-            style={{ "--x": x(), "--y": `${(week().downloads / top) * 100}%` }}
+            style={{ "--x": x(), "--y": `${(week().downloads / top()) * 100}%` }}
             aria-hidden="true"
           >
             {formatNumber(week().downloads)}
@@ -200,7 +216,7 @@ export default function DownloadsChart(props: Props) {
       </div>
       <div class={styles.axis} aria-hidden="true">
         <span class={styles.end} data-hidden={near("start") ? "" : undefined}>
-          {formatDay(props.weeks[0].start)}
+          {formatDay(weeks()[0].start)}
         </span>
         <span class={styles.end} data-hidden={near("end") ? "" : undefined}>
           {formatDay(latest().start)}

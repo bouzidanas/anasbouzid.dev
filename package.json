@@ -11,7 +11,8 @@
     "prebuild": "npm run stats",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "test": "playwright test",
+    "preview:worker": "wrangler dev --local",
+    "test": "node --test scripts/*.test.mjs && playwright test",
     "format": "prettier --write .",
     "astro": "astro"
   },
