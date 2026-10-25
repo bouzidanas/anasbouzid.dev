@@ -1,8 +1,10 @@
 import {
+  createEffect,
   createMemo,
   createSelector,
   createSignal,
   Index,
+  on,
   onCleanup,
   onMount,
   Show,
@@ -125,6 +127,9 @@ export default function DownloadsChart(props: Props) {
   const top = () => nice(0, Math.max(...weeks().map((week) => week.downloads)), 4).max;
   let figures!: HTMLUListElement;
   let plot!: HTMLDivElement;
+  let startDate!: HTMLSpanElement;
+  let endDate!: HTMLSpanElement;
+  let pickedDate!: HTMLSpanElement;
 
   // Under the sticky header counts as out of view, and scroll-padding-top covers the header.
   onMount(() => {
@@ -138,12 +143,20 @@ export default function DownloadsChart(props: Props) {
 
   onMount(() => entrance(plot, setGrow));
 
-  // An end date steps aside only when the picked week's date would cover it.
-  const near = (end: "start" | "end") => {
-    const index = active();
-    if (index === undefined) return false;
-    return end === "start" ? index < 3 : index > weeks().length - 4;
-  };
+  // An end date steps aside only when the picked week's date comes within an em of it.
+  const [crowded, setCrowded] = createSignal({ start: false, end: false });
+  createEffect(
+    on([active, weeks], ([index]) => {
+      if (index === undefined) return setCrowded({ start: false, end: false });
+      const picked = pickedDate.getBoundingClientRect();
+      const room = parseFloat(getComputedStyle(pickedDate).fontSize);
+      const near = (date: Element) => {
+        const { left, right } = date.getBoundingClientRect();
+        return left < picked.right + room && picked.left < right + room;
+      };
+      setCrowded({ start: near(startDate), end: near(endDate) });
+    }),
+  );
 
   const pick = (event: Event) => {
     const column = (event.target as Element).closest<HTMLElement>("[data-week]");
@@ -227,14 +240,14 @@ export default function DownloadsChart(props: Props) {
         </Show>
       </div>
       <div class={styles.axis} aria-hidden="true">
-        <span class={styles.end} data-hidden={near("start") ? "" : undefined}>
+        <span ref={startDate} class={styles.end} data-hidden={crowded().start ? "" : undefined}>
           {formatDay(weeks()[0].start)}
         </span>
-        <span class={styles.end} data-hidden={near("end") ? "" : undefined}>
+        <span ref={endDate} class={styles.end} data-hidden={crowded().end ? "" : undefined}>
           {formatDay(latest().start)}
         </span>
         <Show when={scrubbing()}>
-          <span class={styles.picked} style={{ "--x": x() }}>
+          <span ref={pickedDate} class={styles.picked} style={{ "--x": x() }}>
             {formatDay(week().start)}
           </span>
         </Show>

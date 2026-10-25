@@ -34,6 +34,7 @@ The bars are reused by index, so rhp's own transitions move them.
 `src/components/solid/DownloadsChart.tsx` shows weekly downloads of all the packages added up.
 On screens narrower than 40rem it shows only the last 13 weeks, about three months, so each bar has room.
 Pointing at a week, tapping it, or tabbing into the chart and using the arrow keys updates the gold readout and puts the week's date under its bar.
+The dates at the two ends of the chart fade out only while that date would run into them.
 Once the figures have scrolled up under the header, the week's value also shows over its bar.
 An `IntersectionObserver` watches the figures, with the page's `scroll-padding-top` as its top margin so that the header counts as out of view.
 The first time the chart scrolls into view, its bars grow one after another.
@@ -162,7 +163,7 @@ If your system asks for less motion, the videos stay still and the animations ar
 
 Playwright runs the tests against the production build, in Chromium, WebKit and a phone viewport.
 They check every page for console errors, sideways scrolling and the problems axe finds, leaving out the apps embedded from other sites.
-They also drive the download chart with a pointer, a finger and the keyboard, check that a phone shows its last three months, click my name, switch the theme, turn on Show writes and start the Quizmark demo.
+They also drive the download chart with a pointer, a finger and the keyboard, check that a phone shows its last three months and that a picked date never covers an end date, click my name, switch the theme, turn on Show writes and start the Quizmark demo.
 One more checks that the benchmark chart is on the page with every library and isn't hydrated.
 Others check that the scroll-driven animations are still in the built CSS, that the counters and the bars wait until they come into view, and that tiles arriving together appear one after another.
 CI runs them on every push and pull request.

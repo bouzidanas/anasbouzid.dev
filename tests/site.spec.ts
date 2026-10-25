@@ -135,6 +135,30 @@ test("phones show the last three months of weeks", async ({ page, isMobile }) =>
   );
 });
 
+test("the picked week's date never runs into the dates at the ends", async ({ page }) => {
+  await keepSavedStats(page);
+  await page.goto("/");
+  await hydrated(page, "[data-week]");
+  const weeks = page.locator("[data-week]");
+  const axis = page.locator("[class*=_axis_]");
+  const count = await weeks.count();
+
+  for (let i = 0; i < count; i++) {
+    await weeks.nth(i).focus();
+    const overlaps = await axis.evaluate((axis) => {
+      const picked = axis.querySelector("[class*=_picked_]")!.getBoundingClientRect();
+      return [...axis.querySelectorAll("[class*=_end_]:not([data-hidden])")].some((date) => {
+        const { left, right } = date.getBoundingClientRect();
+        return left < picked.right && picked.left < right;
+      });
+    });
+    expect(overlaps, `week ${i + 1}`).toBe(false);
+  }
+
+  await weeks.nth(Math.floor(count / 2)).focus();
+  await expect(axis.locator("[data-hidden]")).toHaveCount(0);
+});
+
 test("the figures count up and the bars grow when they first come into view", async ({ page }) => {
   await page.goto("/");
   const count = page.locator("[class*=_count_]").nth(1);
