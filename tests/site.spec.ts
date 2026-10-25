@@ -78,8 +78,12 @@ async function hydrated(page: Page, inside: string) {
   await expect(island).not.toHaveAttribute("ssr");
 }
 
+// Fresh statistics clear the picked week when they arrive, so the chart tests keep the saved ones.
+const keepSavedStats = (page: Page) => page.route("**/api/stats", (route) => route.abort());
+
 test("the download chart follows the pointer", async ({ page, isMobile }) => {
   test.skip(isMobile, "phones have no hover");
+  await keepSavedStats(page);
   await page.goto("/");
   await hydrated(page, "[data-week]");
 
@@ -95,6 +99,7 @@ test("the download chart follows the pointer", async ({ page, isMobile }) => {
 
 test("a tap on the download chart keeps its week", async ({ page, isMobile }) => {
   test.skip(!isMobile, "touch only");
+  await keepSavedStats(page);
   await page.goto("/");
   await hydrated(page, "[data-week]");
 
@@ -103,6 +108,7 @@ test("a tap on the download chart keeps its week", async ({ page, isMobile }) =>
 });
 
 test("the download chart can be read from the keyboard", async ({ page }) => {
+  await keepSavedStats(page);
   await page.goto("/");
   await hydrated(page, "[data-week]");
   const weeks = page.locator("[data-week]");
@@ -146,6 +152,7 @@ test("the figures count up and the bars grow when they first come into view", as
 test("the picked week's value shows over its bar once the figures scroll away", async ({
   page,
 }) => {
+  await keepSavedStats(page);
   await page.goto("/");
   await hydrated(page, "[data-week]");
   const week = page.locator("[data-week]").nth(4);
