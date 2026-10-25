@@ -65,7 +65,7 @@ test("saved statistics stay visible while fresh statistics load, then animate to
 });
 
 for (const failure of ["unavailable", "invalid", "disconnected"]) {
-  test(`saved statistics survive a response that is ${failure}`, async ({ page }) => {
+  test(`saved statistics survive a response that is ${failure}`, async ({ page, isMobile }) => {
     await page.route("**/api/stats", async (route) => {
       if (failure === "disconnected") return route.abort();
       if (failure === "unavailable") return route.fulfill({ status: 503 });
@@ -78,7 +78,7 @@ for (const failure of ["unavailable", "invalid", "disconnected"]) {
       "ssr",
     );
     await expect(counters.first()).toHaveCSS("--n", "8");
-    await expect(page.locator("[data-week]")).toHaveCount(saved.weeks.length);
+    await expect(page.locator("[data-week]")).toHaveCount(isMobile ? 13 : saved.weeks.length);
     await expect(page.getByText("GitHub stars on my projects")).toBeVisible();
   });
 }

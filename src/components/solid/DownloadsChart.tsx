@@ -88,8 +88,20 @@ const Column = slat<Week & { dim: boolean; entrance?: Entrance }>(
 
 export default function DownloadsChart(props: Props) {
   const [stats, setStats] = createSignal(props.initial);
+  const [narrow, setNarrow] = createSignal(false);
   const figuresData = createMemo(() => figuresFor(stats()));
-  const weeks = () => stats().weeks;
+  // A phone shows about the last three months, so each week's bar has room.
+  const weeks = createMemo(() => (narrow() ? stats().weeks.slice(-13) : stats().weeks));
+  onMount(() => {
+    const phone = matchMedia("(width < 40rem)");
+    const fit = () => {
+      setActive(undefined);
+      setNarrow(phone.matches);
+    };
+    fit();
+    phone.addEventListener("change", fit);
+    onCleanup(() => phone.removeEventListener("change", fit));
+  });
   onMount(() => {
     let disposed = false;
     void latestStats().then((fresh) => {

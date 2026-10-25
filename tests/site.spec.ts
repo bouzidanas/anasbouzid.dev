@@ -1,6 +1,8 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 import { updates } from "../src/data/benchmark";
+import saved from "../src/data/stats.json" with { type: "json" };
+import { formatDay } from "../src/lib/format";
 
 const pages = [
   "/",
@@ -119,6 +121,18 @@ test("the download chart can be read from the keyboard", async ({ page }) => {
 
   await expect(weeks.nth(1)).toBeFocused();
   await expect(page.getByText(/downloads, week of/)).not.toHaveText(first!);
+});
+
+test("phones show the last three months of weeks", async ({ page, isMobile }) => {
+  await keepSavedStats(page);
+  await page.goto("/");
+  await hydrated(page, "[data-week]");
+  const shown = isMobile ? saved.weeks.slice(-13) : saved.weeks;
+
+  await expect(page.locator("[data-week]")).toHaveCount(shown.length);
+  await expect(page.locator("[data-week]").first()).toContainText(
+    `Week of ${formatDay(shown[0].start)}:`,
+  );
 });
 
 test("the figures count up and the bars grow when they first come into view", async ({ page }) => {
