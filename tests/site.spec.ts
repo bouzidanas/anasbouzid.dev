@@ -1,8 +1,9 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 import { updates } from "../src/data/benchmark";
 import saved from "../src/data/stats.json" with { type: "json" };
 import { formatDay } from "../src/lib/format";
+import { figuresFor } from "../src/lib/stats";
 
 const pages = [
   "/",
@@ -176,15 +177,65 @@ test("the figures count up and the bars grow when they first come into view", as
 
   await count.scrollIntoViewIfNeeded();
   await expect(count).toHaveAttribute("data-entrance", "play");
-  // Partway through, the counter still holds a whole number, which Safari needs calc() for.
-  const counterReset = await count.evaluate((element) => {
+  // Partway through, each digit still holds a whole number, which Safari needs the rounding for,
+  // and the number has no leading zeros.
+  const digits = await count.evaluate((element) => {
     element.getAnimations()[0].currentTime = 600;
-    return getComputedStyle(element).counterReset;
+    return [...element.querySelectorAll("[class*=_digit_]")]
+      .filter((digit) => digit.getBoundingClientRect().width > 0)
+      .map((digit) => getComputedStyle(digit).counterReset);
   });
-  expect(counterReset).toMatch(/^n \d+$/);
+  digits.forEach((digit) => expect(digit).toMatch(/^digit \d$/));
+  expect(digits.map((digit) => digit.slice(-1)).join("")).toMatch(/^(0|[1-9]\d*)$/);
 
   await plot.scrollIntoViewIfNeeded();
   await expect(week).toHaveAttribute("data-entrance", "play");
+});
+
+test("each figure shows its number digit by digit", async ({ page }) => {
+  await keepSavedStats(page);
+  await page.goto("/");
+  const counts = page.locator("[class*=_count_]");
+  // A figure counts up once it's on screen, and a phone stacks them, so each one comes into view in turn.
+  for (const count of await counts.all()) await count.scrollIntoViewIfNeeded();
+
+  const shown = () =>
+    counts.evaluateAll((elements) =>
+      elements.map((count) =>
+        [...count.querySelectorAll("[data-i]")]
+          .filter((character) => character.getBoundingClientRect().width > 0)
+          .map(
+            (character) =>
+              getComputedStyle(character).counterReset.match(/^digit (\d)$/)?.[1] ??
+              character.textContent,
+          )
+          .join(""),
+      ),
+    );
+  await expect
+    .poll(shown)
+    .toEqual(figuresFor(saved).map((figure) => `${figure.value}${figure.suffix}`));
+});
+
+test("the characters near the pointer get bolder", async ({ page, isMobile }) => {
+  test.skip(isMobile, "phones have no hover");
+  await keepSavedStats(page);
+  await page.goto("/");
+  await hydrated(page, "[class*=_count_]");
+  const weight = (character: Locator) =>
+    character.evaluate((element) => Number(getComputedStyle(element).fontWeight));
+
+  for (const characters of [
+    page.locator("[class*=_count_]").nth(1).locator("[data-i]"),
+    page.locator("#contact-title [data-i]"),
+  ]) {
+    await characters.nth(1).hover();
+    await expect.poll(() => weight(characters.nth(1))).toBeGreaterThan(650);
+    expect(await weight(characters.last())).toBeLessThan(await weight(characters.nth(1)));
+
+    await page.mouse.move(0, 0);
+    await expect.poll(() => weight(characters.nth(1))).toBe(350);
+  }
 });
 
 test("Writing lists the newest posts first, each linking to its article", async ({ page }) => {

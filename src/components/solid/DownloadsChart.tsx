@@ -11,6 +11,7 @@ import {
 } from "solid-js";
 import { Bar, Chart, Plot, nice, slat, type Row } from "@bezda/rhp";
 import { formatDay, formatNumber } from "../../lib/format";
+import { swell } from "../../lib/swell";
 import { theme } from "../../lib/rhp";
 import styles from "./DownloadsChart.module.css";
 import { figuresFor, latestStats, type Stats } from "../../lib/stats";
@@ -25,6 +26,10 @@ interface Props {
 }
 
 type Entrance = "hold" | "play";
+
+// The place of each digit, from the left: 547 has a hundreds, a tens and a ones digit.
+const places = (value: number) =>
+  [...String(value)].map((_, k, digits) => 10 ** (digits.length - 1 - k));
 
 // Something below the screen holds its animation, and plays it once nearly all of it is on screen,
 // or as much of it as fits.
@@ -126,6 +131,7 @@ export default function DownloadsChart(props: Props) {
   const x = () => `${((active()! + 0.5) / weeks().length) * 100}%`;
   const top = () => nice(0, Math.max(...weeks().map((week) => week.downloads)), 4).max;
   let figures!: HTMLUListElement;
+  let readout!: HTMLSpanElement;
   let plot!: HTMLDivElement;
   let startDate!: HTMLSpanElement;
   let endDate!: HTMLSpanElement;
@@ -142,6 +148,7 @@ export default function DownloadsChart(props: Props) {
   });
 
   onMount(() => entrance(plot, setGrow));
+  onMount(() => swell(readout));
 
   // An end date steps aside only when the picked week's date comes within an em of it.
   const [crowded, setCrowded] = createSignal({ start: false, end: false });
@@ -174,19 +181,38 @@ export default function DownloadsChart(props: Props) {
         <Index each={figuresData()}>
           {(figure) => {
             const [countUp, setCountUp] = createSignal<Entrance>();
+            const digits = () => places(figure().value);
             let count!: HTMLSpanElement;
-            onMount(() => entrance(count, setCountUp));
+            onMount(() => {
+              entrance(count, setCountUp);
+              swell(count);
+            });
 
             return (
               <li>
                 <span
                   ref={count}
-                  class={styles.count}
+                  class={`${styles.count} swell`}
                   style={{ "--n": figure().value }}
-                  data-suffix={figure().suffix}
                   data-entrance={countUp()}
                   aria-hidden="true"
-                />
+                >
+                  <Index each={digits()}>
+                    {(place, k) => (
+                      <span
+                        class={styles.digit}
+                        classList={{ [styles.lead]: place() > 1 }}
+                        data-i={k}
+                        style={{ "--i": k, "--place": place() }}
+                      />
+                    )}
+                  </Index>
+                  <Show when={figure().suffix}>
+                    <span data-i={digits().length} style={{ "--i": digits().length }}>
+                      {figure().suffix}
+                    </span>
+                  </Show>
+                </span>
                 <span class="visually-hidden">{figure().exact}</span>
                 <span class={styles.what}>{figure().label}</span>
               </li>
@@ -194,7 +220,18 @@ export default function DownloadsChart(props: Props) {
           }}
         </Index>
         <li>
-          <span class={styles.readout}>{formatNumber(week().downloads)}</span>
+          <span class={`${styles.readout} swell`} ref={readout}>
+            <span class="visually-hidden">{formatNumber(week().downloads)}</span>
+            <span aria-hidden="true">
+              <Index each={[...formatNumber(week().downloads)]}>
+                {(character, i) => (
+                  <span data-i={i} style={{ "--i": i }}>
+                    {character()}
+                  </span>
+                )}
+              </Index>
+            </span>
+          </span>
           <span class={styles.what}>
             {scrubbing()
               ? `downloads, week of ${formatDay(week().start)}`

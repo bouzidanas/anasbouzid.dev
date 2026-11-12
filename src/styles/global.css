@@ -24,6 +24,18 @@
   initial-value: orange;
 }
 
+@property --tx {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: -99;
+}
+
+@property --lens {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
 :root {
   color-scheme: light dark;
 
@@ -238,6 +250,33 @@ ul[role="list"] {
 
   .reveal[data-entrance="hold"] {
     animation-play-state: paused;
+  }
+}
+
+/* Big type set one character at a time, each with data-i and --i. The characters near --tx get bolder and turn
+   amber, the same way the bars in my name lift, as strongly as --lens says. lib/swell.ts eases both every frame,
+   so nothing here transitions. It also sets --rest and --bold, the character's width at rest and in bold: the box
+   grows 70% as much as the glyph, which is centered so it grows out of the box on both sides. */
+.swell {
+  white-space: nowrap;
+}
+
+.swell [data-i] {
+  --swell: calc(var(--lens) * max(0, 1 - max(var(--tx) - var(--i), var(--i) - var(--tx)) / 2.2));
+  display: inline-flex;
+  justify-content: center;
+  width: calc(var(--rest) + (var(--bold) - var(--rest)) * var(--swell) * 0.7);
+  font-weight: calc(350 + 350 * var(--swell));
+  color: color-mix(
+    in oklch,
+    var(--accent-text) calc(var(--swell) * 100%),
+    var(--swell-from, var(--ink))
+  );
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .swell [data-i] {
+    translate: 0 calc(var(--swell) * -0.05em);
   }
 }
 

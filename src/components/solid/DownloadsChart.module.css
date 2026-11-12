@@ -1,6 +1,6 @@
 @property --n {
   syntax: "<integer>";
-  inherits: false;
+  inherits: true;
   initial-value: 0;
 }
 
@@ -34,13 +34,22 @@
   letter-spacing: -0.03em;
 }
 
-/* calc() rounds, since Safari animates the <integer> --n through fractions and a counter ignores those. */
-.count {
-  counter-reset: n calc(var(--n));
+/* Each digit is its own counter, worked out from the number being counted: the tens digit of 547 is 547 / 10,
+   rounded down, mod 10. Rounding down first keeps it whole, since Safari animates the <integer> --n through
+   fractions. A digit whose place is above the number takes no room and doesn't show, so the count grows a digit
+   at a time. Clipping it instead would move its baseline in Safari. */
+.digit {
+  counter-reset: digit mod(round(down, var(--n) / var(--place), 1), 10);
 }
 
-.count::before {
-  content: counter(n) attr(data-suffix);
+.digit::before {
+  content: counter(digit);
+}
+
+.lead {
+  --shown: clamp(0, round(down, var(--n), 1) - var(--place) + 1, 1);
+  max-width: calc(var(--shown) * 1em);
+  opacity: var(--shown);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -64,6 +73,7 @@
 }
 
 .readout {
+  --swell-from: var(--gold);
   color: var(--gold);
 }
 

@@ -1,11 +1,24 @@
 ---
 import { resumeRequest } from "../../lib/contact";
 import CopyEmail from "../CopyEmail.astro";
+
+const heading = [..."Let's talk."];
 ---
 
 <section id="contact" class="contact" aria-labelledby="contact-title">
   <div class="wrap">
-    <h2 id="contact-title">Let's talk.</h2>
+    <h2 id="contact-title" class="swell">
+      <span class="visually-hidden">Let's talk.</span>
+      <span aria-hidden="true">
+        {heading.map((character, i) => (
+          <span
+            data-i={i}
+            style={`--i: ${i}`}
+            set:text={character === " " ? "\u00a0" : character}
+          />
+        ))}
+      </span>
+    </h2>
     <p class="note">
       I'm looking for frontend and full-stack roles, remote or on-site. I'm based in Lincoln,
       Nebraska, and happy to relocate.
@@ -30,6 +43,28 @@ import CopyEmail from "../CopyEmail.astro";
     </ul>
   </div>
 </section>
+
+<script>
+  import { keepKerning } from "../../lib/kerning";
+  import { swell } from "../../lib/swell";
+
+  const heading = document.querySelector<HTMLElement>("#contact-title")!;
+  const { wave } = swell(heading);
+
+  // Once the font is in: the kerning back, then a wave through the letters the first time the heading is in view.
+  void document.fonts.ready.then(() => {
+    keepKerning(heading);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        wave();
+        observer.disconnect();
+      },
+      { threshold: 0.9 },
+    );
+    observer.observe(heading);
+  });
+</script>
 
 <style>
   .contact .wrap {

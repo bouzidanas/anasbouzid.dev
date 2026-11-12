@@ -42,17 +42,33 @@ An `IntersectionObserver` watches the figures, with the page's `scroll-padding-t
 The first time the chart scrolls into view, its bars grow one after another.
 
 **The counters.**
-Each number is a CSS counter that reads `--n`, an integer registered with `@property`.
+Each number is a row of digits, and each digit is a CSS counter worked out from `--n`, an integer registered with `@property`.
+The tens digit is `--n` divided by 10, rounded down, mod 10, with CSS `round()` and `mod()`.
+A digit whose place is above the number takes no room and doesn't show, so a count grows a digit at a time.
 The first time the numbers come into view, an animation runs `--n` up from 0.
 When fresh statistics arrive, a transition moves `--n` from its displayed value to the new one.
 The figure elements stay in place, so a refresh does not restart their entrance.
-The counter reads it through `calc()`, which rounds it, because Safari animates a registered integer through fractions and a counter ignores a fraction.
+Each digit rounds down first, because Safari animates a registered integer through fractions and a counter ignores a fraction.
+A hidden digit has no width and no opacity rather than being clipped, because clipping would move its baseline in Safari.
 
 **Entrances.**
 The counters and the bars share one rule for when they play.
 If they're below the screen when the island hydrates, their animations start out paused.
 Each one plays once nearly all of it is on screen, or as much of it as fits in a short window, so a number never sits at 0 while you're reading it.
 Without JavaScript, or if they're already on screen, they're simply drawn.
+
+**Bolder near the pointer.**
+The big figures and "Let's talk." are set one character at a time.
+The characters near the pointer get bolder and more amber, the same distance rule that lifts the bars in my name.
+`src/lib/swell.ts` sets two numbers on the text every frame: `--tx`, where the bump is, counted in characters, and `--lens`, how strong it is.
+Both ease toward the pointer, so the bump glides between pointer events and fades in and out where the pointer enters and leaves, and a rule in `global.css` works out each character's look from them.
+The pointer is read against where the characters sit at rest, so a character widening as it swells doesn't move the bump under it.
+Fraunces widens as it gets bolder, so each character's box grows only 70% as much as its glyph, which is centered and grows out of the box on both sides.
+The word moves less, and bold neighbors still don't touch.
+Fraunces is a variable font, so the weight changes smoothly.
+One box per letter loses the font's kerning, so `src/lib/kerning.ts` measures each pair as plain text and puts the difference back as a margin.
+A wave runs through "Let's talk." the first time it's in view, and the pointer takes over from wherever it is.
+Screen readers get each one once, from a hidden copy of the text.
 
 **The project tiles.**
 A pointer listener in `Work.astro` sets `--x` and `--y` on the tile under the pointer, and a radial gradient lights the tile at that spot.
@@ -153,6 +169,8 @@ A browser that lacks one still shows the page, without that effect.
 | :--------------------------- | :------------------------------------------------------------------------- |
 | View Transitions             | The card-to-page morph and the theme reveal                                |
 | Scroll-driven animations     | The header's border and the reading bar                                    |
+| `round()` and `mod()`        | Each digit of the counters                                                 |
+| Variable fonts               | The weight of the characters near the pointer                              |
 | `@property`                  | Integer counters, and color tokens that resolve `light-dark()` at the root |
 | `light-dark()` and `oklch()` | One line per color for both themes                                         |
 | Container queries            | My name sizes itself to its box                                            |
@@ -174,6 +192,7 @@ Playwright runs the tests against the production build, in Chromium, WebKit and 
 They check every page for console errors, sideways scrolling and the problems axe finds, leaving out the apps embedded from other sites.
 They also drive the download chart with a pointer, a finger and the keyboard, check that a phone shows its last three months and that a picked date never covers an end date, click my name, switch the theme, turn on Show writes and start the Quizmark demo.
 One more checks that the benchmark chart is on the page with every library and isn't hydrated.
+They check that each figure shows its number digit by digit, with no leading zeros while it counts, and that the characters near the pointer get bolder.
 They check that Writing lists its posts newest first, brings up a post's picture beside the pointer, shows it in the row on a phone and follows the theme.
 Others check that the scroll-driven animations are still in the built CSS, that the counters and the bars wait until they come into view, and that tiles arriving together appear one after another.
 CI runs them on every push and pull request.
