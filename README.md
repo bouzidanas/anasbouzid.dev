@@ -5,15 +5,15 @@ My portfolio site: static Astro, with Solid islands drawn by [rhp](https://githu
 
 ## Commands
 
-| Command           | What it does                                                                         |
-| :---------------- | :----------------------------------------------------------------------------------- |
-| `npm run dev`     | Local dev server                                                                     |
-| `npm run stats`   | Refreshes download counts and stars in `src/data/stats.json`                         |
-| `npm run build`   | Type checks and builds to `dist/` (refreshes the stats first)                        |
-| `npm run preview` | Serves the build                                                                     |
-| `npm run preview:worker` | Serves the build with the live statistics endpoint                              |
-| `npm test`        | Playwright and axe tests against the build, in Chromium, WebKit and a phone viewport |
-| `npm run format`  | Prettier                                                                             |
+| Command                  | What it does                                                                         |
+| :----------------------- | :----------------------------------------------------------------------------------- |
+| `npm run dev`            | Local dev server                                                                     |
+| `npm run stats`          | Refreshes download counts and stars in `src/data/stats.json`                         |
+| `npm run build`          | Type checks and builds to `dist/` (refreshes the stats first)                        |
+| `npm run preview`        | Serves the build                                                                     |
+| `npm run preview:worker` | Serves the build with the live statistics endpoint                                   |
+| `npm test`               | Playwright and axe tests against the build, in Chromium, WebKit and a phone viewport |
+| `npm run format`         | Prettier                                                                             |
 
 ## Where things are
 
