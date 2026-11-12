@@ -73,6 +73,24 @@ Screen readers get each one once, from a hidden copy of the text.
 **The project tiles.**
 A pointer listener in `Work.astro` sets `--x` and `--y` on the tile under the pointer, and a radial gradient lights the tile at that spot.
 
+**The pixel trail.**
+The hero, Selected work and the footer sit on a grid of faint dots.
+`src/components/PixelField.astro` is one canvas per section, and the squares near the pointer light up on it and fade out over about a second.
+Each grid spans the window and runs from its section's rule down to the next section's rule, through the gap between them, without changing the layout.
+The hero's starts at the top of the page, under the header, and the footer's runs from its rule to the bottom of the page, on every page.
+The dots are the canvas's CSS background with `background-repeat: space`, which fits whole dots only, so none sits on a rule, and the squares use the same spacing.
+The loop that fades the squares stops once the last one is dark.
+The page listens for the pointer, not the section, so the hero's canvas lights up under the header too.
+It listens in the capture phase, before other listeners change the page, so measuring the canvases doesn't force an extra layout.
+A tap lights the squares around the finger.
+
+**The header.**
+At the top of the page the header is clear, so the hero's dots run up under it and the two read as one.
+Over the first 5rem of scrolling, a scroll-driven animation fades in its frosted glass and draws its border.
+The glass is its own layer fixed behind the header, with a fixed tint and blur, and the animation fades its opacity, because Safari doesn't draw a backdrop-filter whose blur is animated.
+It sits outside the header because the header's `view-transition-name` would keep a blur inside it from seeing the page.
+In browsers without scroll-driven animations, a script clears it at the top of the page instead.
+
 **The Writing list.**
 With a mouse, a post's picture follows the pointer while it's over the post.
 Without one, or on a narrow screen, each post shows its picture under its text.
@@ -168,9 +186,10 @@ A browser that lacks one still shows the page, without that effect.
 | Feature                      | Where                                                                      |
 | :--------------------------- | :------------------------------------------------------------------------- |
 | View Transitions             | The card-to-page morph and the theme reveal                                |
-| Scroll-driven animations     | The header's border and the reading bar                                    |
+| Scroll-driven animations     | The header's frosting and border, and the reading bar                      |
 | `round()` and `mod()`        | Each digit of the counters                                                 |
 | Variable fonts               | The weight of the characters near the pointer                              |
+| Canvas                       | The pixel trail                                                            |
 | `@property`                  | Integer counters, and color tokens that resolve `light-dark()` at the root |
 | `light-dark()` and `oklch()` | One line per color for both themes                                         |
 | Container queries            | My name sizes itself to its box                                            |
@@ -184,7 +203,7 @@ Without the registration, `light-dark()` would always pick the light color insid
 
 The charts are lists of elements a screen reader can read, and every bar carries its value as text.
 Tab reaches the download chart once, and the arrow keys move through its weeks.
-If your system asks for less motion, the videos stay still and the animations are off.
+If your system asks for less motion, the videos stay still, the animations are off and the squares don't light up.
 
 ## Tests
 
@@ -192,6 +211,7 @@ Playwright runs the tests against the production build, in Chromium, WebKit and 
 They check every page for console errors, sideways scrolling and the problems axe finds, leaving out the apps embedded from other sites.
 They also drive the download chart with a pointer, a finger and the keyboard, check that a phone shows its last three months and that a picked date never covers an end date, click my name, switch the theme, turn on Show writes and start the Quizmark demo.
 One more checks that the benchmark chart is on the page with every library and isn't hydrated.
+Others check that the squares light up under the pointer from the hero up into the header and in the footer of a project page, and stay dark with less motion, that each grid spans the window from its section's rule to the next one, and that the header is clear at the top of the page and frosted once it scrolls.
 They check that each figure shows its number digit by digit, with no leading zeros while it counts, and that the characters near the pointer get bolder.
 They check that Writing lists its posts newest first, brings up a post's picture beside the pointer, shows it in the row on a phone and follows the theme.
 Others check that the scroll-driven animations are still in the built CSS, that the counters and the bars wait until they come into view, and that tiles arriving together appear one after another.

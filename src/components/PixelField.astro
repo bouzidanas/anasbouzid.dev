@@ -1,0 +1,140 @@
+<canvas class="pixel-field" aria-hidden="true"></canvas>
+
+<script>
+  // Squares near the pointer light up and fade out, leaving a short trail. The dots are the canvas's CSS background,
+  // so nothing redraws while no square is lit. The page listens rather than the section, so the hero's field also
+  // lights up under the header.
+  const SIZE = 22;
+  const REACH = 2.4;
+  const FADE = 1100;
+
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+
+  // background-repeat: space fits whole cells only, the first and last against the edges, and spreads the leftover
+  // between them, so the squares use the same spacing as the dots.
+  const fit = (length: number) => {
+    const count = Math.max(1, Math.floor(length / SIZE));
+    return { count, pitch: count > 1 ? (length - SIZE) / (count - 1) : SIZE };
+  };
+
+  function field(canvas: HTMLCanvasElement) {
+    const context = canvas.getContext("2d")!;
+    const lit = new Set<number>();
+    let level = new Float32Array(0);
+    let across = fit(0);
+    let down = fit(0);
+    let ratio = 1;
+    let frame = 0;
+    let last = 0;
+
+    new ResizeObserver(() => {
+      ratio = Math.min(devicePixelRatio, 2);
+      canvas.width = Math.round(canvas.clientWidth * ratio);
+      canvas.height = Math.round(canvas.clientHeight * ratio);
+      across = fit(canvas.clientWidth);
+      down = fit(canvas.clientHeight);
+      level = new Float32Array(across.count * down.count);
+      lit.clear();
+    }).observe(canvas);
+
+    const draw = (now: number) => {
+      const fade = (now - last) / FADE;
+      last = now;
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.fillStyle = getComputedStyle(canvas).getPropertyValue("--accent");
+
+      for (const i of lit) {
+        const value = (level[i] -= fade);
+        if (value <= 0) {
+          level[i] = 0;
+          lit.delete(i);
+          continue;
+        }
+        const size = 4 + 13 * value;
+        const x = SIZE / 2 + (i % across.count) * across.pitch;
+        const y = SIZE / 2 + Math.floor(i / across.count) * down.pitch;
+        context.globalAlpha = Math.min(1, value * 1.4) * 0.6;
+        context.beginPath();
+        context.roundRect(x - size / 2, y - size / 2, size, size, 3);
+        context.fill();
+      }
+
+      frame = lit.size ? requestAnimationFrame(draw) : 0;
+    };
+
+    // x and y are in cells, from the center of the first one.
+    const light = (x: number, y: number) => {
+      const rows = Math.min(down.count - 1, y + REACH);
+      const cols = Math.min(across.count - 1, x + REACH);
+      for (let r = Math.max(0, Math.ceil(y - REACH)); r <= rows; r++) {
+        for (let c = Math.max(0, Math.ceil(x - REACH)); c <= cols; c++) {
+          const strength = 1 - Math.hypot(c - x, r - y) / REACH;
+          const i = r * across.count + c;
+          if (strength > level[i]) {
+            level[i] = strength;
+            lit.add(i);
+          }
+        }
+      }
+    };
+
+    // A fast move skips squares, so the points between the last position and this one light up too.
+    return (from: DOMPoint | undefined, to: DOMPoint) => {
+      const { left, top, right, bottom } = canvas.getBoundingClientRect();
+      const margin = REACH * SIZE;
+      if (
+        to.x < left - margin ||
+        to.x > right + margin ||
+        to.y < top - margin ||
+        to.y > bottom + margin
+      ) {
+        return;
+      }
+
+      const start = from ?? to;
+      const steps = Math.max(1, Math.ceil(Math.hypot(to.x - start.x, to.y - start.y) / (SIZE / 2)));
+      for (let k = 1; k <= steps; k++) {
+        const x = start.x + ((to.x - start.x) * k) / steps - left;
+        const y = start.y + ((to.y - start.y) * k) / steps - top;
+        light((x - SIZE / 2) / across.pitch, (y - SIZE / 2) / down.pitch);
+      }
+
+      if (!frame) {
+        last = performance.now();
+        frame = requestAnimationFrame(draw);
+      }
+    };
+  }
+
+  const fields = [...document.querySelectorAll<HTMLCanvasElement>(".pixel-field")].map(field);
+  let previous: DOMPoint | undefined;
+
+  const point = (event: PointerEvent) => {
+    if (reduce.matches) return;
+    const here = new DOMPoint(event.clientX, event.clientY);
+    fields.forEach((trail) => trail(previous, here));
+    // A finger lifts between taps, so only a mouse or pen draws a line from its last position.
+    previous = event.pointerType === "touch" ? undefined : here;
+  };
+
+  // In the capture phase, before other listeners change the page, so measuring the fields doesn't force a layout.
+  addEventListener("pointermove", point, { capture: true, passive: true });
+  addEventListener("pointerdown", point, { capture: true, passive: true });
+  document.documentElement.addEventListener("pointerleave", () => (previous = undefined));
+</script>
+
+<style>
+  .pixel-field {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, var(--dot) 1.1px, transparent 1.7px);
+    background-size: 22px 22px;
+    background-repeat: space;
+    pointer-events: none;
+  }
+</style>

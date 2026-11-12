@@ -9,6 +9,7 @@ const links = [
 ];
 ---
 
+<div class="glass" aria-hidden="true"></div>
 <header class="header">
   <div class="wrap bar">
     <a class="name" href="/">
@@ -27,22 +28,60 @@ const links = [
   </div>
 </header>
 
+<script>
+  // Without scroll-driven animations, the header clears at the top of the page here instead.
+  if (!CSS.supports("animation-timeline: scroll()")) {
+    const header = document.querySelector<HTMLElement>(".header")!;
+    const settle = () => header.toggleAttribute("data-top", scrollY === 0);
+    addEventListener("scroll", settle, { passive: true });
+    settle();
+  }
+</script>
+
 <style>
   .header {
     position: sticky;
     top: 0;
     z-index: 5;
     border-bottom: 1px solid transparent;
-    background: color-mix(in oklch, var(--paper) 82%, transparent);
-    backdrop-filter: blur(12px);
     view-transition-name: header;
   }
 
+  /* The header's frosted glass, fixed behind it. It's clear at the top of the page, so the hero's dots run up under
+     the header, and fades in by its opacity over the first 5rem of scrolling, because Safari doesn't draw a
+     backdrop-filter whose blur is animated. It sits outside the header because the header's view-transition-name
+     would keep a blur inside it from seeing the page. */
+  .glass {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 5;
+    height: calc(var(--header) + 1px);
+    background: color-mix(in oklch, var(--paper) 82%, transparent);
+    backdrop-filter: blur(12px);
+    pointer-events: none;
+    view-transition-name: header-glass;
+  }
+
   @supports (animation-timeline: scroll()) {
-    .header {
+    .header,
+    .glass {
       animation: settle linear both;
       animation-timeline: scroll();
       animation-range: 0 5rem;
+    }
+
+    .glass {
+      animation-name: frost;
+    }
+  }
+
+  @supports not (animation-timeline: scroll()) {
+    .header:not([data-top]) {
+      border-color: var(--rule);
+    }
+
+    .glass:has(+ .header[data-top]) {
+      opacity: 0;
     }
   }
 
@@ -52,11 +91,17 @@ const links = [
     }
   }
 
+  @keyframes frost {
+    from {
+      opacity: 0;
+    }
+  }
+
   .bar {
     display: flex;
     align-items: center;
     gap: clamp(0.75rem, 3vw, 2rem);
-    height: 4rem;
+    height: var(--header);
   }
 
   .name {

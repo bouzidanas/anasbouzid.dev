@@ -23,7 +23,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 <style>
   .home {
+    --section-gap: clamp(5rem, 12vw, 9rem);
     display: grid;
-    gap: clamp(5rem, 12vw, 9rem);
+    gap: var(--section-gap);
   }
 </style>

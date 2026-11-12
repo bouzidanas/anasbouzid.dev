@@ -1,37 +1,49 @@
 ---
 import { email, resumeRequest } from "../../lib/contact";
+import PixelField from "../PixelField.astro";
 import BarName from "../solid/BarName";
 ---
 
-<section class="hero wrap">
-  <p class="label meta">
-    <span>Frontend engineer</span>
-    <span>Lincoln, NE</span>
-    <span>Open to relocation</span>
-  </p>
-
-  <h1 class="visually-hidden">Anas Bouzid</h1>
-  <div class="name" aria-hidden="true">
-    <div class="bars">
-      <BarName client:idle words={["ANAS", "BOUZID"]} />
-    </div>
-  </div>
-  <p class="label note">
-    This is my name as an <a href="/work/rhp/">rhp</a> bar chart. Point at it or click it.
-  </p>
-
-  <div class="below">
-    <p class="lede">
-      I build interactive web apps, charting libraries and developer tools, mostly with React,
-      TypeScript and Python.
+<section class="hero">
+  <PixelField />
+  <div class="wrap content">
+    <p class="label meta">
+      <span>Frontend engineer</span>
+      <span>Lincoln, NE</span>
+      <span>Open to relocation</span>
     </p>
-    <div class="actions">
-      <a class="button" href={resumeRequest}>Request my résumé</a>
-      <a class="button quiet" href={`mailto:${email}`}>Email</a>
-      <span class="profiles">
-        <a class="external" href="https://github.com/bouzidanas">GitHub</a>
-        <a class="external" href="https://www.linkedin.com/in/bouzidanas/">LinkedIn</a>
-      </span>
+
+    <h1 class="visually-hidden">Anas Bouzid</h1>
+    <div class="name" aria-hidden="true">
+      <div class="bars">
+        <BarName client:idle words={["ANAS", "BOUZID"]} />
+      </div>
+    </div>
+    <p class="label note">
+      This is my name as an <a href="/work/rhp/">rhp</a> bar chart. Point at it or click it.
+    </p>
+
+    <div class="below">
+      <p class="lede">
+        I build interactive web apps, charting libraries and developer tools, mostly with React,
+        TypeScript and Python.
+      </p>
+      <div class="actions">
+        <a class="button" href={resumeRequest}>
+          Request my résumé
+        </a>
+        <a class="button quiet" href={`mailto:${email}`}>
+          Email
+        </a>
+        <span class="profiles">
+          <a class="external" href="https://github.com/bouzidanas">
+            GitHub
+          </a>
+          <a class="external" href="https://www.linkedin.com/in/bouzidanas/">
+            LinkedIn
+          </a>
+        </span>
+      </div>
     </div>
   </div>
 </section>
@@ -58,9 +70,20 @@ import BarName from "../solid/BarName";
   }
 
   .hero {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .content {
     display: grid;
     gap: clamp(1.25rem, 3vw, 2rem);
     padding-block: clamp(3rem, 10vw, 7.5rem) clamp(3rem, 8vw, 6rem);
+  }
+
+  /* From the top of the page, under the header (and its 1px border), to the next section's rule. */
+  .hero :global(.pixel-field) {
+    top: calc(-1 * var(--header) - 1px);
+    height: calc(100% + var(--header) + 1px + var(--section-gap));
   }
 
   .meta {

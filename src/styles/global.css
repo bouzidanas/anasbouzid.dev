@@ -47,8 +47,10 @@
   --accent: light-dark(oklch(73% 0.15 68), oklch(80% 0.13 75));
   --accent-text: light-dark(oklch(50% 0.12 58), oklch(84% 0.12 80));
   --gold: light-dark(oklch(64% 0.15 68), oklch(80% 0.13 75));
+  --dot: light-dark(oklch(80% 0.008 80), oklch(37% 0.006 75));
 
   --page: 74rem;
+  --header: 4rem;
   --gutter: clamp(1rem, 4vw, 2.5rem);
   --measure: 66ch;
   --radius: 0.75rem;
@@ -195,8 +197,9 @@ ul[role="list"] {
     scale 150ms var(--ease-out);
 }
 
+/* Paper rather than transparent, so the dots behind a button don't show through it. */
 .button:hover {
-  background: transparent;
+  background: var(--paper);
   color: var(--ink);
 }
 
@@ -205,7 +208,7 @@ ul[role="list"] {
 }
 
 .button.quiet {
-  background: transparent;
+  background: var(--paper);
   color: var(--ink);
   border-color: var(--rule);
 }
@@ -223,7 +226,8 @@ ul[role="list"] {
   animation-timing-function: var(--ease-out);
 }
 
-/* The header stays above a project's media while it morphs into place. */
+/* The header and its glass stay above a project's media while it morphs into place. */
+::view-transition-group(header-glass),
 ::view-transition-group(header) {
   z-index: 1;
 }

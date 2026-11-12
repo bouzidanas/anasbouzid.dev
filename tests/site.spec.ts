@@ -238,6 +238,103 @@ test("the characters near the pointer get bolder", async ({ page, isMobile }) =>
   }
 });
 
+// Whether any square is lit on the canvas, above the given distance from its top.
+const lit = (field: Locator, above = Infinity) =>
+  field.evaluate((canvas: HTMLCanvasElement, above) => {
+    const scale = canvas.width / canvas.clientWidth;
+    const rows = Math.min(canvas.height, Math.round(above * scale));
+    const { data } = canvas.getContext("2d")!.getImageData(0, 0, canvas.width, rows);
+    return data.some((value, i) => i % 4 === 3 && value > 0);
+  }, above);
+
+// The hero's field reaches up under the header, so a pointer over the header lights squares too.
+const litUnderHeader = async (page: Page) => {
+  const field = page.locator(".hero .pixel-field");
+  const header = await page.locator(".header").evaluate((header) => header.getBoundingClientRect());
+  const canvas = await field.evaluate((canvas) => canvas.getBoundingClientRect());
+  return lit(field, header.bottom - canvas.top);
+};
+
+test("squares light up under the pointer, from the hero up into the header", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, "phones light the squares with a tap");
+  await page.goto("/");
+  await page.mouse.move(300, 20);
+  await page.mouse.move(700, 30, { steps: 8 });
+  await expect.poll(() => litUnderHeader(page)).toBe(true);
+});
+
+test("each grid of dots spans the window, from its section's rule to the next section's", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const edges = await page.evaluate(() => {
+    const top = (selector: string) =>
+      Math.round(document.querySelector(selector)!.getBoundingClientRect().top + scrollY);
+    const field = (selector: string) => {
+      const { top, bottom, left, right } = document
+        .querySelector(selector)!
+        .getBoundingClientRect();
+      return [Math.round(top + scrollY), Math.round(bottom + scrollY), left, right];
+    };
+    return {
+      hero: field(".hero .pixel-field"),
+      work: field("#work .pixel-field"),
+      footer: field(".footer .pixel-field"),
+      rules: [
+        top("section[aria-labelledby=numbers-title] .section-head"),
+        top("#work .section-head"),
+        top("#writing .section-head"),
+        top(".footer"),
+      ],
+      bottom: document.documentElement.scrollHeight,
+    };
+  });
+  const [numbers, work, writing, footer] = edges.rules;
+  const width = await page.evaluate(() => document.documentElement.clientWidth);
+
+  // The hero's starts at the top of the page, under the header, and the footer's ends at the bottom of the page.
+  expect(edges.hero).toEqual([0, numbers, 0, width]);
+  expect(edges.work).toEqual([work, writing, 0, width]);
+  expect(edges.footer).toEqual([footer, edges.bottom, 0, width]);
+});
+
+test("squares light up in the footer on every page", async ({ page, isMobile }) => {
+  test.skip(isMobile, "phones light the squares with a tap");
+  await page.goto("/work/rhp/");
+  const footer = page.locator(".footer");
+  await footer.scrollIntoViewIfNeeded();
+  const { x, y, width, height } = (await footer.boundingBox())!;
+  await page.mouse.move(x + width * 0.2, y + height / 2);
+  await page.mouse.move(x + width * 0.6, y + height / 2, { steps: 8 });
+  await expect.poll(() => lit(footer.locator(".pixel-field"))).toBe(true);
+});
+
+test("with less motion, the squares stay dark", async ({ page, isMobile }) => {
+  test.skip(isMobile, "phones light the squares with a tap");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await page.mouse.move(300, 20);
+  await page.mouse.move(700, 30, { steps: 8 });
+  await page.waitForTimeout(100);
+  expect(await litUnderHeader(page)).toBe(false);
+});
+
+test("the header is clear over the hero and frosted once the page scrolls", async ({ page }) => {
+  const glass = () =>
+    page.locator(".glass").evaluate((glass) => {
+      const style = getComputedStyle(glass);
+      return { opacity: style.opacity, blur: style.backdropFilter };
+    });
+  await page.goto("/");
+  expect(await glass()).toEqual({ opacity: "0", blur: "blur(12px)" });
+
+  await page.evaluate(() => scrollTo({ top: 600, behavior: "instant" }));
+  await expect.poll(glass).toEqual({ opacity: "1", blur: "blur(12px)" });
+});
+
 test("Writing lists the newest posts first, each linking to its article", async ({ page }) => {
   await page.goto("/");
   const posts = page.locator("#writing li");

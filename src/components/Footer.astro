@@ -1,8 +1,11 @@
 ---
+import PixelField from "./PixelField.astro";
+
 const year = new Date().getFullYear();
 ---
 
 <footer class="footer">
+  <PixelField />
   <div class="wrap row">
     <p>© {year} Anas Bouzid</p>
     <p>
@@ -13,9 +16,17 @@ const year = new Date().getFullYear();
 
 <style>
   .footer {
+    position: relative;
+    isolation: isolate;
     border-top: 1px solid var(--rule);
     color: var(--muted);
     font-size: var(--step--1);
+  }
+
+  /* From the footer's rule to the bottom of the page. */
+  .footer :global(.pixel-field) {
+    top: -1px;
+    height: calc(100% + 1px);
   }
 
   .row {

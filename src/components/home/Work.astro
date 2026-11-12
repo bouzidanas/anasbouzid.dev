@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import PixelField from "../PixelField.astro";
 import ProjectCard from "../ProjectCard.astro";
 
 const SHOWN = 4;
@@ -9,32 +10,35 @@ const shown = projects.slice(0, SHOWN);
 const more = projects.slice(SHOWN);
 ---
 
-<section id="work" class="wrap" aria-labelledby="work-title">
-  <header class="section-head">
-    <h2 id="work-title">Selected work</h2>
-  </header>
-  <div class="projects">
-    {shown.map((project) => (
-      <ProjectCard project={project} />
-    ))}
+<section id="work" class="work" aria-labelledby="work-title">
+  <PixelField />
+  <div class="wrap">
+    <header class="section-head">
+      <h2 id="work-title">Selected work</h2>
+    </header>
+    <div class="projects">
+      {shown.map((project) => (
+        <ProjectCard project={project} />
+      ))}
+    </div>
+    {more.length > 0 && (
+      <details class="more">
+        <summary class="button quiet">
+          <span class="closed">Show {more.length} more projects</span>
+          <span class="opened">Show fewer projects</span>
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+            <path class="vertical" d="M8 2v12" stroke="currentColor" stroke-width="1.5" />
+            <path d="M2 8h12" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+        </summary>
+        <div class="projects">
+          {more.map((project) => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+      </details>
+    )}
   </div>
-  {more.length > 0 && (
-    <details class="more">
-      <summary class="button quiet">
-        <span class="closed">Show {more.length} more projects</span>
-        <span class="opened">Show fewer projects</span>
-        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
-          <path class="vertical" d="M8 2v12" stroke="currentColor" stroke-width="1.5" />
-          <path d="M2 8h12" stroke="currentColor" stroke-width="1.5" />
-        </svg>
-      </summary>
-      <div class="projects">
-        {more.map((project) => (
-          <ProjectCard project={project} />
-        ))}
-      </div>
-    </details>
-  )}
 </section>
 
 <script>
@@ -49,6 +53,16 @@ const more = projects.slice(SHOWN);
 </script>
 
 <style>
+  .work {
+    position: relative;
+    isolation: isolate;
+  }
+
+  /* From the section's rule to the next section's rule. */
+  .work :global(.pixel-field) {
+    height: calc(100% + var(--section-gap));
+  }
+
   .projects {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
