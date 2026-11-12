@@ -192,6 +192,42 @@ test("the figures count up and the bars grow when they first come into view", as
   await expect(week).toHaveAttribute("data-entrance", "play");
 });
 
+// A busy page can hand an observer several readings of where something is at once, oldest first. This holds each
+// observer's readings until a second goes by without a new one, then hands them over together.
+const batchReadings = (page: Page) =>
+  page.addInitScript(() => {
+    const Native = IntersectionObserver;
+    window.IntersectionObserver = class extends Native {
+      constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {
+        const held: IntersectionObserverEntry[] = [];
+        let timer: ReturnType<typeof setTimeout> | undefined;
+        super((entries, observer) => {
+          held.push(...entries);
+          clearTimeout(timer);
+          timer = setTimeout(() => callback(held.splice(0), observer), 1000);
+        }, options);
+      }
+    };
+  });
+
+test("a figure counts up when it's reported below the screen and in view at once", async ({
+  page,
+}) => {
+  await batchReadings(page);
+  await page.goto("/");
+  const count = page.locator("[class*=_count_]").nth(1);
+  await page
+    .locator("[class*=_figures_]")
+    .evaluate((element) => scrollBy(0, element.getBoundingClientRect().top - innerHeight - 50));
+  await expect
+    .poll(() => count.getAttribute("data-entrance"), { intervals: [50], timeout: 10_000 })
+    .toBe("hold");
+
+  // Within the second, so the reading in view arrives with the one from below the screen.
+  await count.scrollIntoViewIfNeeded();
+  await expect(count).toHaveAttribute("data-entrance", "play");
+});
+
 test("each figure shows its number digit by digit", async ({ page }) => {
   await keepSavedStats(page);
   await page.goto("/");

@@ -55,8 +55,8 @@ const heading = [..."Let's talk."];
   void document.fonts.ready.then(() => {
     keepKerning(heading);
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
+      (entries) => {
+        if (!entries.at(-1)!.isIntersecting) return;
         wave();
         observer.disconnect();
       },

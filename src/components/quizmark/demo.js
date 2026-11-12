@@ -494,7 +494,7 @@ function initTimeline(root) {
   let visible = false;
   const tick = () => { if (visible) choose(CYCLE[(CYCLE.indexOf(minutes) + 1) % CYCLE.length]); };
   const seen = new IntersectionObserver(entries => {
-    visible = entries.some(e => e.isIntersecting);
+    visible = entries.at(-1).isIntersecting;
     if (!visible || root.classList.contains('is-running')) return;
     root.classList.add('is-running');
     requestAnimationFrame(() => requestAnimationFrame(() => root.style.setProperty('--p', '100%')));

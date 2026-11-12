@@ -32,15 +32,16 @@ const places = (value: number) =>
   [...String(value)].map((_, k, digits) => 10 ** (digits.length - 1 - k));
 
 // Something below the screen holds its animation, and plays it once nearly all of it is on screen,
-// or as much of it as fits.
+// or as much of it as fits. A busy page can hand an observer several readings at once, oldest first, so this and
+// the observers below go by the latest.
 function entrance(element: Element, set: (state: Entrance) => void) {
   const { top, height } = element.getBoundingClientRect();
   if (top < innerHeight) return;
   const threshold = Math.min(0.95, (0.9 * innerHeight) / height);
   set("hold");
   const observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.intersectionRatio < threshold) return;
+    (entries) => {
+      if (entries.at(-1)!.intersectionRatio < threshold) return;
       set("play");
       observer.disconnect();
     },
@@ -140,9 +141,12 @@ export default function DownloadsChart(props: Props) {
   // Under the sticky header counts as out of view, and scroll-padding-top covers the header.
   onMount(() => {
     const header = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
-    const observer = new IntersectionObserver(([entry]) => setFiguresInView(entry.isIntersecting), {
-      rootMargin: `${-header}px 0px 0px`,
-    });
+    const observer = new IntersectionObserver(
+      (entries) => setFiguresInView(entries.at(-1)!.isIntersecting),
+      {
+        rootMargin: `${-header}px 0px 0px`,
+      },
+    );
     observer.observe(figures);
     onCleanup(() => observer.disconnect());
   });

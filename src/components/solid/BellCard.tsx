@@ -15,7 +15,9 @@ export default function BellCard() {
 
   onMount(() => {
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting));
+    const observer = new IntersectionObserver((entries) =>
+      setVisible(entries.at(-1)!.isIntersecting),
+    );
     observer.observe(box);
     onCleanup(() => observer.disconnect());
   });

@@ -55,6 +55,7 @@ A hidden digit has no width and no opacity rather than being clipped, because cl
 The counters and the bars share one rule for when they play.
 If they're below the screen when the island hydrates, their animations start out paused.
 Each one plays once nearly all of it is on screen, or as much of it as fits in a short window, so a number never sits at 0 while you're reading it.
+A busy page can report where something is several times at once, oldest first, so the observers go by the latest report.
 Without JavaScript, or if they're already on screen, they're simply drawn.
 
 **Bolder near the pointer.**
@@ -212,7 +213,7 @@ They check every page for console errors, sideways scrolling and the problems ax
 They also drive the download chart with a pointer, a finger and the keyboard, check that a phone shows its last three months and that a picked date never covers an end date, click my name, switch the theme, turn on Show writes and start the Quizmark demo.
 One more checks that the benchmark chart is on the page with every library and isn't hydrated.
 Others check that the squares light up under the pointer from the hero up into the header and in the footer of a project page, and stay dark with less motion, that each grid spans the window from its section's rule to the next one, and that the header is clear at the top of the page and frosted once it scrolls.
-They check that each figure shows its number digit by digit, with no leading zeros while it counts, and that the characters near the pointer get bolder.
+They check that each figure shows its number digit by digit, with no leading zeros while it counts, that a figure still counts up when the reports of where it is arrive together, and that the characters near the pointer get bolder.
 They check that Writing lists its posts newest first, brings up a post's picture beside the pointer, shows it in the row on a phone and follows the theme.
 Others check that the scroll-driven animations are still in the built CSS, that the counters and the bars wait until they come into view, and that tiles arriving together appear one after another.
 CI runs them on every push and pull request.
