@@ -9,6 +9,8 @@ Astro renders every island to HTML at build time, so each one shows before any J
 The home page is a stack of section components in `src/components/home/`.
 Each project page comes from an MDX file in `src/content/projects/`, rendered by `src/pages/work/[id].astro`.
 A project's `order` field sets its place in the grid on the home page.
+The Writing section lists the newest three posts in `src/content/posts/`, one Markdown file each, whose frontmatter holds the title, summary, date, link and pictures.
+For now the two posts link to the Every Word and Election Night articles.
 The first four show right away, and the rest sit in a `<details>` element behind a Show more button, which opens with an animated height where the browser supports `::details-content`.
 
 `src/components/ProjectMedia.astro` picks what each project shows, on its card and at the top of its page:
@@ -54,6 +56,11 @@ Without JavaScript, or if they're already on screen, they're simply drawn.
 
 **The project tiles.**
 A pointer listener in `Work.astro` sets `--x` and `--y` on the tile under the pointer, and a radial gradient lights the tile at that spot.
+
+**The Writing list.**
+With a mouse, a post's picture follows the pointer while it's over the post.
+Without one, or on a narrow screen, each post shows its picture under its text.
+`PostCover.astro` holds a post's light and dark pictures and shows the one that matches the site's theme.
 
 **The reveals.**
 Project tiles and open-source rows that are below the screen when the page loads fade up once they come into view.
@@ -134,6 +141,8 @@ The icon is the A from my name on the amber tile, drawn on whole pixels so it st
 - `src/components/solid/gallery/` holds two gallery posters from the same site.
 - `src/components/quizmark/demo.js` and `lecture.js` come from Quizmark's `packages/landing`.
 - `src/data/benchmark.ts` comes from rhp's `bench/` results, and its link points at the file it was copied from.
+- `src/assets/posts/` holds pictures of the two posts' articles, taken on November 10, 2026 at a 640-pixel-wide window.
+  The Election Night one shows the counts from that day.
 
 ## Browser features
 
@@ -165,6 +174,7 @@ Playwright runs the tests against the production build, in Chromium, WebKit and 
 They check every page for console errors, sideways scrolling and the problems axe finds, leaving out the apps embedded from other sites.
 They also drive the download chart with a pointer, a finger and the keyboard, check that a phone shows its last three months and that a picked date never covers an end date, click my name, switch the theme, turn on Show writes and start the Quizmark demo.
 One more checks that the benchmark chart is on the page with every library and isn't hydrated.
+They check that Writing lists its posts newest first, brings up a post's picture beside the pointer, shows it in the row on a phone and follows the theme.
 Others check that the scroll-driven animations are still in the built CSS, that the counters and the bars wait until they come into view, and that tiles arriving together appear one after another.
 CI runs them on every push and pull request.
 The live statistics tests delay responses to check the saved figures, then verify animated updates, updated chart values, inline figures, reduced motion and failure fallbacks.

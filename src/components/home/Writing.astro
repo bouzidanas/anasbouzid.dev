@@ -1,0 +1,199 @@
+---
+import { getCollection } from "astro:content";
+import { formatDate } from "../../lib/format";
+import PostCover from "../PostCover.astro";
+
+const SHOWN = 3;
+
+const posts = (await getCollection("posts"))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, SHOWN);
+---
+
+<section id="writing" class="wrap writing" aria-labelledby="writing-title">
+  <header class="section-head">
+    <h2 id="writing-title">Writing</h2>
+    <p>The latest posts from my blog.</p>
+  </header>
+  <ul class="posts" role="list">
+    {posts.map((post) => (
+      <li class="reveal" data-post={post.id}>
+        <time datetime={post.data.date.toISOString().slice(0, 10)}>
+          {formatDate(post.data.date)}
+        </time>
+        <div class="text">
+          <h3>
+            <a href={post.data.href}>{post.data.title}</a>
+          </h3>
+          <p>{post.data.summary}</p>
+        </div>
+        <span class="arrow" aria-hidden="true">
+          ↗
+        </span>
+        <PostCover post={post} class="thumb" sizes="16rem" />
+      </li>
+    ))}
+  </ul>
+  <div class="preview" aria-hidden="true">
+    {posts.map((post) => (
+      <PostCover post={post} class="shot" sizes="24rem" data-post={post.id} />
+    ))}
+  </div>
+</section>
+
+<script>
+  // With a mouse, a post's picture follows the pointer while it's over the post.
+  const section = document.querySelector<HTMLElement>(".writing")!;
+  const preview = section.querySelector<HTMLElement>(".preview")!;
+  const shots = preview.querySelectorAll<HTMLElement>("[data-post]");
+
+  section.querySelectorAll<HTMLElement>(".posts li").forEach((post) => {
+    post.addEventListener("pointerenter", (event) => {
+      if (event.pointerType === "touch") return;
+      shots.forEach((shot) =>
+        shot.toggleAttribute("data-shown", shot.dataset.post === post.dataset.post),
+      );
+      preview.toggleAttribute("data-open", true);
+    });
+    post.addEventListener("pointerleave", () => preview.removeAttribute("data-open"));
+  });
+
+  section.addEventListener("pointermove", (event) => {
+    const { left, top, width } = section.getBoundingClientRect();
+    const x = Math.min(event.clientX - left + 24, width - preview.offsetWidth);
+    preview.style.translate = `${x}px ${event.clientY - top - preview.offsetHeight / 2}px`;
+  });
+</script>
+
+<style>
+  .writing {
+    position: relative;
+  }
+
+  .posts li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 0.25rem 1.5rem;
+    padding: 1.25rem 0.75rem;
+    border-bottom: 1px solid var(--rule);
+    transition: background-color 200ms var(--ease-out);
+  }
+
+  .posts li:hover {
+    background: color-mix(in oklch, var(--accent) 9%, transparent);
+  }
+
+  .posts li:has(a:focus-visible) {
+    outline: 2px solid var(--accent-text);
+    outline-offset: 2px;
+  }
+
+  time {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+  }
+
+  h3 {
+    font-size: var(--step-2);
+  }
+
+  h3 a {
+    text-decoration: none;
+  }
+
+  h3 a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  h3 a:focus-visible {
+    outline: none;
+  }
+
+  .text p {
+    max-width: 56ch;
+    margin-top: 0.4rem;
+    color: var(--muted);
+  }
+
+  .arrow {
+    color: var(--accent-text);
+    transition: translate 250ms var(--ease-out);
+  }
+
+  .posts li:hover .arrow {
+    translate: 0.15em -0.15em;
+  }
+
+  .posts :global(.thumb) {
+    display: none;
+  }
+
+  .preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: min(24rem, 40%);
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    box-shadow: 0 30px 60px -30px color-mix(in oklch, var(--ink) 50%, transparent);
+    opacity: 0;
+    scale: 0.92;
+    pointer-events: none;
+  }
+
+  .preview[data-open] {
+    opacity: 1;
+    scale: 1;
+  }
+
+  .preview :global(.shot) {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
+
+  .preview :global(.shot[data-shown]) {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .preview {
+      transition:
+        opacity 200ms var(--ease-out),
+        scale 250ms var(--ease-out);
+    }
+  }
+
+  /* Without a mouse, or on a narrow screen, each post shows its picture under its text. */
+  @media (hover: none), (width < 44rem) {
+    .posts li {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    time {
+      grid-column: 1 / -1;
+    }
+
+    .posts :global(.thumb) {
+      display: block;
+      grid-column: 1;
+      width: min(100%, 16rem);
+      aspect-ratio: 16 / 10;
+      margin-top: 0.75rem;
+      border: 1px solid var(--rule);
+      border-radius: 0.6rem;
+    }
+
+    .preview {
+      display: none;
+    }
+  }
+</style>

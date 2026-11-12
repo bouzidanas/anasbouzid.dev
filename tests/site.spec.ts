@@ -187,6 +187,59 @@ test("the figures count up and the bars grow when they first come into view", as
   await expect(week).toHaveAttribute("data-entrance", "play");
 });
 
+test("Writing lists the newest posts first, each linking to its article", async ({ page }) => {
+  await page.goto("/");
+  const posts = page.locator("#writing li");
+
+  await expect(posts.getByRole("heading")).toHaveText([
+    "Election Night 2026",
+    "Every Word They Ever Rapped",
+  ]);
+  await expect(posts.first().getByRole("link")).toHaveAttribute(
+    "href",
+    "https://rhp.vercel.app/gallery/articles/election-night/",
+  );
+  await expect(posts.first().locator("time")).toHaveText("Nov 3, 2026");
+});
+
+test("a post's picture follows the pointer over its row", async ({ page, isMobile }) => {
+  test.skip(isMobile, "phones show the picture in the row");
+  await page.goto("/");
+  const preview = page.locator("#writing .preview");
+
+  await page.locator("#writing li").nth(1).hover();
+  await expect(preview).toHaveAttribute("data-open", "");
+  await expect(preview.locator("[data-post=every-word]")).toHaveAttribute("data-shown", "");
+  await expect(preview.locator("[data-post=election-night]")).not.toHaveAttribute("data-shown");
+
+  await page.mouse.move(0, 0);
+  await expect(preview).not.toHaveAttribute("data-open");
+});
+
+test("phones show each post's picture in its row", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "a mouse brings the picture up beside the pointer");
+  await page.goto("/");
+
+  await expect(page.locator("#writing li .thumb img:visible")).toHaveCount(2);
+});
+
+test("the post pictures follow the theme", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "light" });
+  await page.goto("/");
+  const shown = () =>
+    page
+      .locator("#writing .preview [data-post=election-night] img")
+      .evaluateAll((images) =>
+        images
+          .filter((image) => getComputedStyle(image).display !== "none")
+          .map((image) => image.className),
+      );
+  expect(await shown()).toEqual(["light"]);
+
+  await page.getByRole("button", { name: "Dark theme" }).click();
+  await expect.poll(shown).toEqual(["dark"]);
+});
+
 test("the picked week's value shows over its bar once the figures scroll away", async ({
   page,
 }) => {

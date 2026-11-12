@@ -1,0 +1,58 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+
+interface Props {
+  post: CollectionEntry<"posts">;
+  sizes: string;
+  class?: string;
+  [attribute: `data-${string}`]: string;
+}
+
+const { post, sizes, class: className, ...attributes } = Astro.props;
+const { cover, coverDark } = post.data;
+const widths = [480, 800, 1280];
+---
+
+<span class:list={["post-cover", className]} {...attributes}>
+  <Image src={cover} alt="" widths={widths} sizes={sizes} class={coverDark ? "light" : undefined} />
+  {coverDark && <Image src={coverDark} alt="" widths={widths} sizes={sizes} class="dark" />}
+</span>
+
+<style>
+  .post-cover {
+    display: block;
+    overflow: hidden;
+    background: var(--raised);
+  }
+
+  .post-cover :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  /* A post with a dark picture shows the one that matches the site's theme. */
+  .post-cover :global(.dark) {
+    display: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .post-cover :global(.light) {
+      display: none;
+    }
+
+    :global(:root:not([data-theme="light"])) .post-cover :global(.dark) {
+      display: block;
+    }
+  }
+
+  :global(:root[data-theme="dark"]) .post-cover :global(.light) {
+    display: none;
+  }
+
+  :global(:root[data-theme="dark"]) .post-cover :global(.dark) {
+    display: block;
+  }
+</style>
