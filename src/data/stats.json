@@ -1,138 +1,138 @@
 {
-  "updated": "2026-10-17",
+  "updated": "2026-11-12",
   "weeks": [
     {
-      "start": "2026-04-25",
-      "downloads": 38920
+      "start": "2026-05-21",
+      "downloads": 59702
     },
     {
-      "start": "2026-05-02",
-      "downloads": 47522
+      "start": "2026-05-28",
+      "downloads": 64623
     },
     {
-      "start": "2026-05-09",
-      "downloads": 46196
+      "start": "2026-06-04",
+      "downloads": 59301
     },
     {
-      "start": "2026-05-16",
-      "downloads": 65699
+      "start": "2026-06-11",
+      "downloads": 58751
     },
     {
-      "start": "2026-05-23",
-      "downloads": 62556
+      "start": "2026-06-18",
+      "downloads": 53599
     },
     {
-      "start": "2026-05-30",
-      "downloads": 59424
+      "start": "2026-06-25",
+      "downloads": 45723
     },
     {
-      "start": "2026-06-06",
-      "downloads": 62118
+      "start": "2026-07-02",
+      "downloads": 66834
     },
     {
-      "start": "2026-06-13",
-      "downloads": 56039
+      "start": "2026-07-09",
+      "downloads": 86109
     },
     {
-      "start": "2026-06-20",
-      "downloads": 51575
+      "start": "2026-07-16",
+      "downloads": 78462
     },
     {
-      "start": "2026-06-27",
-      "downloads": 49004
+      "start": "2026-07-23",
+      "downloads": 66943
     },
     {
-      "start": "2026-07-04",
-      "downloads": 76134
+      "start": "2026-07-30",
+      "downloads": 58036
     },
     {
-      "start": "2026-07-11",
-      "downloads": 86485
+      "start": "2026-08-06",
+      "downloads": 55239
     },
     {
-      "start": "2026-07-18",
-      "downloads": 73962
+      "start": "2026-08-13",
+      "downloads": 62976
     },
     {
-      "start": "2026-07-25",
-      "downloads": 61416
+      "start": "2026-08-20",
+      "downloads": 41348
     },
     {
-      "start": "2026-08-01",
-      "downloads": 56805
+      "start": "2026-08-27",
+      "downloads": 19054
     },
     {
-      "start": "2026-08-08",
-      "downloads": 58077
+      "start": "2026-09-03",
+      "downloads": 26099
     },
     {
-      "start": "2026-08-15",
-      "downloads": 62714
+      "start": "2026-09-10",
+      "downloads": 34262
     },
     {
-      "start": "2026-08-22",
-      "downloads": 27387
+      "start": "2026-09-17",
+      "downloads": 37939
     },
     {
-      "start": "2026-08-29",
-      "downloads": 20871
+      "start": "2026-09-24",
+      "downloads": 41382
     },
     {
-      "start": "2026-09-05",
-      "downloads": 28345
+      "start": "2026-10-01",
+      "downloads": 36888
     },
     {
-      "start": "2026-09-12",
-      "downloads": 36358
+      "start": "2026-10-08",
+      "downloads": 33144
     },
     {
-      "start": "2026-09-19",
-      "downloads": 40379
+      "start": "2026-10-15",
+      "downloads": 38531
     },
     {
-      "start": "2026-09-26",
-      "downloads": 40191
+      "start": "2026-10-22",
+      "downloads": 30229
     },
     {
-      "start": "2026-10-03",
-      "downloads": 34650
+      "start": "2026-10-29",
+      "downloads": 27563
     },
     {
-      "start": "2026-10-10",
-      "downloads": 36110
+      "start": "2026-11-05",
+      "downloads": 36293
     }
   ],
   "pypi": {
     "streamlit-code-editor": {
-      "lastMonth": 139962
+      "lastMonth": 123398
     },
     "streamlit-float": {
-      "lastMonth": 15086
+      "lastMonth": 13616
     },
     "streamlit-dnd": {
-      "lastMonth": 5986
+      "lastMonth": 5363
     },
     "streamlit-reveal-slides": {
-      "lastMonth": 234
+      "lastMonth": 256
     }
   },
   "npm": {
     "@bezda/rhp": {
-      "lastMonth": 1579
+      "lastMonth": 1021
     },
     "@bezda/rhp-mcp": {
-      "lastMonth": 444
+      "lastMonth": 2064
     },
     "pr-ui-compare": {
-      "lastMonth": 511
+      "lastMonth": 26
     },
     "react-list-player": {
-      "lastMonth": 22
+      "lastMonth": 29
     }
   },
   "github": {
     "bezda-team/rhp": {
-      "stars": 21
+      "stars": 65
     },
     "bouzidanas/pynote-notebook-editor": {
       "stars": 71
@@ -141,7 +141,7 @@
       "stars": 167
     },
     "bouzidanas/streamlit-float": {
-      "stars": 91
+      "stars": 90
     },
     "bouzidanas/streamlit-dnd": {
       "stars": 4
