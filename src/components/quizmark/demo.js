@@ -35,7 +35,7 @@ function initDemo(root) {
     { start: 0, at: FINAL, title: 'Final test', ready: false, go: 'Open final test', final: true },
   ];
   const markBox = $('.seek-marks');
-  markBox.innerHTML = marks.map((m, i) =>
+  markBox.innerHTML = marks.map(m =>
     `<button class="mark ${m.ready ? 'is-ready' : 'is-generating'}${m.final ? ' is-final' : ''}" type="button" style="--x:${pct(m.at)}" aria-label="${esc(m.title)}. ${m.ready ? 'Ready' : 'Generating'}" aria-controls="demo-tip" aria-expanded="false"></button>`).join('');
   const markEls = [...markBox.children];
 
@@ -121,7 +121,7 @@ function initDemo(root) {
     const total = paced ? times.at(-1) : seconds * 1000;
     const at = elapsed => paced
       ? (() => {
-          const i = Math.min(lines.length - 1, times.findIndex((x, k) => elapsed < times[k + 1]));
+          const i = Math.min(lines.length - 1, times.findIndex((_, k) => elapsed < times[k + 1]));
           const a = lines[i][0], b = lines[i + 1]?.[0] ?? to;
           const f = Math.min(1, (elapsed - times[i]) / (times[i + 1] - times[i]));
           return a + (b - a) * f;
@@ -491,7 +491,7 @@ function initTimeline(root) {
 
   root.classList.add('is-waiting');
   root.style.setProperty('--p', '0%');
-  let visible = false, cycling = null;
+  let visible = false;
   const tick = () => { if (visible) choose(CYCLE[(CYCLE.indexOf(minutes) + 1) % CYCLE.length]); };
   const seen = new IntersectionObserver(entries => {
     visible = entries.some(e => e.isIntersecting);
@@ -504,7 +504,7 @@ function initTimeline(root) {
       spans()[i].classList.add('is-hit');
       if (i === 0) root.classList.remove('is-waiting');
     }, FILL_MS * timeFor(t / DURATION)));
-    setTimeout(() => { tick(); cycling = setInterval(tick, HOLD_MS); }, FILL_MS + FIRST_HOLD_MS);
+    setTimeout(() => { tick(); setInterval(tick, HOLD_MS); }, FILL_MS + FIRST_HOLD_MS);
   }, { threshold: 0.4 });
   seen.observe(root);
 }
